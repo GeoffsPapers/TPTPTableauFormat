@@ -1,0 +1,124 @@
+\documentclass[runningheads]{llncs}
+
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+% \renewcommand\UrlFont{\color{blue}\rmfamily}
+\usepackage{hyperref}
+\usepackage{color}
+\usepackage{setspace}
+\usepackage{verbatim}
+\usepackage{multicol}
+\usepackage{array}
+\usepackage{bbding}
+\newcommand{\PreserveBackslash}[1]{\let\temp=\\#1\let\\=\temp}
+\newcolumntype{C}[1]{>{\PreserveBackslash\centering}p{#1}}
+\newcolumntype{R}[1]{>{\PreserveBackslash\raggedleft}p{#1}}
+\newcolumntype{L}[1]{>{\PreserveBackslash\raggedright}p{#1}}
+\setlength{\tabcolsep}{3pt}
+
+\renewcommand{\floatpagefraction}{0.9}
+\renewcommand{\textfloatsep}{2.0ex}
+\renewcommand{\dbltextfloatsep}{2.0ex}
+
+\newenvironment{packed_itemize}{
+\vspace*{-0.5em}
+\begin{itemize}
+\setlength{\partopsep}{0pt}
+\setlength{\itemsep}{1pt}
+\setlength{\parskip}{0pt}
+\setlength{\parsep}{0pt}
+}{\end{itemize}}
+
+\begin{document}
+
+\title{The TPTP Format for Tableaux Proofs}
+\titlerunning{TPTP Tableaux}
+
+\author{
+Geoff Sutcliffe\inst{1}\orcidID{0000-0001-9120-3927}\Envelope
+\and
+Sean Holden\inst{2}
+\and \\
+Mantas WHO\inst{2}\orcidID{0000-0003-4635-6873}
+}
+\authorrunning{G. Sutcliffe, et al.}
+\institute{University of Miami, Miami, USA,
+\email{geoff@cs.miami.edu},
+\and
+University of Cambridge, Cambridge, United Kingdom,
+\email{sbh11@cl.cam.ac.uk,mb2412@cam.ac.uk}
+}
+
+\maketitle
+%--------------------------------------------------------------------------------------------------
+\begin{abstract}
+Geoff
+
+\keywords{Geoff}
+\end{abstract}
+%--------------------------------------------------------------------------------------------------
+\section{Introduction}
+\label{Introduction}
+
+Geoff
+
+\paragraph{Related work:}
+
+Sections~\ref{BLAH} provide ...
+Section~\ref{Conclusion} concludes.
+
+%--------------------------------------------------------------------------------------------------
+\section{The TPTP World}
+\label{TPTP}
+
+Geoff
+
+%--------------------------------------------------------------------------------------------------
+\subsection{The TPTP Language}
+\label{TPTPLanguage}
+
+Geoff
+
+%--------------------------------------------------------------------------------------------------
+\subsection{The TPTP Format for Derivations}
+\label{Derivations}
+
+Geoff. Include GDV here.
+
+%--------------------------------------------------------------------------------------------------
+\section{The (new) TPTP Format for Tableau Proofs}
+\label{Tableau}
+
+Geoff and Mantas
+
+Examples here.
+
+% \begin{figure}[t!]
+% \centering
+% \includegraphics[width=0.6\textwidth]{Plots/FOF_THM_RFO_PPP/FOF_THM_RFO_PPP}
+% \vspace*{-1em}
+% \caption{CPU times for {\tt FOF\_THM\_RFO\_*}}
+% \label{PPPPlot}
+% \end{figure}
+
+%--------------------------------------------------------------------------------------------------
+\section{Tableau ATP Systems}
+\label{ATPSystems}
+
+Sean.
+
+Connect++ and more.
+
+Results from verifying a bunch of Connect++ tableau if we get the software done.
+
+%--------------------------------------------------------------------------------------------------
+\section{Conclusion}
+\label{Conclusion}
+
+All.
+
+%--------------------------------------------------------------------------------------------------
+\bibliographystyle{splncs04}
+\bibliography{Bibliography}
+%--------------------------------------------------------------------------------------------------
+\end{document}
