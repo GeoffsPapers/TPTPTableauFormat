@@ -104,12 +104,11 @@ which means that the impact of ATP extends into many facets of society.
 % and the semantic web \cite{McG04}.
 In many of these applications the use of ATP systems is mission critical, in the sense that 
 incorrect results from ATP might have nasty consequences.
-The importance of verifying the results from autonomous systems (including ATP systems) is
-reflected in the IEEE~P2817 standard, which aims to ``identify best practices and provide guidance 
-that supports the definition of valid verification processes for a range of autonomous system 
-configurations''.\footnote{%
-\href{https://standards.ieee.org/ieee/2817/11726/}{\smalltt standards.ieee.org/ieee/2817/11726/}}
-
+% The importance of verifying the results from autonomous systems (including ATP systems) is
+% reflected in the IEEE~P2817 standard, which aims to ``identify best practices and provide guidance 
+% that supports the definition of valid verification processes for a range of autonomous system 
+% configurations''.\footnote{%
+% \href{https://standards.ieee.org/ieee/2817/11726/}{\smalltt standards.ieee.org/ieee/2817/11726/}}
 Facing the demand for error-free results from ATP systems is the reality that ATP systems
 are complex pieces of software, implementing complex calculi with complex data structures and
 algorithms~\cite{Sch06}. 
@@ -128,8 +127,8 @@ To ensure that a
 proof is correct, proof verification can be required, 
 which serves as a certification (but not a certificate) of the proof.
 %MODEL solution.
-If the verifier outputs evidence for the certification in a form that can be independently checked,
-that evidence serves as a certificate for the verifier's claim.
+% If the verifier outputs evidence for the certification in a form that can be independently 
+% checked, that evidence serves as a certificate for the verifier's claim.
 % As a concrete example, consider the verification process for aerospace software, shown in 
 % Figure~\ref{NASACodeCertification}, taken from ~\cite{SDF05}.
 % The ``proofs'' output by the ATP system are certificates that the ``safety policy'' has been 
@@ -148,7 +147,23 @@ that evidence serves as a certificate for the verifier's claim.
 % \end{center}
 % \end{figure}
 
-\paragraph{Related work:}
+At one top level, proofs can be divided into two types: Hilbert-style proofs that start at
+axioms and derive theorems~\cite{End72}, and proofs-by-contradiction that negate the
+conjecture to be proved and show that leads to a contradiction with the axioms~\cite{Men87}.
+ATP systems that search for Hilbert-style proofs are often called ``natural deduction systems'',
+e.g., THINKER~\cite{Pel98} and Muscadet~\cite{Pas01-IJCAR}.
+Most contemporary high-performance ATP systems that search for a proof-by-contradiction, called
+a refutation in this context, use a saturation based approach~\cite{Sch06}, e.g., E~\cite{SCV19} 
+and Vampire~\cite{KV13}.
+A complementary approach is taken in systems that build tableaux and closed connection 
+matrices~\cite{FB+98}, e.g., leanCoP~\cite{Ott23} and Connect++~\cite{Hol23}.
+The TPTP World (see Section~\ref{TPTP}) has an established format for writing Hilbert-style proofs 
+and refutations~\cite{SS+06}, and has a tool for verifying proofs in that format (see
+Section~\ref{Derivations}), but has not yet settled on a format for tableaux and connection
+proofs.
+One early proposal for a TPTP style format never gained traction~\cite{OS10}.
+A more recent proposal~\cite{OH23} is in the TPTP style, and provided some inspiration for
+the format proposed in this paper.
 
 Sections~\ref{BLAH} provide ...
 Section~\ref{Conclusion} concludes.
