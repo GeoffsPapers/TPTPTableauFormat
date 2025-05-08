@@ -22,10 +22,19 @@
 \newcolumntype{L}[1]{>{\PreserveBackslash\raggedright}p{#1}}
 \setlength{\tabcolsep}{3pt}
 
-\renewcommand{\floatpagefraction}{0.9}
+%----Making things more compact
+%----Suppress extra space in texttt mode
+%\AddToHook{cmd/ttfamily/after}{\frenchspacing}
+\renewcommand{\textfraction}{0.07}
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.9}
+\renewcommand{\floatpagefraction}{0.66}
+\setlength{\floatsep}{2.0pt plus 2.0pt minus 2.0pt}
+\setlength{\textfloatsep}{5.0pt plus 2.0pt minus 0.0pt}
 \renewcommand{\textfloatsep}{2.0ex}
 \renewcommand{\dbltextfloatsep}{2.0ex}
 
+\newcommand{\smalltt}[1]{\small \texttt{#1}}
 \newenvironment{packed_itemize}{
 \vspace*{-0.5em}
 \begin{itemize}
@@ -66,7 +75,78 @@ Geoff
 \section{Introduction}
 \label{Introduction}
 
-Geoff
+% Geoff
+
+Automated Theorem Proving (ATP)~\cite{RV01-HAR} is concerned with the development and use of 
+software that automates sound reasoning: the derivation of conclusions that follow inevitably 
+from known facts.
+ATP is at the heart of many computational tasks, including sensitive tasks such as 
+software/hardware verification~\cite{HH19} and system security~\cite{Coo18}.
+% New and emerging application areas include
+% chemistry \cite{Yad17}, 
+% biology \cite{CC+13}, 
+% medicine \cite{HLB05},
+% elections \cite{Nip09,BDS17}, 
+% auctions \cite{CK+15}, 
+% privacy \cite{Lib20},
+% law \cite{PS15}, 
+% ethics \cite{DF+16}, 
+% religion \cite{OZ11,BW14-ECAI,Hor19},
+% and business \cite{Han98}.
+ATP systems are often used as components of more complex Artificial Intelligence (AI) systems,
+which means that the impact of ATP extends into many facets of society.
+% in areas such as 
+% knowledge representation \cite{TR+04}, 
+% natural language processing \cite{BM05}, 
+% planning \cite{NV07}, 
+% agents \cite{TBP03}, 
+% commonsense reasoning \cite{MS05}, 
+% and the semantic web \cite{McG04}.
+In many of these applications the use of ATP systems is mission critical, in the sense that 
+incorrect results from ATP might have nasty consequences.
+The importance of verifying the results from autonomous systems (including ATP systems) is
+reflected in the IEEE~P2817 standard, which aims to ``identify best practices and provide guidance 
+that supports the definition of valid verification processes for a range of autonomous system 
+configurations''.\footnote{%
+\href{https://standards.ieee.org/ieee/2817/11726/}{\smalltt standards.ieee.org/ieee/2817/11726/}}
+
+Facing the demand for error-free results from ATP systems is the reality that ATP systems
+are complex pieces of software, implementing complex calculi with complex data structures and
+algorithms~\cite{Sch06}. 
+Despite best intentions and efforts, incorrect results are possible.
+% Two forms of incorrectness are most evident. 
+% Firstly, an ATP system claiming to have found a solution when there is none, e.g., claiming to 
+% have proved a non-theorem.
+%MODEL or established the consistency of an unsatisfiable set of formulae. 
+% Secondly, outputting a flawed solution, e.g., a proof that contains unsound inferences.
+%MODEL or a model that has contradictory mappings for the symbols in the input problem.
+To counter incorrectness, an ATP system can be required to output a proof
+%MODEL solution, e.g., a proof or a model, which 
+that serves as a certificate for the system's claim.
+To ensure that a 
+%MODEL solution 
+proof is correct, proof verification can be required, 
+which serves as a certification (but not a certificate) of the proof.
+%MODEL solution.
+If the verifier outputs evidence for the certification in a form that can be independently checked,
+that evidence serves as a certificate for the verifier's claim.
+% As a concrete example, consider the verification process for aerospace software, shown in 
+% Figure~\ref{NASACodeCertification}, taken from ~\cite{SDF05}.
+% The ``proofs'' output by the ATP system are certificates that the ``safety policy'' has been 
+% verified.  
+% However, certification authorities like the FAA must be given explicit evidence that 
+% the individual tool components (here, the ``ATP'' system) yield correct results.
+% To that end the ATP system's proofs are given to a ``proof checker'' that produces certificates 
+% that are attached to the ``code''.
+%  
+% \begin{figure}[htb]
+% \begin{center}
+% %EASYCHAIR \includegraphics[width=0.6\textwidth]{NASACodeCertification}
+% \includegraphics[width=0.8\columnwidth]{NASACodeCertification}   %FLAIRS
+% \caption{Practical proof checking for program certification}
+% \label{NASACodeCertification}
+% \end{center}
+% \end{figure}
 
 \paragraph{Related work:}
 
@@ -77,13 +157,101 @@ Section~\ref{Conclusion} concludes.
 \section{The TPTP World}
 \label{TPTP}
 
-Geoff
+% Geoff
 
-%--------------------------------------------------------------------------------------------------
-\subsection{The TPTP Language}
-\label{TPTPLanguage}
+The TPTP World~\cite{Sut24} is a well-established infrastructure that supports research, 
+development, and deployment of Automated Theorem Proving (ATP) systems %(see 
+%Section~\ref{TPTPWorld} for more details).
+The TPTP World infrastructure includes
+the TPTP language~\cite{SS+06},
+the TPTP problem library~\cite{Sut09},
+the TSTP solution library~\cite{Sut10},
+the SZS ontologies~\cite{Sut08-KEAPPA},
+the Specialist Problem Classes (SPCs) and problem difficulty ratings~\cite{SS01},
+SystemOnTPTP~\cite{Sut00-CADE-17} and StarExec~\cite{SST14},
+and the CADE ATP System Competition (CASC)~\cite{Sut16}.
+The problem library is a large collection of Thousands of Problems for Theorem Proving -- hence 
+the name. 
+The problem library contains over 25000 problems from over 50 different domains, written in the 
+TPTP language.
+The problems are categorized into Specialist Problem Classes according to their syntactic and
+logical status~\cite{Sut08-KEAPPA}.
+The TSTP solution library is the result of running numerous ATP systems on that library and 
+collecting their output. 
+The solutions are categorized according to their logical and output form~\cite{Sut08-KEAPPA}.
+The TPTP and TSTP libraries, with their categorizations, provide the basis for assigning a difficulty 
+rating to each problem, according to the number of ATP systems that are able to solve 
+it~\cite{SS01}.
 
-Geoff
+The most salient feature of the TPTP World for this work is the TPTP language.
+The TPTP language~\cite{Sut23-IGPL} is one of the keys to the success of the TPTP World.
+The TPTP language is used for writing both problems and solutions,
+which enables convenient communication between ATP systems and tools.
+Originally the TPTP World supported only first-order clause normal form (CNF)
+\cite{SS98-JAR}.
+Over the years full first-order form (FOF)
+\cite{Sut09}, 
+typed first-order form (TFF)
+\cite{SS+12,BP13-TFF1}, 
+typed extended first-order form (TXF)
+\cite{SK18}, 
+typed higher-order form (THF)
+\cite{SB10,KSR16}, 
+and non-classical forms (NTF)~\cite{SF+22} have been added.
+A general principle of the TPTP language is: ``We provide the syntax, you provide the semantics''.
+As such, there is no a priori commitment to any semantics for each of the language forms, 
+although in almost all cases the intended logic and semantics are well known.
+
+Problems and solutions are built from {\em annotated formulae} of the form
+\begin{center}
+{\em language}{\tt (}{\em name}{\tt ,}
+{\em role}{\tt ,}
+{\em formula}{\tt ,}
+{\em source}{\tt ,}
+{\em useful\_info}{\tt )}
+\end{center}
+The {\em language}s supported are {\smalltt{cnf}} (clause normal form), {\smalltt{fof}}
+(first-order form), {\smalltt{tff}} (typed first-order form), and {\smalltt{thf}}
+(typed higher-order form).
+The {\em role}, e.g., {\smalltt{axiom}}, {\smalltt{lemma}}, {\smalltt{conjecture}}, defines the 
+use of the formula.
+In a {\em formula}, terms and atoms follow Prolog conventions -- functions and predicates start 
+with a lowercase letter or are {\tt '}single quoted{\tt '}, and variables start with an uppercase 
+letter.
+The language also supports interpreted symbols that either start with a {\tt \$}, e.g., the 
+truth constants {\smalltt{\$true}} and {\smalltt{\$false}}, or are composed of 
+non-alphabetic characters, e.g., integer/rational/real numbers such as 27, 43/92, -99.66.
+The logical connectives in the TPTP language are
+{\tt !>}, {\tt ?*}, {\tt @+}, {\tt @-}, {\tt !}, {\tt ?}, {\tt {\raisebox{0.4ex}{\texttildelow}}}, 
+{\tt |}, {\tt \&}, {\tt =>}, {\tt <=}, {\tt <=>}, and {\tt <{\raisebox{0.4ex}{\texttildelow}}>},
+for the mathematical connectives
+$\Pi$, $\Sigma$, choice (indefinite description), definite description,
+$\forall$, $\exists$, $\neg$, $\vee$, $\wedge$, $\Rightarrow$, $\Leftarrow$, $\Leftrightarrow$, 
+and $\oplus$ respectively.
+Equality and inequality are expressed as the infix operators {\tt =} and {\tt !=}.
+The {\em source} and {\em useful\_info} are optional.
+
+\begin{figure}[htb]
+\centering
+{\footnotesize
+{\setlength{\baselineskip}{3mm}
+\begin{verbatim}
+%------------------------------------------------------------------------
+fof(pel24_1,axiom,    ~ ? [X] : ( s(X) & q(X) ) ).
+
+fof(pel24_2,axiom,    ! [X] : ( p(X) => ( q(X) | r(X) ) ) ).
+
+fof(pel24_3a,axiom,   ? [X] : p(X) ).
+
+fof(pel24_4a,axiom,   ! [X] : ( q(X) => s(X) ) ).
+
+fof(pel24,conjecture, ? [X] : ( p(X) & r(X) ) ).
+%------------------------------------------------------------------------
+\end{verbatim}
+}}
+\caption{A simplified version of TPTP problem {\tt SYN???}}
+\label{ExampleProblem}
+\end{figure}
 
 %--------------------------------------------------------------------------------------------------
 \subsection{The TPTP Format for Derivations}
@@ -98,6 +266,166 @@ Geoff. Include GDV here.
 Geoff: Requirements: semantic verification, tableau reconstruction.
 
 Mantas: Explain the format, with two examples.
+Note tableau has variables instantiated, if information is required {\tt bin()} records can be
+added to the useful information list, e.g., 
+
+\begin{verbatim}
+cnf(t2,plain,              p(a),
+    inference(extension,[status(thm),path([t1:1]),bind(t1:X,a)],[c3]) ).
+\end{verbatim}
+
+notes that the variable {\tt X} in the parent literal {\tt ~p(X)} gets bound to {\tt a}.
+AAAARGH, WE NEED TO GET THIS VERY CLEAR.
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.8\textwidth]{SimpleTableau.pdf}
+\vspace*{-1em}
+\caption{Tableau for the problem in Figure~\ref{ExampleProblem}}
+\label{SimpleTableau}
+\end{figure}
+
+\begin{figure}[htb]
+\centering
+{\scriptsize
+{\setlength{\baselineskip}{3mm}
+\begin{verbatim}
+%--------------------------------------------------------------------------------------------
+%----Problem formulae in FOF
+fof(pel24_1,axiom,         ~ ? [X] : ( s(X) & q(X) ),  file('Pell24Simplified.p',pel24_1) ).
+fof(pel24_2,axiom,         ! [X] : ( p(X) => ( q(X) | r(X) ) ),
+    file('Pell24Simplified.p',pel24_2) ).
+fof(pel24_3a,axiom,        ? [X] : p(X),               file('Pell24Simplified.p',pel24_3a) ).
+fof(pel24_4a,axiom,        ! [X] : ( q(X) => s(X) ),   file('Pell24Simplified.p',pel24_4a) ).
+fof(pel24,conjecture,      ? [X] : ( p(X) & r(X) ),    file('Pell24Simplified.p',pel24) ).
+fof(f1,negated_conjecture, ~ ? [X] : ( p(X) & r(X) ),
+    inference(negate,[status(cth)],[pel24]) ).
+
+%----Clausification
+cnf(c1,plain,              ( ~ p(X) | ~ r(X) ),
+    inference(clausify,[status(thm)],[f1]) ).
+cnf(c2,plain,              ( ~ s(X) | ~ q(X) ),
+    inference(clausify,[status(thm)],[pel24_1]) ).
+cnf(c3,plain,              p(a),
+    inference(clausify,[status(esa),new_symbols(skolem,[a]),skolemized(X)],[pel24_3a]) ).
+cnf(c4,plain,              ( ~ q(X) | s(X) ),
+    inference(clausify,[status(thm)],[pel24_4a]) ).
+cnf(c5,plain,              ( ~ p(X) | q(X) | r(X) ),
+    inference(clausify,[status(thm)],[pel24_2]) ).
+
+%----Tableau
+cnf(t1,plain,              ( ~ p(a) | ~ r(a) ),
+    inference(start,[status(thm),path([0:0])],[c1]) ).
+cnf(t2,plain,              p(a),
+    inference(extension,[status(thm),path([t1:1])],[c3]) ).
+cnf(t3,plain,              $false,
+    inference(connection,[status(thm),path([t2:1,t1:1])],[t2:1,t1:1]) ).
+cnf(t4,plain,              ( ~ p(a) | q(a) | r(a) ),
+    inference(extension,[status(thm),path([t1:2])],[c5]) ).
+cnf(t5,plain,              $false,
+    inference(connection,[status(thm),path([t4:3,t1:2])],[t4:1,t1:2]) ).
+cnf(t6,plain,              p(a),
+    inference(extension,[status(thm),path([t4:1,t1:2])],[c3]) ).
+cnf(t7,plain,              $false,
+    inference(connection,[status(thm),path([t6:1,t4:1,t1:2])],[t6:1,t4:1]) ).
+cnf(t8,plain,              ( ~ s(a) | ~ q(a) ),
+    inference(extension,[status(thm),path([t4:2,t1:2])],[c2]) ).
+cnf(t9,plain,              $false,
+    inference(reduction,[status(thm),path([t8:2,t4:2,t1:2])],[t8:2,t4:2]) ).
+cnf(t10,plain,             ( ~ q(a) | s(a) ),
+    inference(extension,[status(thm),path([t8:1,t4:2,t1:2])],[c4]) ).
+cnf(t11,plain,             $false,
+    inference(connection,[status(thm),path([t10:2,t8:1,t4:2,t1:2])],[t10:2,t8:1]) ).
+cnf(t12,plain,             $false,
+    inference(reduction,[status(thm),path([t10:1,t8:1,t4:2,t1:2])],[t10:1,t4:2]) ).
+%--------------------------------------------------------------------------------------------
+\end{verbatim}
+}}
+\caption{Simple tableau in TPTP format}
+\label{SimpleTableauCode}
+\end{figure}
+
+\begin{figure}[htb]
+\centering
+{\scriptsize
+{\setlength{\baselineskip}{3mm}
+\begin{verbatim}
+%--------------------------------------------------------------------------------------------
+%----Problem formulae in FOF
+fof(a1,axiom,              ~ ( ~ q(b) & ? [X] : s(X) ),           file('PaperFOF.p',a1) ).
+fof(a2,axiom,              ( ( r & q(b) ) => ! [X] : ~ p(X) ),    file('PaperFOF.p',a2) ).
+fof(a3,axiom,              ( p(c) | ! [Y] : ( ~ q(c) & q(Y) ) ),  file('PaperFOF.p',a3) ).
+fof(a4,axiom,              ( ~ q(c) => ~ q(b) ),                  file('PaperFOF.p',a4) ).
+fof(a5,axiom,              ( p(c) => r ),                         file('PaperFOF.p',a5) ).
+fof(prove,conjecture,      ! [X] : ( ~ s(X) & ~ q(b) & p(c) ),    file('PaperFOF.p',prove) ).
+
+%----Clausification
+fof(nc1,negated_conjecture, ~ ! [X] : ( ~ s(X) & ~ q(b) & p(c) ),
+    inference(negate,[status(cth)],[prove]) ).
+fof(nc2,negated_conjecture, ? [X] : ~ ( ~ s(X) & ~ q(b) & p(c) ),
+    inference(negate,[status(thm)],[nc1]) ).
+fof(nc3,negated_conjecture, ~ ( ~ s(sK1) & ~ q(b) & p(c) ),
+    inference(skolemize,[status(esq),new_symbols(skolem,[sK1]),skolemized(X)],[nc2]) ).
+cnf(c1,plain,               ( q(b) | ~ s(X) ),
+    inference(clausify,[status(thm)],[a1]) ).
+cnf(c2,plain,               ( ~ q(b) | ~ p(X) | ~ r ),
+    inference(clausify,[status(thm)],[a2]) ).
+cnf(c3,plain,               ( p(c) | ~ q(c) ),
+    inference(clausify,[status(thm)],[a3]) ).
+cnf(c4,plain,               ( p(c) | q(Y) ),
+    inference(clausify,[status(thm)],[a3]) ).
+cnf(c5,plain,               ( q(c) | ~ q(b) ),
+    inference(clausify,[status(thm)],[a4]) ).
+cnf(c6,plain,               ( r | ~ p(c) ),
+    inference(clausify,[status(thm)],[a5]) ).
+cnf(c7,negated_conjecture,  ( s(sK1) | q(b) | ~ p(c) ),
+    inference(clausify,[status(thm)],[nc3]) ).
+
+%----Tableau
+cnf(t1,plain,               ( q(b) | ~ s(X) ),
+    inference(start,[status(thm),path([0:0])],[c1]) ).
+cnf(t2,plain,               ( ~ q(b) | ~ p(X) | ~ r ),
+    inference(extension,[status(thm),path([t1:1])],[c2]) ).
+cnf(t3,plain,               $false,
+    inference(connection,[status(thm),path([t2:1,t1:1])],[t2:1,t1:1]) ).
+cnf(t4,plain,               ( p(c) | ~ q(c) ),
+    inference(extension,[status(thm),path([t2:2,t1:1])],[c3]) ).
+cnf(t5,plain,               $false,
+    inference(connection,[status(thm),path([t4:1,t2:2,t1:1])],[t4:1,t2:2]) ).
+cnf(t6,plain,               ( q(c) | ~ q(b) ),
+    inference(extension,[status(thm),path([t2:2,t1:1])],[c5]) ).
+cnf(t7,plain,               $false,
+    inference(connection,[status(thm),path([t6:1,t4:2,t2:2,t1:1])],[t6:1,t4:2]) ).
+cnf(t8,plain,               $false,
+    inference(reduction,[status(thm),path([t6:2,t4:2,t2:2,t1:1])],[t6:2,t1:1]) ).
+cnf(l1,plain,               p(c),
+    inference(extension_lemma,[status(thm),path([t2:2,t1:1]),below(t1:1)],[t4:1]) ).
+cnf(t9,plain,               ( r | ~ p(c) ),
+    inference(extension,[status(thm),path([t2:3,t1:1])],[c6]) ).
+cnf(t10,plain,              $false,
+    inference(connection,[status(thm),path([t9:1,t2:3,t1:1])],[t9:1,t2:3]) ).
+cnf(t11,plain,              $false,
+    inference(lemma,[status(thm),path([l1:1,t9:2,t2:3,t1:1])],[l1:1,t9:2]) ).
+cnf(l2,plain,               ~ q(b),
+    inference(extension_lemma,[status(thm),path([t1:1]),below(0:0)],[t2:1]) ).
+cnf(t12,plain,              ( s(sK1) | q(b) | ~ p(c) ),
+    inference(extension,[status(thm),path([t1:2])],[c7]) ).
+cnf(t13,plain,              $false,
+    inference(connection,[status(thm),path([t12:1,t1:2])],[t12:1,t1:2]) ).
+cnf(t14,plain,              $false,
+    inference(lemma,[status(thm),path([l2:1,t12:2,t1:2])],[l2:1,t12:2]) ).
+cnf(t15,plain,              ( p(c) | q(Y) ),
+    inference(extension,[status(thm),path([t12:3,t1:2])],[c4]) ).
+cnf(t16,plain,              $false,
+    inference(connection,[status(thm),path([t15:1,t12:3,t1:2])],[t15:1,t2:3]) ).
+cnf(t17,plain,              $false,
+    inference(lemma,[status(thm),path([l2:1,t15:2,t12:3,t1:2])],[l2:1,t15:2]) ).
+%--------------------------------------------------------------------------------------------
+\end{verbatim}
+}}
+\caption{Full tableau in TPTP format}
+\label{FullTableauCode}
+\end{figure}
 
 % \begin{figure}[t!]
 % \centering
