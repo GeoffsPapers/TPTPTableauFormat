@@ -34,15 +34,24 @@
 \renewcommand{\textfloatsep}{2.0ex}
 \renewcommand{\dbltextfloatsep}{2.0ex}
 
+\newcommand{\proves}{{\footnotesize {\raisebox{0.3ex}{$\;\models$\;}}}}
 \newcommand{\smalltt}[1]{\small \texttt{#1}}
 \newenvironment{packed_itemize}{
-\vspace*{-0.5em}
+\vspace*{-0.2em}
 \begin{itemize}
 \setlength{\partopsep}{0pt}
 \setlength{\itemsep}{1pt}
 \setlength{\parskip}{0pt}
 \setlength{\parsep}{0pt}
 }{\end{itemize}}
+\newenvironment{packed_enumerate}{
+\vspace*{-0.2em}
+\begin{enumerate}
+\setlength{\partopsep}{0pt}
+\setlength{\itemsep}{1pt}
+\setlength{\parskip}{0pt}
+\setlength{\parsep}{0pt}
+}{\end{enumerate}}
 
 \begin{document}
 
@@ -246,6 +255,9 @@ and $\oplus$ respectively.
 Equality and inequality are expressed as the infix operators {\tt =} and {\tt !=}.
 The {\em source} and {\em useful\_info} are optional.
 
+Figure~\ref{ExampleProblem} shows a simple problem -- it is a simplified version of the
+``Pelletier 54'' problem {\tt SYN054} from the TPTP problem library.
+
 \begin{figure}[htb]
 \centering
 {\footnotesize
@@ -264,15 +276,135 @@ fof(pel24,conjecture, ? [X] : ( p(X) & r(X) ) ).
 %------------------------------------------------------------------------
 \end{verbatim}
 }}
-\caption{A simplified version of TPTP problem {\tt SYN???}}
+\caption{A simplified version of TPTP problem {\tt SYN054}}
 \label{ExampleProblem}
 \end{figure}
 
 %--------------------------------------------------------------------------------------------------
-\subsection{The TPTP Format for Derivations}
+\subsection{The TPTP Format for Refutations}
 \label{Derivations}
 
-Geoff. Include GDV here.
+A refutation written in the TPTP language is a list of annotated formulae. 
+The leaves of a refutation DAG are typically have a role {\smalltt axiom} or {\smalltt conjecture}, 
+and the role for inferred formulae is typically one of {\smalltt negated\_conjecture} (also used 
+for leaves in CNF) or {\smalltt plain} for inferred formulae. 
+The source is either a {\smalltt file} record for leaves or an {\smalltt inference} record for 
+inferred formulae.
+A {\smalltt file} record contains the problem file name and the corresponding annotated formulae 
+name in the problem file.
+An {\smalltt inference} record contains the inference rule name, a list of useful inference 
+information, and a list of the parent formulae.
+The parent formulae list can contain parent annotated formulae names, and nested 
+{\smalltt inference} records.
+Common types of useful inference information are the semantic relationship of the inferred formula 
+to its parents as an SZS ontology value~\cite{Sut08-KEAPPA} in a {\smalltt status} record, 
+special information about recognized types of complex inference rules, e.g., Skolemization and
+explicit splitting, and details of new symbols introduced in the inference.
+The use of SZS values is core to GDV's approach to verification, described below.
+The most common type of steps are those that infer a logical consequence of the parent formulae.
+These are tagged with the SZS status {\smalltt{thm}}.
+Another well known step is negating the conjecture, which is tagged with the SZS status 
+{\smalltt{cth}}.
+Steps of equi-satisfiability are tagged with the SZS status {\smalltt{esa}}. 
+
+Figure~\ref{ExampleDerivation} shows an extract from the refutation found by E~3.2.5.\footnote{%
+The full refutation can be viewed at \\ \href{https://tptp.org/cgi-bin/SeeTPTP?Category=Solutions\&Domain=SYN\&File=SYN054+1\&System=E---3.2.5.THM-CRf.s}{{\tt tptp.org/cgi-bin/SeeTPTP?Category=Solutions\&Domain=SYN\&File=SYN054+1\& \\ System=E---3.2.5.THM-CRf.s}}}
+Points of note:
+the leaf formula {\smalltt pel24\_1} is a copy of a formula in the problem.
+Many of the formulae are inferred with SZS status {\smalltt{thm}}, i.e., they are logical 
+consequences of their parents;
+the negated conjecture {\smalltt c\_0\_7} is inferred with SZS status {\smalltt{cth}},
+its negation is a logical consequence of its parent;
+the inferred formulae, {\smalltt c\_0\_18} has a nested {\smalltt inference} record, and the 
+intermediate inferred formula has not been recorded in the derivation. 
+
+\begin{figure}[htb]
+\centering
+{\footnotesize
+{\setlength{\baselineskip}{3mm}
+\begin{verbatim}
+%------------------------------------------------------------------------
+   ... several formulae not shown ...
+
+fof(pel24_1,axiom,         ~ ? [X1] : ( s(X1) & q(X1) ),
+    file('/export/starexec/sandbox/benchmark/theBenchmark.p',pel24_1) ).
+
+   ... several formulae not shown ...
+
+fof(c_0_6,plain,           ! [X8] : ( ~ s(X8) | ~ q(X8) ),
+    inference(fof_nnf,[status(thm)],[inference(variable_rename,
+[status(thm)],[inference(fof_nnf,[status(thm)],[pel24_1])])]) ).
+
+fof(c_0_7,negated_conjecture, ~ ? [X1] : ( big_p(X1) & big_r(X1) ),
+    inference(assume_negation,[status(cth)],[pel24]) ).
+
+   ... several formulae not shown ...
+
+cnf(c_0_14,plain,          ~ q(X1),
+    inference(csr,[status(thm)],[c_0_9,c_0_10]) ).
+
+cnf(c_0_15,plain,          ( q(X1) | r(X1) | ~ p(X1) ),
+    inference(split_conjunct,[status(thm)],[c_0_11]) ).
+
+cnf(c_0_16,negated_conjecture, ( ~ p(X1) | ~ r(X1) ),
+    inference(split_conjunct,[status(thm)],[c_0_12]) ).
+
+cnf(c_0_17,plain,           p(esk1_0),
+    inference(sr,[status(thm)],[c_0_13,c_0_14]) ).
+
+cnf(c_0_18,plain,           ~ p(X1),
+    inference(csr,[status(thm)],[inference(sr,[status(thm)],
+[c_0_15,c_0_14]),c_0_16]) ).
+
+cnf(c_0_19,plain,           $false,
+    inference(sr,[status(thm)],[c_0_17,c_0_18]),[proof] ).
+%------------------------------------------------------------------------
+\end{verbatim}
+}}
+\caption{A extract from E 3.2.5's refutation of Figure~\ref{ExampleProblem}}
+\label{ExampleDerivation}
+\end{figure}
+
+The GDV derivation verifier~\cite{Sut06} was developed at the start of the century, primarily
+targeting proofs by refutation in clause normal and first-order form.
+Over time it has been incrementally developed to verify proofs in typed first-order form and
+typed higher-order form.
+Most recently it has been developed to produce LambdaPi 
+terms that can be independently verified using the {\smalltt lambdapi} checker.~\cite{SBB25}
+GDV's input is a TPTP format refutation, and optionally (required for complete verification) the 
+problem for which the proof was produced.
+GDV checks a TPTP proof in four verification phases: structural verification, leaf verification,
+rule-specific verification, and inference verification.
+Many of the checks rely on a ``check-by-ATP'', which calls a trusted ATP system -- either a theorem 
+prover or a model finder.
+Structural verification deals with non-logical aspects of a proof, checking whether the
+formulae presented as proof have the right format and relationships, e.g., all the parents of 
+inferred formulae exist, the refutation is acyclic. 
+Leaf verification deals with the leaves of the derivation, and their relationship with
+the problem formulae, e.g., check-by-ATP that the leaf axioms are satisfiable, and that leaves 
+are copies of problem formulae or can be proved from problem formulae using a check-by-ATP.
+Rule specific verification deals with inference rules that require special treatment, e.g.,
+explicit splitting~\cite{Wei01}, Skolemization. 
+Inference verification deals with the various types of inferences that are made by ATP
+systems in a proof.
+Examples of checks are: for inference steps with SZS status {\smalltt{THM}} check-by-ATP that the 
+inferred formula can be proved from the parent formulae, for inference steps with SZS status 
+{\smalltt{CTH}} check-by-ATP that the negation of the inferred formula can be proved from the parent 
+formulae.
+
+% \begin{figure*}[htb]   %FLAIRS
+% \begin{center}
+% \includegraphics[width=1.0\textwidth]{GDVArchitecture}
+% \caption{GDV architecture}
+% \label{GDVArchitecture}
+% \end{center}
+% %EASYCHAIR \end{figure}
+% \end{figure*}   %FLAIRS
+
+The default trusted theorem provers and model finders used by GDV are Otter~\cite{McC03-Otter}
+and E~\cite{SCV19} for theorem proving, Paradox~\cite{CS18}, Vampire~\cite{KV13}, and
+Nitpick~\cite{BN10-ITP} for model finding.
+These systems have become trusted through the process described in \cite{SBB25}.
 
 %--------------------------------------------------------------------------------------------------
 \section{The (new) TPTP Format for Tableau Proofs}
@@ -451,14 +583,14 @@ cnf(t17,plain,              $false,
 % \end{figure}
 
 %--------------------------------------------------------------------------------------------------
-\section{Tableau ATP Systems}
-\label{ATPSystems}
+\section{ATP Systems and Tools}
+\label{SystemsTools}
 
-Sean.
-
+Sean:
 Connect++ and more.
-
 Results from verifying a bunch of Connect++ tableau if we get the software done.
+
+Geoff: GDV, IDV
 
 %--------------------------------------------------------------------------------------------------
 \section{Conclusion}
