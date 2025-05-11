@@ -308,7 +308,8 @@ Another well known step is negating the conjecture, which is tagged with the SZS
 Steps of equi-satisfiability are tagged with the SZS status {\smalltt{esa}}. 
 
 Figure~\ref{ExampleDerivation} shows an extract from the refutation found by E~3.2.5 for the
-problem in Figure~\ref{ExampleProblem}.
+problem in Figure~\ref{ExampleProblem}.\footnote{%
+The full refutation can be generated in \href{https://tptp.org/cgi-bin/SystemOnTPTP}{SystemOnTPTP}}
 Points of note:
 all the leaf formulae except {\tt a4} and {\tt a5} are copies of formulas in the problem;
 {\tt a4} and {\tt a5} is easily derived from the corresponding problen formulae {\tt a5};
@@ -325,40 +326,42 @@ intermediate inferred formula has not been recorded in the derivation.
 {\setlength{\baselineskip}{3mm}
 \begin{verbatim}
 %------------------------------------------------------------------------
-fof(prove, conjecture, ![X1]:(((~(s(X1))&~(q(b)))&p(c))), file('PaperFOF.p', prove)).
-fof(a1, axiom, ~((~(q(b))&?[X1]:(s(X1)))), file('PaperFOF.p', a1)).
-fof(a2, axiom, ((r&q(b))=>![X1]:(~(p(X1)))), file('PaperFOF.p', a2)).
-fof(a3, axiom, (p(c)|![X2]:((~(q(c))&q(X2)))), file('PaperFOF.p', a3)).
-fof(a4, axiom, (~(q(c))=>~(q(b))), file('PaperFOF.p', a4)).
-fof(a5, axiom, (p(c)=>r), file('PaperFOF.p', a5)).
-fof(c_0_6, negated_conjecture, ~(![X1]:(((~s(X1)&~q(b))&p(c)))), inference(fof_simplification,[status(thm)],[inference(assume_negation,[status(cth)],[prove])])).
-fof(c_0_7, plain, ~((~q(b)&?[X1]:(s(X1)))), inference(fof_simplification,[status(thm)],[a1])).
-fof(c_0_8, plain, ((r&q(b))=>![X1]:(~p(X1))), inference(fof_simplification,[status(thm)],[a2])).
-fof(c_0_9, plain, (p(c)|![X2]:((~q(c)&q(X2)))), inference(fof_simplification,[status(thm)],[a3])).
-fof(c_0_10, plain, (~q(c)=>~q(b)), inference(fof_simplification,[status(thm)],[a4])).
-fof(c_0_11, negated_conjecture, (s(esk1_0)|q(b)|~p(c)), inference(fof_nnf,[status(thm)],[inference(skolemize,[status(esa)],[inference(variable_rename,[status(thm)],[inference(fof_nnf,[status(thm)],[c_0_6])])])])).
-fof(c_0_12, plain, ![X6]:((q(b)|~s(X6))), inference(fof_nnf,[status(thm)],[inference(shift_quantors,[status(thm)],[inference(variable_rename,[status(thm)],[inference(fof_nnf,[status(thm)],[c_0_7])])])])).
-fof(c_0_13, plain, ![X4]:((~r|~q(b)|~p(X4))), inference(fof_nnf,[status(thm)],[inference(shift_quantors,[status(thm)],[inference(variable_rename,[status(thm)],[inference(fof_nnf,[status(thm)],[c_0_8])])])])).
-fof(c_0_14, plain, ![X5]:(((~q(c)|p(c))&(q(X5)|p(c)))), inference(distribute,[status(thm)],[inference(fof_nnf,[status(thm)],[inference(shift_quantors,[status(thm)],[inference(variable_rename,[status(thm)],[c_0_9])])])])).
-fof(c_0_15, plain, (q(c)|~q(b)), inference(fof_nnf,[status(thm)],[inference(fof_nnf,[status(thm)],[c_0_10])])).
-cnf(c_0_16, negated_conjecture, (s(esk1_0)|q(b)|~p(c)), inference(split_conjunct,[status(thm)],[c_0_11])).
-cnf(c_0_17, plain, (q(b)|~s(X1)), inference(split_conjunct,[status(thm)],[c_0_12])).
-cnf(c_0_18, plain, (~r|~q(b)|~p(X1)), inference(split_conjunct,[status(thm)],[c_0_13])).
-cnf(c_0_19, plain, (p(c)|~q(c)), inference(split_conjunct,[status(thm)],[c_0_14])).
-cnf(c_0_20, plain, (q(c)|~q(b)), inference(split_conjunct,[status(thm)],[c_0_15])).
-cnf(c_0_21, negated_conjecture, (q(b)|~p(c)), inference(csr,[status(thm)],[c_0_16, c_0_17])).
-fof(c_0_22, plain, (~p(c)|r), inference(fof_nnf,[status(thm)],[inference(fof_nnf,[status(thm)],[a5])])).
-cnf(c_0_23, plain, (~r|~q(b)), inference(csr,[status(thm)],[inference(spm,[status(thm)],[c_0_18, c_0_19]), c_0_20])).
-cnf(c_0_24, negated_conjecture, (q(b)|~q(c)), inference(spm,[status(thm)],[c_0_21, c_0_19])).
-cnf(c_0_25, plain, (r|~p(c)), inference(split_conjunct,[status(thm)],[c_0_22])).
-cnf(c_0_26, negated_conjecture, (~r|~q(c)), inference(spm,[status(thm)],[c_0_23, c_0_24])).
-cnf(c_0_27, plain, (q(X1)|p(c)), inference(split_conjunct,[status(thm)],[c_0_14])).
-cnf(c_0_28, plain, (~q(c)), inference(csr,[status(thm)],[inference(spm,[status(thm)],[c_0_25, c_0_19]), c_0_26])).
-cnf(c_0_29, plain, (r|q(X1)), inference(spm,[status(thm)],[c_0_25, c_0_27])).
-cnf(c_0_30, plain, (r), inference(spm,[status(thm)],[c_0_28, c_0_29])).
-cnf(c_0_31, plain, (~q(b)), inference(cn,[status(thm)],[inference(rw,[status(thm)],[c_0_23, c_0_30])])).
-cnf(c_0_32, negated_conjecture, (q(X1)), inference(sr,[status(thm)],[inference(spm,[status(thm)],[c_0_21, c_0_27]), c_0_31])).
-cnf(c_0_33, plain, ($false), inference(cn,[status(thm)],[inference(rw,[status(thm)],[c_0_31, c_0_32])]), ['proof']).
+%----Problem formulae in FOF (some ommitted)
+fof(prove,conjecture,         ! [X1] : ( ~ s(X1) & ~ q(b) & p(c) ),
+    file('PaperFOF.p',prove) ).
+
+fof(a1,axiom,                 ~ ( ~ q(b) & ? [X1] : s(X1) ),
+    file('PaperFOF.p',a1) ).
+
+fof(a5,axiom,                 p(c) => r,
+    file('PaperFOF.p',a5) ).
+
+%----Clausification (some formulae omitted)
+fof(c_0_6,negated_conjecture, ~ ! [X1] : ( ~ s(X1) & ~ q(b) & p(c) ),
+    inference(assume_negation,[status(cth)],[prove]) ).
+
+fof(c_0_11,negated_conjecture, s(esk1_0) | q(b) | ~ p(c),
+    inference(skolemize,[status(esa)],[c_0_6]) ).
+
+%----Refutation (some formulae omitted)
+cnf(c_0_29,plain,              r | q(X1),
+    inference(spm,[status(thm)],[c_0_25,c_0_27]) ).
+
+cnf(c_0_30,plain,              r,
+    inference(spm,[status(thm)],[c_0_28,c_0_29]) ).
+
+cnf(c_0_31,plain,              ~ q(b),
+    inference(cn,[status(thm)],
+[inference(rw,[status(thm)],[c_0_23,c_0_30])]) ).
+
+cnf(c_0_32,negated_conjecture, q(X1),
+    inference(sr,[status(thm)],
+[inference(spm,[status(thm)],[c_0_21,c_0_27]),c_0_31]) ).
+
+cnf(c_0_33,plain,              $false,
+    inference(cn,[status(thm)],
+[inference(rw,[status(thm)],[c_0_31,c_0_32])]),
+    [proof] ).
 %------------------------------------------------------------------------
 \end{verbatim}
 }}
@@ -432,74 +435,6 @@ cnf(t2,plain,              p(a),
 
 notes that the variable {\tt X} in the parent literal {\tt ~p(X)} gets bound to {\tt a}.
 AAAARGH, WE NEED TO GET THIS VERY CLEAR.
-
-\begin{figure}[htb]
-\centering
-\includegraphics[width=0.8\textwidth]{Tableau.pdf}
-\vspace*{-1em}
-\caption{Tableau for the problem in Figure~\ref{ExampleProblem}}
-\label{SimpleTableau}
-\end{figure}
-
-\begin{figure}[htb]
-\centering
-{\scriptsize
-{\setlength{\baselineskip}{3mm}
-\begin{verbatim}
-%--------------------------------------------------------------------------------------------
-%----Problem formulae in FOF
-fof(pel24_1,axiom,         ~ ? [X] : ( s(X) & q(X) ),  file('Pell24Simplified.p',pel24_1) ).
-fof(pel24_2,axiom,         ! [X] : ( p(X) => ( q(X) | r(X) ) ),
-    file('Pell24Simplified.p',pel24_2) ).
-fof(pel24_3a,axiom,        ? [X] : p(X),               file('Pell24Simplified.p',pel24_3a) ).
-fof(pel24_4a,axiom,        ! [X] : ( q(X) => s(X) ),   file('Pell24Simplified.p',pel24_4a) ).
-fof(pel24,conjecture,      ? [X] : ( p(X) & r(X) ),    file('Pell24Simplified.p',pel24) ).
-fof(f1,negated_conjecture, ~ ? [X] : ( p(X) & r(X) ),
-    inference(negate,[status(cth)],[pel24]) ).
-
-%----Clausification
-cnf(c1,plain,              ( ~ p(X) | ~ r(X) ),
-    inference(clausify,[status(thm)],[f1]) ).
-cnf(c2,plain,              ( ~ s(X) | ~ q(X) ),
-    inference(clausify,[status(thm)],[pel24_1]) ).
-cnf(c3,plain,              p(a),
-    inference(clausify,[status(esa),new_symbols(skolem,[a]),skolemized(X)],[pel24_3a]) ).
-cnf(c4,plain,              ( ~ q(X) | s(X) ),
-    inference(clausify,[status(thm)],[pel24_4a]) ).
-cnf(c5,plain,              ( ~ p(X) | q(X) | r(X) ),
-    inference(clausify,[status(thm)],[pel24_2]) ).
-
-%----Tableau
-cnf(t1,plain,              ( ~ p(a) | ~ r(a) ),
-    inference(start,[status(thm),path([0:0])],[c1]) ).
-cnf(t2,plain,              p(a),
-    inference(extension,[status(thm),path([t1:1])],[c3]) ).
-cnf(t3,plain,              $false,
-    inference(connection,[status(thm),path([t2:1,t1:1])],[t2:1,t1:1]) ).
-cnf(t4,plain,              ( ~ p(a) | q(a) | r(a) ),
-    inference(extension,[status(thm),path([t1:2])],[c5]) ).
-cnf(t5,plain,              $false,
-    inference(connection,[status(thm),path([t4:3,t1:2])],[t4:1,t1:2]) ).
-cnf(t6,plain,              p(a),
-    inference(extension,[status(thm),path([t4:1,t1:2])],[c3]) ).
-cnf(t7,plain,              $false,
-    inference(connection,[status(thm),path([t6:1,t4:1,t1:2])],[t6:1,t4:1]) ).
-cnf(t8,plain,              ( ~ s(a) | ~ q(a) ),
-    inference(extension,[status(thm),path([t4:2,t1:2])],[c2]) ).
-cnf(t9,plain,              $false,
-    inference(reduction,[status(thm),path([t8:2,t4:2,t1:2])],[t8:2,t4:2]) ).
-cnf(t10,plain,             ( ~ q(a) | s(a) ),
-    inference(extension,[status(thm),path([t8:1,t4:2,t1:2])],[c4]) ).
-cnf(t11,plain,             $false,
-    inference(connection,[status(thm),path([t10:2,t8:1,t4:2,t1:2])],[t10:2,t8:1]) ).
-cnf(t12,plain,             $false,
-    inference(reduction,[status(thm),path([t10:1,t8:1,t4:2,t1:2])],[t10:1,t4:2]) ).
-%--------------------------------------------------------------------------------------------
-\end{verbatim}
-}}
-\caption{Simple tableau in TPTP format}
-\label{SimpleTableauCode}
-\end{figure}
 
 \begin{figure}[htb]
 \centering
@@ -583,13 +518,13 @@ cnf(t17,plain,              $false,
 \label{FullTableauCode}
 \end{figure}
 
-% \begin{figure}[t!]
-% \centering
-% \includegraphics[width=0.6\textwidth]{Plots/FOF_THM_RFO_PPP/FOF_THM_RFO_PPP}
-% \vspace*{-1em}
-% \caption{CPU times for {\tt FOF\_THM\_RFO\_*}}
-% \label{PPPPlot}
-% \end{figure}
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.8\textwidth]{Tableau.pdf}
+\vspace*{-1em}
+\caption{Tableau for the problem in Figure~\ref{ExampleProblem}}
+\label{SimpleTableau}
+\end{figure}
 
 %--------------------------------------------------------------------------------------------------
 \section{ATP Systems and Tools}
