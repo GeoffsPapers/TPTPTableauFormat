@@ -254,9 +254,7 @@ $\forall$, $\exists$, $\neg$, $\vee$, $\wedge$, $\Rightarrow$, $\Leftarrow$, $\L
 and $\oplus$ respectively.
 Equality and inequality are expressed as the infix operators {\tt =} and {\tt !=}.
 The {\em source} and {\em useful\_info} are optional.
-
-Figure~\ref{ExampleProblem} shows a simple problem -- it is a simplified version of the
-``Pelletier 54'' problem {\tt SYN054} from the TPTP problem library.
+Figure~\ref{ExampleProblem} shows an example problem.
 
 \begin{figure}[htb]
 \centering
@@ -264,19 +262,21 @@ Figure~\ref{ExampleProblem} shows a simple problem -- it is a simplified version
 {\setlength{\baselineskip}{3mm}
 \begin{verbatim}
 %------------------------------------------------------------------------
-fof(pel24_1,axiom,    ~ ? [X] : ( s(X) & q(X) ) ).
+fof(a1,axiom,         ~ ( ~ q(b) & ? [X] : s(X) ) ).
 
-fof(pel24_2,axiom,    ! [X] : ( p(X) => ( q(X) | r(X) ) ) ).
+fof(a2,axiom,         ( r & q(b) ) => ! [X] : ~ p(X) ).
 
-fof(pel24_3a,axiom,   ? [X] : p(X) ).
+fof(a3,axiom,         p(c) | ! [Y] : ( ~ q(c) & q(Y) ) ).
 
-fof(pel24_4a,axiom,   ! [X] : ( q(X) => s(X) ) ).
+fof(a4,axiom,         ~ q(c) => ~ q(b) ).
 
-fof(pel24,conjecture, ? [X] : ( p(X) & r(X) ) ).
+fof(a5,axiom,         p(c) => r ).
+
+fof(prove,conjecture, ! [X] : ( ~ s(X) & ~ q(b) & p(c) ) ).
 %------------------------------------------------------------------------
 \end{verbatim}
 }}
-\caption{A simplified version of TPTP problem {\tt SYN054}}
+\caption{An example problem in TPTP format}
 \label{ExampleProblem}
 \end{figure}
 
@@ -307,11 +307,12 @@ Another well known step is negating the conjecture, which is tagged with the SZS
 {\smalltt{cth}}.
 Steps of equi-satisfiability are tagged with the SZS status {\smalltt{esa}}. 
 
-Figure~\ref{ExampleDerivation} shows an extract from the refutation found by E~3.2.5.\footnote{%
-The full refutation can be viewed at \\ \href{https://tptp.org/cgi-bin/SeeTPTP?Category=Solutions\&Domain=SYN\&File=SYN054+1\&System=E---3.2.5.THM-CRf.s}{{\tt tptp.org/cgi-bin/SeeTPTP?Category=Solutions\&Domain=SYN\&File=SYN054+1\& \\ System=E---3.2.5.THM-CRf.s}}}
+Figure~\ref{ExampleDerivation} shows an extract from the refutation found by E~3.2.5 for the
+problem in Figure~\ref{ExampleProblem}.
 Points of note:
-the leaf formula {\smalltt pel24\_1} is a copy of a formula in the problem.
-Many of the formulae are inferred with SZS status {\smalltt{thm}}, i.e., they are logical 
+all the leaf formulae except {\tt a4} and {\tt a5} are copies of formulas in the problem;
+{\tt a4} and {\tt a5} is easily derived from the corresponding problen formulae {\tt a5};
+many of the formulae are inferred with SZS status {\smalltt{thm}}, i.e., they are logical 
 consequences of their parents;
 the negated conjecture {\smalltt c\_0\_7} is inferred with SZS status {\smalltt{cth}},
 its negation is a logical consequence of its parent;
@@ -324,45 +325,53 @@ intermediate inferred formula has not been recorded in the derivation.
 {\setlength{\baselineskip}{3mm}
 \begin{verbatim}
 %------------------------------------------------------------------------
-   ... several formulae not shown ...
-
-fof(pel24_1,axiom,         ~ ? [X1] : ( s(X1) & q(X1) ),
-    file('/export/starexec/sandbox/benchmark/theBenchmark.p',pel24_1) ).
-
-   ... several formulae not shown ...
-
-fof(c_0_6,plain,           ! [X8] : ( ~ s(X8) | ~ q(X8) ),
-    inference(fof_nnf,[status(thm)],[inference(variable_rename,
-[status(thm)],[inference(fof_nnf,[status(thm)],[pel24_1])])]) ).
-
-fof(c_0_7,negated_conjecture, ~ ? [X1] : ( big_p(X1) & big_r(X1) ),
-    inference(assume_negation,[status(cth)],[pel24]) ).
-
-   ... several formulae not shown ...
-
-cnf(c_0_14,plain,          ~ q(X1),
-    inference(csr,[status(thm)],[c_0_9,c_0_10]) ).
-
-cnf(c_0_15,plain,          ( q(X1) | r(X1) | ~ p(X1) ),
-    inference(split_conjunct,[status(thm)],[c_0_11]) ).
-
-cnf(c_0_16,negated_conjecture, ( ~ p(X1) | ~ r(X1) ),
-    inference(split_conjunct,[status(thm)],[c_0_12]) ).
-
-cnf(c_0_17,plain,           p(esk1_0),
-    inference(sr,[status(thm)],[c_0_13,c_0_14]) ).
-
-cnf(c_0_18,plain,           ~ p(X1),
-    inference(csr,[status(thm)],[inference(sr,[status(thm)],
-[c_0_15,c_0_14]),c_0_16]) ).
-
-cnf(c_0_19,plain,           $false,
-    inference(sr,[status(thm)],[c_0_17,c_0_18]),[proof] ).
+fof(prove, conjecture, ![X1]:(((~(s(X1))&~(q(b)))&p(c))), file('PaperFOF.p', prove)).
+fof(a1, axiom, ~((~(q(b))&?[X1]:(s(X1)))), file('PaperFOF.p', a1)).
+fof(a2, axiom, ((r&q(b))=>![X1]:(~(p(X1)))), file('PaperFOF.p', a2)).
+fof(a3, axiom, (p(c)|![X2]:((~(q(c))&q(X2)))), file('PaperFOF.p', a3)).
+fof(a4, axiom, (~(q(c))=>~(q(b))), file('PaperFOF.p', a4)).
+fof(a5, axiom, (p(c)=>r), file('PaperFOF.p', a5)).
+fof(c_0_6, negated_conjecture, ~(![X1]:(((~s(X1)&~q(b))&p(c)))), inference(fof_simplification,[status(thm)],[inference(assume_negation,[status(cth)],[prove])])).
+fof(c_0_7, plain, ~((~q(b)&?[X1]:(s(X1)))), inference(fof_simplification,[status(thm)],[a1])).
+fof(c_0_8, plain, ((r&q(b))=>![X1]:(~p(X1))), inference(fof_simplification,[status(thm)],[a2])).
+fof(c_0_9, plain, (p(c)|![X2]:((~q(c)&q(X2)))), inference(fof_simplification,[status(thm)],[a3])).
+fof(c_0_10, plain, (~q(c)=>~q(b)), inference(fof_simplification,[status(thm)],[a4])).
+fof(c_0_11, negated_conjecture, (s(esk1_0)|q(b)|~p(c)), inference(fof_nnf,[status(thm)],[inference(skolemize,[status(esa)],[inference(variable_rename,[status(thm)],[inference(fof_nnf,[status(thm)],[c_0_6])])])])).
+fof(c_0_12, plain, ![X6]:((q(b)|~s(X6))), inference(fof_nnf,[status(thm)],[inference(shift_quantors,[status(thm)],[inference(variable_rename,[status(thm)],[inference(fof_nnf,[status(thm)],[c_0_7])])])])).
+fof(c_0_13, plain, ![X4]:((~r|~q(b)|~p(X4))), inference(fof_nnf,[status(thm)],[inference(shift_quantors,[status(thm)],[inference(variable_rename,[status(thm)],[inference(fof_nnf,[status(thm)],[c_0_8])])])])).
+fof(c_0_14, plain, ![X5]:(((~q(c)|p(c))&(q(X5)|p(c)))), inference(distribute,[status(thm)],[inference(fof_nnf,[status(thm)],[inference(shift_quantors,[status(thm)],[inference(variable_rename,[status(thm)],[c_0_9])])])])).
+fof(c_0_15, plain, (q(c)|~q(b)), inference(fof_nnf,[status(thm)],[inference(fof_nnf,[status(thm)],[c_0_10])])).
+cnf(c_0_16, negated_conjecture, (s(esk1_0)|q(b)|~p(c)), inference(split_conjunct,[status(thm)],[c_0_11])).
+cnf(c_0_17, plain, (q(b)|~s(X1)), inference(split_conjunct,[status(thm)],[c_0_12])).
+cnf(c_0_18, plain, (~r|~q(b)|~p(X1)), inference(split_conjunct,[status(thm)],[c_0_13])).
+cnf(c_0_19, plain, (p(c)|~q(c)), inference(split_conjunct,[status(thm)],[c_0_14])).
+cnf(c_0_20, plain, (q(c)|~q(b)), inference(split_conjunct,[status(thm)],[c_0_15])).
+cnf(c_0_21, negated_conjecture, (q(b)|~p(c)), inference(csr,[status(thm)],[c_0_16, c_0_17])).
+fof(c_0_22, plain, (~p(c)|r), inference(fof_nnf,[status(thm)],[inference(fof_nnf,[status(thm)],[a5])])).
+cnf(c_0_23, plain, (~r|~q(b)), inference(csr,[status(thm)],[inference(spm,[status(thm)],[c_0_18, c_0_19]), c_0_20])).
+cnf(c_0_24, negated_conjecture, (q(b)|~q(c)), inference(spm,[status(thm)],[c_0_21, c_0_19])).
+cnf(c_0_25, plain, (r|~p(c)), inference(split_conjunct,[status(thm)],[c_0_22])).
+cnf(c_0_26, negated_conjecture, (~r|~q(c)), inference(spm,[status(thm)],[c_0_23, c_0_24])).
+cnf(c_0_27, plain, (q(X1)|p(c)), inference(split_conjunct,[status(thm)],[c_0_14])).
+cnf(c_0_28, plain, (~q(c)), inference(csr,[status(thm)],[inference(spm,[status(thm)],[c_0_25, c_0_19]), c_0_26])).
+cnf(c_0_29, plain, (r|q(X1)), inference(spm,[status(thm)],[c_0_25, c_0_27])).
+cnf(c_0_30, plain, (r), inference(spm,[status(thm)],[c_0_28, c_0_29])).
+cnf(c_0_31, plain, (~q(b)), inference(cn,[status(thm)],[inference(rw,[status(thm)],[c_0_23, c_0_30])])).
+cnf(c_0_32, negated_conjecture, (q(X1)), inference(sr,[status(thm)],[inference(spm,[status(thm)],[c_0_21, c_0_27]), c_0_31])).
+cnf(c_0_33, plain, ($false), inference(cn,[status(thm)],[inference(rw,[status(thm)],[c_0_31, c_0_32])]), ['proof']).
 %------------------------------------------------------------------------
 \end{verbatim}
 }}
 \caption{A extract from E 3.2.5's refutation of Figure~\ref{ExampleProblem}}
 \label{ExampleDerivation}
+\end{figure}
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.8\textwidth]{PaperFOFIDV.pdf}
+\vspace*{-1em}
+\caption{Refutation extract for the problem in Figure~\ref{ExampleProblem}}
+\label{Refutation}
 \end{figure}
 
 The GDV derivation verifier~\cite{Sut06} was developed at the start of the century, primarily
@@ -389,8 +398,8 @@ Inference verification deals with the various types of inferences that are made 
 systems in a proof.
 Examples of checks are: for inference steps with SZS status {\smalltt{THM}} check-by-ATP that the 
 inferred formula can be proved from the parent formulae, for inference steps with SZS status 
-{\smalltt{CTH}} check-by-ATP that the negation of the inferred formula can be proved from the parent 
-formulae.
+{\smalltt{CTH}} check-by-ATP that the negation of the inferred formula can be proved from the 
+parent formulae.
 
 % \begin{figure*}[htb]   %FLAIRS
 % \begin{center}
@@ -426,7 +435,7 @@ AAAARGH, WE NEED TO GET THIS VERY CLEAR.
 
 \begin{figure}[htb]
 \centering
-\includegraphics[width=0.8\textwidth]{SimpleTableau.pdf}
+\includegraphics[width=0.8\textwidth]{Tableau.pdf}
 \vspace*{-1em}
 \caption{Tableau for the problem in Figure~\ref{ExampleProblem}}
 \label{SimpleTableau}
