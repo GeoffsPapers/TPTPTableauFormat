@@ -315,10 +315,13 @@ all the leaf formulae except {\tt a4} and {\tt a5} are copies of formulas in the
 {\tt a4} and {\tt a5} is easily derived from the corresponding problen formulae {\tt a5};
 many of the formulae are inferred with SZS status {\smalltt{thm}}, i.e., they are logical 
 consequences of their parents;
-the negated conjecture {\smalltt c\_0\_7} is inferred with SZS status {\smalltt{cth}},
+the negated conjecture {\smalltt c\_0\_7} is inferred with SZS status {\smalltt{cth}} --
 its negation is a logical consequence of its parent;
-the inferred formulae, {\smalltt c\_0\_18} has a nested {\smalltt inference} record, and the 
-intermediate inferred formula has not been recorded in the derivation. 
+the Skolemized formula {\smalltt c\_0\_11} is inferred with SZS status {\smalltt{esa}} --
+it is equisatisfiable with its parent;
+the inferred formulae, {\smalltt c\_0\_31}, {\smalltt c\_0\_32}, and {\smalltt c\_0\_33} 
+have nested {\smalltt inference} records -- the intermediate inferred formulae have not been 
+recorded. 
 
 \begin{figure}[htb]
 \centering
@@ -341,7 +344,8 @@ fof(c_0_6,negated_conjecture, ~ ! [X1] : ( ~ s(X1) & ~ q(b) & p(c) ),
     inference(assume_negation,[status(cth)],[prove]) ).
 
 fof(c_0_11,negated_conjecture, s(esk1_0) | q(b) | ~ p(c),
-    inference(skolemize,[status(esa)],[c_0_6]) ).
+    inference(skolemize,[status(esa),new_symbols(skolem,[esk1_0]),
+skolemized(X1)],[c_0_6]) ).
 
 %----Refutation (some formulae omitted)
 cnf(c_0_29,plain,              r | q(X1),
@@ -373,7 +377,7 @@ cnf(c_0_33,plain,              $false,
 \centering
 \includegraphics[width=0.8\textwidth]{PaperFOFIDV.pdf}
 \vspace*{-1em}
-\caption{Refutation extract for the problem in Figure~\ref{ExampleProblem}}
+\caption{IDV rendering of the (full version of the) proof in Figure~\ref{ExampleDerivation}}
 \label{Refutation}
 \end{figure}
 
