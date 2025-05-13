@@ -16,11 +16,6 @@
 \usepackage{multicol}
 \usepackage{array}
 \usepackage{bbding}
-\newcommand{\PreserveBackslash}[1]{\let\temp=\\#1\let\\=\temp}
-\newcolumntype{C}[1]{>{\PreserveBackslash\centering}p{#1}}
-\newcolumntype{R}[1]{>{\PreserveBackslash\raggedleft}p{#1}}
-\newcolumntype{L}[1]{>{\PreserveBackslash\raggedright}p{#1}}
-\setlength{\tabcolsep}{3pt}
 
 %----Making things more compact
 %----Suppress extra space in texttt mode
@@ -29,6 +24,7 @@
 \renewcommand{\topfraction}{0.9}
 \renewcommand{\bottomfraction}{0.9}
 \renewcommand{\floatpagefraction}{0.66}
+\setlength{\tabcolsep}{3pt}
 \setlength{\floatsep}{2.0pt plus 2.0pt minus 2.0pt}
 \setlength{\textfloatsep}{5.0pt plus 2.0pt minus 0.0pt}
 \renewcommand{\textfloatsep}{2.0ex}
@@ -36,6 +32,7 @@
 
 \newcommand{\proves}{{\footnotesize {\raisebox{0.3ex}{$\;\models$\;}}}}
 \newcommand{\smalltt}[1]{\small \texttt{#1}}
+\newcommand{\mytilde}{\raisebox{0.4ex}{\texttildelow}}
 \newenvironment{packed_itemize}{
 \vspace*{-0.2em}
 \begin{itemize}
@@ -246,9 +243,8 @@ The language also supports interpreted symbols that either start with a {\tt \$}
 truth constants {\smalltt{\$true}} and {\smalltt{\$false}}, or are composed of 
 non-alphabetic characters, e.g., integer/rational/real numbers such as 27, 43/92, -99.66.
 The logical connectives in the TPTP language are
-{\tt !>}, {\tt ?*}, {\tt @+}, {\tt @-}, {\tt !}, {\tt ?}, {\tt {\raisebox{0.4ex}{\texttildelow}}}, 
-{\tt |}, {\tt \&}, {\tt =>}, {\tt <=}, {\tt <=>}, and {\tt <{\raisebox{0.4ex}{\texttildelow}}>},
-for the mathematical connectives
+{\tt !>}, {\tt ?*}, {\tt @+}, {\tt @-}, {\tt !}, {\tt ?}, {\tt {\mytilde}}, {\tt |}, {\tt \&}, 
+{\tt =>}, {\tt <=}, {\tt <=>}, and {\tt <{\mytilde}>}, for the mathematical connectives
 $\Pi$, $\Sigma$, choice (indefinite description), definite description,
 $\forall$, $\exists$, $\neg$, $\vee$, $\wedge$, $\Rightarrow$, $\Leftarrow$, $\Leftrightarrow$, 
 and $\oplus$ respectively.
@@ -508,18 +504,56 @@ AAAARGH, WE NEED TO GET THIS VERY CLEAR.
 The TPTP format uses five inference rules:
 
 \paragraph{{\tt extension}:} The standard tableau extension rule.
+For example, {\smalltt{t2}} extends from the first literal {\smalltt{q(b)}} of {\smalltt{t1}} to 
+the 1st literal {\smalltt{{\mytilde}q(b)}} of {\smalltt{c2}}.
+The path to this point is recorded as {\smalltt{path([t1:1])}}. 
+The logical parent is recorded as {\smalltt{[c2]}}. 
+The inference has status {\smalltt{thm}}, i.e., {\smalltt{t2}} is a logical consequence of its
+parents.
 
 \paragraph{{\tt connection}:} Explicitly close the branch of the contradiction of an extension.
-A degenerate for of {\tt reduction}.
+For example, {\smalltt{t3}} closes the branch of the contradiction between {\smalltt{q(b)}} and
+{\smalltt{{\mytilde}q(b)}} in the extension {\smalltt{t2}}.
+The path to this point is recorded as {\smalltt{path([t2:1,t1:1])}}.
+The logical parents are recorded as {\smalltt{[t2:1,t1:1]}}, meaning the 1st literal of 
+{\smalltt{t2}} and the 1st literal of {\smalltt{t1}}. 
+The inference has status {\smalltt{thm}}, i.e., {\smalltt{t3}} is a logical consequence of its
+parents. 
+{\tt connection} can be viewed as a degenerate form of {\tt reduction}, described next.
 
 \paragraph{{\tt reduction}:} The standard tableau reduction rule.
+For example, {\smalltt{t8}} closes the branch of the contradiction between the 2nd literal
+{\smalltt{{\mytilde}q(b)}} of {\smalltt{t6}} and the 1st literal {\smalltt{q(b)}} of 
+{\smalltt{t1}}.
+The path to this point is recorded as {\smalltt{path([t6:2,t4:2,t2:2,t1:1])}}.
+The logical parents are recorded as {\smalltt{[t6:2,t1:1]}}, meaning the 2nd literal of 
+{\smalltt{t6}} and the 1st literal of {\smalltt{t1}}. 
+The inference has status {\smalltt{thm}}, i.e., {\smalltt{t8}} is a logical consequence of its 
+parents.
 
-\paragraph{{\tt lemma}:} The creation of a unit lemma.
-Available below the lowest node in the tableau that was used in a reduction that contributed
-to closing a branch.
+\paragraph{{\tt lemma}:} The creation of a unit lemma when a branch is closed.
+For example, {\smalltt{l1}} is the lemma {\smalltt{p(c)}} created when the branch rooted at
+{\smalltt{t2:2}} is closed.
+The lemma is the negation of the 2nd literal {\smalltt{{\mytilde}p(c)}} of {\smalltt{t2}}.
+The path to this point is recorded as {\smalltt{path([t2:2,t1:1])}}.
+As the node {\smalltt{t1:1}} is used in a reduction in closing the branch, the lemma is
+available only below {\smalltt{t1:1}}, recorded as {\smalltt{below(t1:1)}}.
+The logical parent is recorded as {\smalltt{[t4:1]}}, meaning the 1st literal of
+{\smalltt{t4}} that is the negation of the 2nd literal {\smalltt{{\mytilde}p(c)}} of {\smalltt{t2}}.
+The inference has status {\smalltt{thm}}, i.e., {\smalltt{l1}} is a logical consequence of its 
+parents.
 
 \paragraph{{\tt lemma\_extension}:} Use of a lemma to close a branch.
-Very similar to an extension.
+For example, {\smalltt{t11}} is the result of using the lemma {\smalltt{l1}} to close the branch
+down to {\smalltt{9:2}}.
+The lemma {\smalltt{l1}} can be used because {\smalltt{9:2}} is below {\smalltt{t1:1}}.
+The path to this point is recorded as {\smalltt{path([l1:1,t9:2,t2:3,t1:1])}}.
+The logical parents are recorded as {\smalltt{[l1:1,t9:2]}}, meaning the 1st literal 
+{\smalltt{p(c)}} of {\smalltt{l1}} and the 2nd literal {\smalltt{{\mytilde}p(c)}} of 
+{\smalltt{t9}}.
+The inference has status {\smalltt{thm}}, i.e., {\smalltt{t11}} is a logical consequence of its
+parents.
+{\tt lemma\_extension} can be viewed as a special form of {\tt extension}.
 
 \begin{figure}[htb]
 \centering
