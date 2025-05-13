@@ -262,17 +262,17 @@ Figure~\ref{ExampleProblem} shows an example problem.
 {\setlength{\baselineskip}{3mm}
 \begin{verbatim}
 %------------------------------------------------------------------------
-fof(a1,axiom,         ~ ( ~ q(b) & ? [X] : s(X) ) ).
+fof(a1,axiom,         ~ ( ~q(b) & ? [X] : s(X) ) ).
 
-fof(a2,axiom,         ( r & q(b) ) => ! [X] : ~ p(X) ).
+fof(a2,axiom,         ( r & q(b) ) => ! [X] : ~p(X) ).
 
-fof(a3,axiom,         p(c) | ! [Y] : ( ~ q(c) & q(Y) ) ).
+fof(a3,axiom,         p(c) | ! [Y] : ( ~q(c) & q(Y) ) ).
 
-fof(a4,axiom,         ~ q(c) => ~ q(b) ).
+fof(a4,axiom,         ~q(c) => ~q(b) ).
 
 fof(a5,axiom,         p(c) => r ).
 
-fof(prove,conjecture, ! [X] : ( ~ s(X) & ~ q(b) & p(c) ) ).
+fof(prove,conjecture, ! [X] : ( ~s(X) & ~q(b) & p(c) ) ).
 %------------------------------------------------------------------------
 \end{verbatim}
 }}
@@ -301,27 +301,19 @@ to its parents as an SZS ontology value~\cite{Sut08-KEAPPA} in a {\smalltt statu
 special information about recognized types of complex inference rules, e.g., Skolemization and
 explicit splitting, and details of new symbols introduced in the inference.
 The use of SZS values is core to GDV's approach to verification, described below.
-The most common type of steps are those that infer a logical consequence of the parent formulae.
-These are tagged with the SZS status {\smalltt{thm}}.
-Another well known step is negating the conjecture, which is tagged with the SZS status 
-{\smalltt{cth}}.
-Steps of equi-satisfiability are tagged with the SZS status {\smalltt{esa}}. 
 
-Figure~\ref{ExampleDerivation} shows an extract from the refutation found by E~3.2.5 for the
-problem in Figure~\ref{ExampleProblem}.\footnote{%
-The full refutation can be generated in \href{https://tptp.org/cgi-bin/SystemOnTPTP}{SystemOnTPTP}}
+Figure~\ref{ExampleClausification} shows the start of any CNF-cased proof for the problems
+in Figure~\ref{ExampleProblem}, including the reutation discussed here, and the tableau
+discussed in Section~\ref{Tableau}.
 Points of note:
 all the leaf formulae except {\tt a4} and {\tt a5} are copies of formulas in the problem;
-{\tt a4} and {\tt a5} is easily derived from the corresponding problen formulae {\tt a5};
+{\tt a4} and {\tt a5} are easily derived from the corresponding problen formulae;
 many of the formulae are inferred with SZS status {\smalltt{thm}}, i.e., they are logical 
 consequences of their parents;
 the negated conjecture {\smalltt c\_0\_7} is inferred with SZS status {\smalltt{cth}} --
 its negation is a logical consequence of its parent;
 the Skolemized formula {\smalltt c\_0\_11} is inferred with SZS status {\smalltt{esa}} --
 it is equisatisfiable with its parent;
-the inferred formulae, {\smalltt c\_0\_31}, {\smalltt c\_0\_32}, and {\smalltt c\_0\_33} 
-have nested {\smalltt inference} records -- the intermediate inferred formulae have not been 
-recorded. 
 
 \begin{figure}[htb]
 \centering
@@ -329,32 +321,91 @@ recorded.
 {\setlength{\baselineskip}{3mm}
 \begin{verbatim}
 %------------------------------------------------------------------------
-%----Problem formulae in FOF (some ommitted)
-fof(prove,conjecture,         ! [X1] : ( ~ s(X1) & ~ q(b) & p(c) ),
+fof(a1,axiom,              ~ ( ~q(b) & ? [X] : s(X) ),
+    file('PaperFOF.p',a1) ).
+fof(a2,axiom,              ( r & q(b) ) => ! [X] : ~p(X),
+    file('PaperFOF.p',a2) ).
+fof(a3,axiom,              p(c) | ! [Y] : ( ~q(c) & q(Y) ),
+    file('PaperFOF.p',a3) ).
+fof(a4,axiom,              ~q(c) => ~q(b),
+    file('PaperFOF.p',a4) ).
+fof(a5,axiom,              p(c) => r,
+    file('PaperFOF.p',a5) ).
+fof(prove,conjecture,      ! [X] : ( ~s(X) & ~q(b) & p(c) ),
     file('PaperFOF.p',prove) ).
 
-fof(a1,axiom,                 ~ ( ~ q(b) & ? [X1] : s(X1) ),
-    file('PaperFOF.p',a1) ).
+fof(nc1,negated_conjecture, ~ ! [X] : ( ~s(X) & ~q(b) & p(c) ),
+    inference(negate,[status(cth)],[prove]) ).
+fof(nc2,negated_conjecture, ? [X] : ~ ( ~s(X) & ~q(b) & p(c) ),
+    inference(negate,[status(thm)],[nc1]) ).
+fof(nc3,negated_conjecture, ~ ( ~s(sK1) & ~q(b) & p(c) ),
+    inference(skolemize,[status(esq),new_symbols(skolem,[sK1]),
+skolemized(X)],[nc2]) ).
 
-fof(a5,axiom,                 p(c) => r,
-    file('PaperFOF.p',a5) ).
+cnf(c1,plain,               ( q(b) | ~s(X) ),
+    inference(clausify,[status(thm)],[a1]) ).
+cnf(c2,plain,               ( ~q(b) | ~p(X) | ~r ),
+    inference(clausify,[status(thm)],[a2]) ).
+cnf(c3,plain,               ( p(c) | ~q(c) ),
+    inference(clausify,[status(thm)],[a3]) ).
+cnf(c4,plain,               ( p(c) | q(Y) ),
+    inference(clausify,[status(thm)],[a3]) ).
+cnf(c5,plain,               ( q(c) | ~q(b) ),
+    inference(clausify,[status(thm)],[a4]) ).
+cnf(c6,plain,               ( r | ~p(c) ),
+    inference(clausify,[status(thm)],[a5]) ).
+cnf(c7,negated_conjecture,  ( s(sK1) | q(b) | ~p(c) ),
+    inference(clausify,[status(thm)],[nc3]) ).
+%------------------------------------------------------------------------
+\end{verbatim}
+}}
+\caption{Start of CNF-based proofs for the problem in Figure~\ref{ExampleProblem}}
+\label{ExampleClausification}
+\end{figure}
 
-%----Clausification (some formulae omitted)
-fof(c_0_6,negated_conjecture, ~ ! [X1] : ( ~ s(X1) & ~ q(b) & p(c) ),
-    inference(assume_negation,[status(cth)],[prove]) ).
+Figure~\ref{ExampleDerivation} shows an extract from the refutation found by E~3.2.5 for the
+problem in Figure~\ref{ExampleProblem}, following the start shown in 
+Figure~\ref{ExampleClausification}.\footnote{%
+The full refutation can be generated in \href{https://tptp.org/cgi-bin/SystemOnTPTP}{SystemOnTPTP}}
+Points of note:
+many of the formulae are inferred with SZS status {\smalltt{thm}}, i.e., they are logical 
+consequences of their parents;
+several of the inferred formulae, e.g., {\smalltt{c\_0\_23}}, have nested {\smalltt{inference}}
+records -- the intermediate inferred formulae have not been output. 
 
-fof(c_0_11,negated_conjecture, s(esk1_0) | q(b) | ~ p(c),
-    inference(skolemize,[status(esa),new_symbols(skolem,[esk1_0]),
-skolemized(X1)],[c_0_6]) ).
+\begin{figure}[htb]
+\centering
+{\footnotesize
+{\setlength{\baselineskip}{3mm}
+\begin{verbatim}
+%------------------------------------------------------------------------
+cnf(c_0_23,plain,              ~r | ~q(b),
+    inference(csr,[status(thm)],
+[inference(spm,[status(thm)],[c_0_18, c_0_19]), c_0_20])).
 
-%----Refutation (some formulae omitted)
+cnf(c_0_24,negated_conjecture, q(b) | ~q(c),
+    inference(spm,[status(thm)],[c_0_21, c_0_19])).
+
+cnf(c_0_25,plain,              r | ~p(c),
+    inference(split_conjunct,[status(thm)],[c_0_22])).
+
+cnf(c_0_26,negated_conjecture, ~r | ~q(c),
+    inference(spm,[status(thm)],[c_0_23, c_0_24])).
+
+cnf(c_0_27,plain,              q(X1) | p(c),
+    inference(split_conjunct,[status(thm)],[c_0_14])).
+
+cnf(c_0_28,plain,              ~q(c),
+    inference(csr,[status(thm)],
+[inference(spm,[status(thm)],[c_0_25, c_0_19]), c_0_26])).
+
 cnf(c_0_29,plain,              r | q(X1),
     inference(spm,[status(thm)],[c_0_25,c_0_27]) ).
 
 cnf(c_0_30,plain,              r,
     inference(spm,[status(thm)],[c_0_28,c_0_29]) ).
 
-cnf(c_0_31,plain,              ~ q(b),
+cnf(c_0_31,plain,              ~q(b),
     inference(cn,[status(thm)],
 [inference(rw,[status(thm)],[c_0_23,c_0_30])]) ).
 
@@ -373,26 +424,19 @@ cnf(c_0_33,plain,              $false,
 \label{ExampleDerivation}
 \end{figure}
 
-\begin{figure}[htb]
-\centering
-\includegraphics[width=0.8\textwidth]{PaperFOFIDV.pdf}
-\vspace*{-1em}
-\caption{IDV rendering of the (full version of the) proof in Figure~\ref{ExampleDerivation}}
-\label{Refutation}
-\end{figure}
-
-The GDV derivation verifier~\cite{Sut06} was developed at the start of the century, primarily
-targeting proofs by refutation in clause normal and first-order form.
-Over time it has been incrementally developed to verify proofs in typed first-order form and
-typed higher-order form.
-Most recently it has been developed to produce LambdaPi 
-terms that can be independently verified using the {\smalltt lambdapi} checker.~\cite{SBB25}
+The GDV derivation verifier~\cite{Sut06} verifies proofs by refutation.
+% Most recently it has been developed to produce LambdaPi terms that can be independently verified 
+% using the {\smalltt lambdapi} checker.~\cite{SBB25}
 GDV's input is a TPTP format refutation, and optionally (required for complete verification) the 
 problem for which the proof was produced.
 GDV checks a TPTP proof in four verification phases: structural verification, leaf verification,
 rule-specific verification, and inference verification.
 Many of the checks rely on a ``check-by-ATP'', which calls a trusted ATP system -- either a theorem 
 prover or a model finder.
+The default trusted theorem provers and model finders used by GDV are Otter~\cite{McC03-Otter}
+and E~\cite{SCV19} for theorem proving, Paradox~\cite{CS18}, Vampire~\cite{KV13}, and
+Nitpick~\cite{BN10-ITP} for model finding.
+These systems have become trusted through the process described in \cite{SBB25}.
 Structural verification deals with non-logical aspects of a proof, checking whether the
 formulae presented as proof have the right format and relationships, e.g., all the parents of 
 inferred formulae exist, the refutation is acyclic. 
@@ -400,12 +444,12 @@ Leaf verification deals with the leaves of the derivation, and their relationshi
 the problem formulae, e.g., check-by-ATP that the leaf axioms are satisfiable, and that leaves 
 are copies of problem formulae or can be proved from problem formulae using a check-by-ATP.
 Rule specific verification deals with inference rules that require special treatment, e.g.,
-explicit splitting~\cite{Wei01}, Skolemization. 
+explicit splitting~\cite{Wei01} and Skolemization. 
 Inference verification deals with the various types of inferences that are made by ATP
 systems in a proof.
-Examples of checks are: for inference steps with SZS status {\smalltt{THM}} check-by-ATP that the 
+Examples of checks are: for inference steps with SZS status {\smalltt{thm}} check-by-ATP that the 
 inferred formula can be proved from the parent formulae, for inference steps with SZS status 
-{\smalltt{CTH}} check-by-ATP that the negation of the inferred formula can be proved from the 
+{\smalltt{cth}} check-by-ATP that the negation of the inferred formula can be proved from the 
 parent formulae.
 
 % \begin{figure*}[htb]   %FLAIRS
@@ -417,19 +461,38 @@ parent formulae.
 % %EASYCHAIR \end{figure}
 % \end{figure*}   %FLAIRS
 
-The default trusted theorem provers and model finders used by GDV are Otter~\cite{McC03-Otter}
-and E~\cite{SCV19} for theorem proving, Paradox~\cite{CS18}, Vampire~\cite{KV13}, and
-Nitpick~\cite{BN10-ITP} for model finding.
-These systems have become trusted through the process described in \cite{SBB25}.
+The IDV Interactive Derivation Viewer~\cite{TPS07} provides a graphical rendering of a proof
+DAG, with features that allow the user to examine the proof structure in various way, 
+including identification of ``interesting'' steps in the proof~\cite{PGS06}.
+Figure~\ref{Refutation} shows the IDV rendering of the (full version of the) proof in 
+Figure~\ref{ExampleDerivation}
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.8\textwidth]{PaperFOFIDV.pdf}
+\vspace*{-1em}
+\caption{IDV rendering of the (full version of the) proof in Figure~\ref{ExampleDerivation}}
+\label{Refutation}
+\end{figure}
 
 %--------------------------------------------------------------------------------------------------
 \section{The (new) TPTP Format for Tableau Proofs}
 \label{Tableau}
 
-Geoff: Requirements: semantic verification, tableau reconstruction.
+There were two primary requirements for the new format for tableau proofs:
+\begin{itemize}
+\item Easy reconstruction of the tableau.
+\item Semantic verification of the inference steps.
+\end{itemize}
+One early proposal for a TPTP style format never gained traction~\cite{OS10}.
+A more recent proposal~\cite{OH23} is in the TPTP style, and provided some inspiration for
+the format proposed in this paper.
 
-Mantas: Explain the format, with two examples.
-Note tableau has variables instantiated, if information is required {\tt bin()} records can be
+Figure~\ref{ExampleTableau} shows a tableau proof for the problem in Figure~\ref{ExampleProblem},
+following the start shown in Figure~\ref{ExampleClausification}.
+
+Mantas: Explain the format, referring to the example.
+Note tableau has variables instantiated, if information is required {\tt bind()} records can be
 added to the useful information list, e.g., 
 
 \begin{verbatim}
@@ -442,52 +505,29 @@ AAAARGH, WE NEED TO GET THIS VERY CLEAR.
 
 \begin{figure}[htb]
 \centering
+\includegraphics[width=0.8\textwidth]{Tableau.pdf}
+\vspace*{-1em}
+\caption{Tableau for the problem in Figure~\ref{ExampleProblem}}
+\label{SimpleTableau}
+\end{figure}
+
+\begin{figure}[htb]
+\centering
 {\scriptsize
 {\setlength{\baselineskip}{3mm}
 \begin{verbatim}
 %--------------------------------------------------------------------------------------------
-%----Problem formulae in FOF
-fof(a1,axiom,              ~ ( ~ q(b) & ? [X] : s(X) ),           file('PaperFOF.p',a1) ).
-fof(a2,axiom,              ( ( r & q(b) ) => ! [X] : ~ p(X) ),    file('PaperFOF.p',a2) ).
-fof(a3,axiom,              ( p(c) | ! [Y] : ( ~ q(c) & q(Y) ) ),  file('PaperFOF.p',a3) ).
-fof(a4,axiom,              ( ~ q(c) => ~ q(b) ),                  file('PaperFOF.p',a4) ).
-fof(a5,axiom,              ( p(c) => r ),                         file('PaperFOF.p',a5) ).
-fof(prove,conjecture,      ! [X] : ( ~ s(X) & ~ q(b) & p(c) ),    file('PaperFOF.p',prove) ).
-
-%----Clausification
-fof(nc1,negated_conjecture, ~ ! [X] : ( ~ s(X) & ~ q(b) & p(c) ),
-    inference(negate,[status(cth)],[prove]) ).
-fof(nc2,negated_conjecture, ? [X] : ~ ( ~ s(X) & ~ q(b) & p(c) ),
-    inference(negate,[status(thm)],[nc1]) ).
-fof(nc3,negated_conjecture, ~ ( ~ s(sK1) & ~ q(b) & p(c) ),
-    inference(skolemize,[status(esq),new_symbols(skolem,[sK1]),skolemized(X)],[nc2]) ).
-cnf(c1,plain,               ( q(b) | ~ s(X) ),
-    inference(clausify,[status(thm)],[a1]) ).
-cnf(c2,plain,               ( ~ q(b) | ~ p(X) | ~ r ),
-    inference(clausify,[status(thm)],[a2]) ).
-cnf(c3,plain,               ( p(c) | ~ q(c) ),
-    inference(clausify,[status(thm)],[a3]) ).
-cnf(c4,plain,               ( p(c) | q(Y) ),
-    inference(clausify,[status(thm)],[a3]) ).
-cnf(c5,plain,               ( q(c) | ~ q(b) ),
-    inference(clausify,[status(thm)],[a4]) ).
-cnf(c6,plain,               ( r | ~ p(c) ),
-    inference(clausify,[status(thm)],[a5]) ).
-cnf(c7,negated_conjecture,  ( s(sK1) | q(b) | ~ p(c) ),
-    inference(clausify,[status(thm)],[nc3]) ).
-
-%----Tableau
-cnf(t1,plain,               ( q(b) | ~ s(X) ),
+cnf(t1,plain,               q(b) | ~s(X),
     inference(start,[status(thm),path([0:0])],[c1]) ).
-cnf(t2,plain,               ( ~ q(b) | ~ p(X) | ~ r ),
+cnf(t2,plain,               ~q(b) | ~p(X) | ~r,
     inference(extension,[status(thm),path([t1:1])],[c2]) ).
 cnf(t3,plain,               $false,
     inference(connection,[status(thm),path([t2:1,t1:1])],[t2:1,t1:1]) ).
-cnf(t4,plain,               ( p(c) | ~ q(c) ),
+cnf(t4,plain,               p(c) | ~q(c),
     inference(extension,[status(thm),path([t2:2,t1:1])],[c3]) ).
 cnf(t5,plain,               $false,
     inference(connection,[status(thm),path([t4:1,t2:2,t1:1])],[t4:1,t2:2]) ).
-cnf(t6,plain,               ( q(c) | ~ q(b) ),
+cnf(t6,plain,               q(c) | ~q(b),
     inference(extension,[status(thm),path([t2:2,t1:1])],[c5]) ).
 cnf(t7,plain,               $false,
     inference(connection,[status(thm),path([t6:1,t4:2,t2:2,t1:1])],[t6:1,t4:2]) ).
@@ -495,21 +535,21 @@ cnf(t8,plain,               $false,
     inference(reduction,[status(thm),path([t6:2,t4:2,t2:2,t1:1])],[t6:2,t1:1]) ).
 cnf(l1,plain,               p(c),
     inference(extension_lemma,[status(thm),path([t2:2,t1:1]),below(t1:1)],[t4:1]) ).
-cnf(t9,plain,               ( r | ~ p(c) ),
+cnf(t9,plain,               r | ~p(c),
     inference(extension,[status(thm),path([t2:3,t1:1])],[c6]) ).
 cnf(t10,plain,              $false,
     inference(connection,[status(thm),path([t9:1,t2:3,t1:1])],[t9:1,t2:3]) ).
 cnf(t11,plain,              $false,
     inference(lemma,[status(thm),path([l1:1,t9:2,t2:3,t1:1])],[l1:1,t9:2]) ).
-cnf(l2,plain,               ~ q(b),
+cnf(l2,plain,               ~q(b),
     inference(extension_lemma,[status(thm),path([t1:1]),below(0:0)],[t2:1]) ).
-cnf(t12,plain,              ( s(sK1) | q(b) | ~ p(c) ),
+cnf(t12,plain,              s(sK1) | q(b) | ~p(c),
     inference(extension,[status(thm),path([t1:2])],[c7]) ).
 cnf(t13,plain,              $false,
     inference(connection,[status(thm),path([t12:1,t1:2])],[t12:1,t1:2]) ).
 cnf(t14,plain,              $false,
     inference(lemma,[status(thm),path([l2:1,t12:2,t1:2])],[l2:1,t12:2]) ).
-cnf(t15,plain,              ( p(c) | q(Y) ),
+cnf(t15,plain,              p(c) | q(Y),
     inference(extension,[status(thm),path([t12:3,t1:2])],[c4]) ).
 cnf(t16,plain,              $false,
     inference(connection,[status(thm),path([t15:1,t12:3,t1:2])],[t15:1,t2:3]) ).
@@ -518,16 +558,8 @@ cnf(t17,plain,              $false,
 %--------------------------------------------------------------------------------------------
 \end{verbatim}
 }}
-\caption{Full tableau in TPTP format}
-\label{FullTableauCode}
-\end{figure}
-
-\begin{figure}[htb]
-\centering
-\includegraphics[width=0.8\textwidth]{Tableau.pdf}
-\vspace*{-1em}
-\caption{Tableau for the problem in Figure~\ref{ExampleProblem}}
-\label{SimpleTableau}
+\caption{Tableau proof for the problem in Figure~\ref{ExampleProblem}}
+\label{ExampleTableau}
 \end{figure}
 
 %--------------------------------------------------------------------------------------------------
