@@ -16,6 +16,7 @@
 \usepackage{multicol}
 \usepackage{array}
 \usepackage{bbding}
+\usepackage{enumitem}
 
 %----Making things more compact
 %----Suppress extra space in texttt mode
@@ -73,7 +74,7 @@ University of Cambridge, United Kingdom,
 \maketitle
 %--------------------------------------------------------------------------------------------------
 \begin{abstract}
-This paper described the (new) TPTP format for recording tableau proofs.
+This paper describes the (new) TPTP format for recording tableau proofs.
 The format builds on the existing infrastructure of the TPTP World, in particular the TPTP format
 for recording derivations.
 Existing TPTP World tools for verifying and viewing derivations can be directly extended to
@@ -170,8 +171,7 @@ and refutations~\cite{SS+06}, and has a tool for verifying proofs in that format
 Section~\ref{Derivations}), but has not yet settled on a format for tableaux and connection
 proofs.
 One early proposal for a TPTP style format never gained traction~\cite{OS10}.
-A more recent proposal~\cite{OH23} is in the TPTP style, and provided some inspiration for
-the format proposed in this paper.
+A more recent proposal~\cite{OH23} in the TPTP style provided some inspiration for the new format.
 
 This paper is structured as follows:
 Section~\ref{TPTP} introduces the TPTP World, providing the necessary background to the TPTP
@@ -264,19 +264,14 @@ Figure~\ref{ExampleProblem} shows an example problem.
 \begin{figure}[htb]
 \centering
 {\footnotesize
-{\setlength{\baselineskip}{3mm}
+{\setlength{\baselineskip}{4mm}
 \begin{verbatim}
 %------------------------------------------------------------------------
 fof(a1,axiom,         ~ ( ~q(b) & ? [X] : s(X) ) ).
-
 fof(a2,axiom,         ( r & q(b) ) => ! [X] : ~p(X) ).
-
 fof(a3,axiom,         p(c) | ! [Y] : ( ~q(c) & q(Y) ) ).
-
 fof(a4,axiom,         ~q(c) => ~q(b) ).
-
 fof(a5,axiom,         p(c) => r ).
-
 fof(prove,conjecture, ! [X] : ( ~s(X) & ~q(b) & p(c) ) ).
 %------------------------------------------------------------------------
 \end{verbatim}
@@ -298,18 +293,17 @@ inferred formulae.
 A {\smalltt file} record contains the problem file name and the corresponding annotated formulae 
 name in the problem file.
 An {\smalltt inference} record contains the inference rule name, a list of useful inference 
-information, and a list of the parent formulae.
-The parent formulae list can contain parent annotated formulae names, and nested 
-{\smalltt inference} records.
+information, and a list of the inference parents.
+The inference parents can be annotated formulae names, and nested {\smalltt inference} records.
 Common types of useful inference information are the semantic relationship of the inferred formula 
 to its parents as an SZS ontology value~\cite{Sut08-KEAPPA} in a {\smalltt status} record, 
 special information about recognized types of complex inference rules, e.g., Skolemization and
 explicit splitting, and details of new symbols introduced in the inference.
 The use of SZS values is core to GDV's approach to verification, described below.
 
-Figure~\ref{ExampleClausification} shows the start of any CNF-cased proof for the problems
-in Figure~\ref{ExampleProblem}, including the reutation discussed here, and the tableau
-discussed in Section~\ref{Tableau}.
+Figure~\ref{ExampleClausification} shows the transformation to CNF of the problem in 
+Figure~\ref{ExampleProblem}, which is used in the refutation discussed here, and the tableau
+proof in Section~\ref{Tableau}.
 Points of note:
 all the leaf formulae except {\tt a4} and {\tt a5} are copies of formulas in the problem;
 {\tt a4} and {\tt a5} are easily derived from the corresponding problen formulae;
@@ -323,7 +317,7 @@ it is equisatisfiable with its parent;
 \begin{figure}[htb]
 \centering
 {\footnotesize
-{\setlength{\baselineskip}{3mm}
+{\setlength{\baselineskip}{4mm}
 \begin{verbatim}
 %------------------------------------------------------------------------
 fof(a1,axiom,              ~ ( ~q(b) & ? [X] : s(X) ),
@@ -364,12 +358,12 @@ cnf(c7,negated_conjecture,  ( s(sK1) | q(b) | ~p(c) ),
 %------------------------------------------------------------------------
 \end{verbatim}
 }}
-\caption{Start of CNF-based proofs for the problem in Figure~\ref{ExampleProblem}}
+\caption{Clausification for CNF-based proofs of the problem in Figure~\ref{ExampleProblem}}
 \label{ExampleClausification}
 \end{figure}
 
 Figure~\ref{ExampleDerivation} shows the final steps of the refutation found by E~3.2.5 for the
-problem in Figure~\ref{ExampleProblem}, following the start shown in 
+problem in Figure~\ref{ExampleProblem}, following the transformation to CNF shown in 
 Figure~\ref{ExampleClausification}.\footnote{%
 The full refutation can be generated in \href{https://tptp.org/cgi-bin/SystemOnTPTP}{SystemOnTPTP}}
 Points of note:
@@ -381,7 +375,7 @@ records -- the intermediate inferred formulae have not been output.
 \begin{figure}[htb]
 \centering
 {\footnotesize
-{\setlength{\baselineskip}{3mm}
+{\setlength{\baselineskip}{4mm}
 \begin{verbatim}
 %------------------------------------------------------------------------
 cnf(c_0_23,plain,              ~r | ~q(b),
@@ -443,11 +437,12 @@ and E~\cite{SCV19} for theorem proving, Paradox~\cite{CS18}, Vampire~\cite{KV13}
 Nitpick~\cite{BN10-ITP} for model finding.
 These systems have become trusted through the process described in \cite{SBB25}.
 Structural verification deals with non-logical aspects of a proof, checking whether the
-formulae presented as proof have the right format and relationships, e.g., all the parents of 
-inferred formulae exist, the refutation is acyclic. 
+the annotated formulae of the proof have the right format and relationships, e.g., all the 
+parents of inferred formulae exist, the refutation is acyclic. 
 Leaf verification deals with the leaves of the derivation, and their relationship with
-the problem formulae, e.g., check-by-ATP that the leaf axioms are satisfiable, and that leaves 
-are copies of problem formulae or can be proved from problem formulae using a check-by-ATP.
+the problem annotated formulae, e.g., check-by-ATP that the leaf axioms are satisfiable, and 
+that leaves are copies of problem formulae or can be proved from problem formulae using a 
+check-by-ATP.
 Rule specific verification deals with inference rules that require special treatment, e.g.,
 explicit splitting~\cite{Wei01} and Skolemization. 
 Inference verification deals with the various types of inferences that are made by ATP
@@ -484,23 +479,37 @@ Figure~\ref{ExampleDerivation}
 \section{The (new) TPTP Format for Tableau Proofs}
 \label{Tableau}
 
-There were two primary requirements for the new format for tableau proofs:
-\begin{itemize}
+There were three primary requirements for the new format for tableau proofs:
+\begin{enumerate}
 \item Easy reconstruction of the tableau.
-\item Semantic verification of the inference steps.
-\end{itemize}
-One early proposal for a TPTP style format never gained traction~\cite{OS10}.
-A more recent proposal~\cite{OH23} is in the TPTP style, and provided some inspiration for
-the format proposed in this paper.
+\item Sufficient information for structural verification of the closed tableau.
+\item Sufficient information for semantic verification of the inference steps.
+\end{enumerate}
+Additional requirements adopted from~\cite{OH23} are:
+\begin{enumerate}[resume]
+\item Concise and simple enough for a natural representation of proofs.
+\item Readable by humans as well as ATP tools.
+\end{enumerate}
+One early proposal for a TPTP style format~\cite{OS10} met requirement~1, but fell short
+of requirements~2 and~3 due to the omission of some necessary details. 
+As claimed in~\cite{OH23}, that early proposal might have also failed to meet requirements~4 and~5.
+Another existing TPTP style format is the leanTPTP format output by the leanCoP ATP 
+system~\cite{OB03}.
+The leanTPTP format definitely meets requirement~4, but omits the information required for 
+requirements~1,~2, and~3.
+A more recent proposal~\cite{OH23} in the TPTP style provided some inspiration for the new format,
+but left some important information as implicit, which is made explicit in the new format.
+The new format aims to meet all the requirements.
 
 Figure~\ref{TableauPicture} shows the tableau for the problem in Figure~\ref{ExampleProblem}.
-Figure~\ref{ExampleTableau} shows the TPTP format for the tableau, following the start shown in 
-Figure~\ref{ExampleClausification}.
+Figure~\ref{ExampleTableau} shows the TPTP format for the tableau, following the transformation
+to CNF shown in Figure~\ref{ExampleClausification}.
 The labels in square brackets in Figure~\ref{TableauPicture} identify the literals in the 
-formulae in Figure~\ref{ExampleTableau}.
+annotated formulae in Figure~\ref{ExampleTableau}.
 The rightward arrows point to the lemmas that are created; note that the lemmas can be used
 only below where they are created.
-The tableau has the variables instantiated as they would be when the tableau is closed.
+The tableau in Figure~\ref{TableauPicture} has the variables instantiated as they would be when 
+the tableau is closed.
 
 \begin{figure}[htb]
 \centering
@@ -510,12 +519,13 @@ The tableau has the variables instantiated as they would be when the tableau is 
 \label{TableauPicture}
 \end{figure}
 
-The TPTP format recognizes six inference rules that are described below.
-Each inference record in a tableau records the name of the rule, the SZS status of the
-inferred formula wrt it parents, the path from the root to the node above, and the parents.
-The SZS status and parent information makes it possible to use semantic verification of each
+The TPTP format recognizes six inference rules, which are described below.
+The inference record of each annotated formula records the name of the rule used, the SZS status 
+of the inferred formula wrt it parents, the path from the root to the node above, and the 
+inference parents.  
+The SZS status and parent information makes it possible to use semantic verification of each 
 inference, and the path information makes it easy to reconstruct the tableau.
-The point at which a variable becomes instantiated can optionally be recorded in a {\tt bind()} 
+The point at which a variable becomes instantiated can optionally be recorded with a {\tt bind()} 
 record, e.g., 
 {\footnotesize
 \begin{verbatim}
@@ -589,7 +599,7 @@ The inference has status {\smalltt{thm}}, i.e., {\smalltt{t11}} is a logical con
 parents.
 {\tt lemma\_extension} can be viewed as a special form of {\tt extension}.
 
-\begin{figure}[htb]
+\begin{figure}[h!]
 \centering
 {\scriptsize
 {\setlength{\baselineskip}{3mm}
@@ -597,42 +607,60 @@ parents.
 %--------------------------------------------------------------------------------------------
 cnf(t1,plain,               q(b) | ~s(X),
     inference(start,[status(thm),path([0:0])],[c1]) ).
+
 cnf(t2,plain,               ~q(b) | ~p(X) | ~r,
-    inference(extension,[status(thm),path([t1:1])],[c2]) ).
+    inference(extension,[status(thm),path([t1:1,0:0])],[c2]) ).
+
 cnf(t3,plain,               $false,
-    inference(connection,[status(thm),path([t2:1,t1:1])],[t2:1,t1:1]) ).
+    inference(connection,[status(thm),path([t2:1,t1:1,0:0])],[t2:1,t1:1]) ).
+
 cnf(t4,plain,               p(c) | ~q(c),
-    inference(extension,[status(thm),path([t2:2,t1:1])],[c3]) ).
+    inference(extension,[status(thm),path([t2:2,t1:1,0:0])],[c3]) ).
+
 cnf(t5,plain,               $false,
-    inference(connection,[status(thm),path([t4:1,t2:2,t1:1])],[t4:1,t2:2]) ).
+    inference(connection,[status(thm),path([t4:1,t2:2,t1:1,0:0])],[t4:1,t2:2]) ).
+
 cnf(t6,plain,               q(c) | ~q(b),
-    inference(extension,[status(thm),path([t2:2,t1:1])],[c5]) ).
+    inference(extension,[status(thm),path([t2:2,t1:1,0:0])],[c5]) ).
+
 cnf(t7,plain,               $false,
-    inference(connection,[status(thm),path([t6:1,t4:2,t2:2,t1:1])],[t6:1,t4:2]) ).
+    inference(connection,[status(thm),path([t6:1,t4:2,t2:2,t1:1,0:0])],[t6:1,t4:2]) ).
+
 cnf(t8,plain,               $false,
-    inference(reduction,[status(thm),path([t6:2,t4:2,t2:2,t1:1])],[t6:2,t1:1]) ).
+    inference(reduction,[status(thm),path([t6:2,t4:2,t2:2,t1:1,0:0])],[t6:2,t1:1]) ).
+
 cnf(l1,plain,               p(c),
-    inference(lemma,[status(thm),path([t2:2,t1:1]),below(t1:1)],[t4:1]) ).
+    inference(lemma,[status(thm),path([t2:2,t1:1,0:0]),below(t1:1)],[t4:1]) ).
+
 cnf(t9,plain,               r | ~p(c),
-    inference(extension,[status(thm),path([t2:3,t1:1])],[c6]) ).
+    inference(extension,[status(thm),path([t2:3,t1:1,0:0])],[c6]) ).
+
 cnf(t10,plain,              $false,
-    inference(connection,[status(thm),path([t9:1,t2:3,t1:1])],[t9:1,t2:3]) ).
+    inference(connection,[status(thm),path([t9:1,t2:3,t1:1,0:0])],[t9:1,t2:3]) ).
+
 cnf(t11,plain,              $false,
-    inference(lemma_extension,[status(thm),path([l1:1,t9:2,t2:3,t1:1])],[l1:1,t9:2]) ).
+    inference(lemma_extension,[status(thm),path([l1:1,t9:2,t2:3,t1:1,0:0])],[l1:1,t9:2]) ).
+
 cnf(l2,plain,               ~q(b),
-    inference(lemma,[status(thm),path([t1:1]),below(0:0)],[t2:1]) ).
+    inference(lemma,[status(thm),path([t1:1,0:0]),below(0:0)],[t2:1]) ).
+
 cnf(t12,plain,              s(sK1) | q(b) | ~p(c),
-    inference(extension,[status(thm),path([t1:2])],[c7]) ).
+    inference(extension,[status(thm),path([t1:2,0:0])],[c7]) ).
+
 cnf(t13,plain,              $false,
-    inference(connection,[status(thm),path([t12:1,t1:2])],[t12:1,t1:2]) ).
+    inference(connection,[status(thm),path([t12:1,t1:2,0:0])],[t12:1,t1:2]) ).
+
 cnf(t14,plain,              $false,
-    inference(lemma_extension,[status(thm),path([l2:1,t12:2,t1:2])],[l2:1,t12:2]) ).
+    inference(lemma_extension,[status(thm),path([l2:1,t12:2,t1:2,0:0])],[l2:1,t12:2]) ).
+
 cnf(t15,plain,              p(c) | q(Y),
-    inference(extension,[status(thm),path([t12:3,t1:2])],[c4]) ).
+    inference(extension,[status(thm),path([t12:3,t1:2,0:0])],[c4]) ).
+
 cnf(t16,plain,              $false,
-    inference(connection,[status(thm),path([t15:1,t12:3,t1:2])],[t15:1,t2:3]) ).
+    inference(connection,[status(thm),path([t15:1,t12:3,t1:2,0:0])],[t15:1,t2:3]) ).
+
 cnf(t17,plain,              $false,
-    inference(lemma_extension,[status(thm),path([l2:1,t15:2,t12:3,t1:2])],[l2:1,t15:2]) ).
+    inference(lemma_extension,[status(thm),path([l2:1,t15:2,t12:3,t1:2,0:0])],[l2:1,t15:2]) ).
 %--------------------------------------------------------------------------------------------
 \end{verbatim}
 }}
@@ -644,11 +672,38 @@ cnf(t17,plain,              $false,
 \section{ATP Systems and Tools}
 \label{SystemsTools}
 
-Sean:
-Connect++ and more.
-Results from verifying a bunch of Connect++ tableau if we get the software done.
+% Sean:
+Connect++ is a prover for first-order logic based on clausal connection calculus.~\cite{Hol23} 
+The advantages of connection provers, with respect to their goal-oriented search and ability to 
+produce readable proofs, are well-known
+Connect++ supports restricted backtracking, restriction of start clauses, reordering, iterative 
+deepening by path length or tree depth.
+Connect++ supports the use of arbitrary search schedules, and can read these from a file in a 
+simple format.
+It deals with equality by detecting its use in the input file and adding the necessary axioms.
+Most relevant to work, Connect accepts input in TPTP format, and {\em outputs closed tableau in
+the new format}.
+Connect++ is implemented in C++, and is open source under the GNU General Public License (GPL) 
+Version 3.\footnote{%
+\href{https://www.cl.cam.ac.uk/~sbh11/connect++.html}{\smalltt{www.cl.cam.ac.uk/~sbh11/connect++.html}}}.
 
-Geoff: GDV, IDV
+The extension of GDV to verify tableau requires extending the structural verification phase,
+and a minor change to inference verification.
+Leaf verification remains unchanged, and the rule-specific steps of derivation verification
+are naturally inapplicable.
+Structural verification of a tableau requires checking:
+\begin{packed_itemize}
+\item All inference parents exist, in particular that the specified literals exist.
+\item The {\smalltt{path}} records define an acyclic DAG, without contradictions in the paths.
+\item All paths end at the root {\smalltt{0:0}} node.
+\item The tableau is closed, i.e., every branch ends at a {\smalltt{\$false}} formula.
+\item All {\tt lemma\_extension} steps use lemmas that are below the specified node in the tableau.
+\end{packed_itemize}
+Semantic verification is essentially the same as for derivations, with the small additional need 
+to extract the specified literals from inference parents.
+
+The extension of IDV to an Interactive Tableau Viewer (ITV) is quite simple, and will be 
+completed as soon as my undergraduate developers have time.
 
 %--------------------------------------------------------------------------------------------------
 \section{Conclusion}
