@@ -464,7 +464,7 @@ parent formulae.
 The IDV Interactive Derivation Viewer~\cite{TPS07} provides a graphical rendering of a proof
 DAG, with features that allow the user to examine the proof structure in various way, 
 including identification of ``interesting'' steps in the proof~\cite{PGS06}.
-Figure~\ref{Refutation} shows the IDV rendering of the (full version of the) refutation in 
+Figure~\ref{IDVDerivation} shows the IDV rendering of the (full version of the) refutation in 
 Figure~\ref{ExampleDerivation}
 
 \begin{figure}[htb]
@@ -472,7 +472,7 @@ Figure~\ref{ExampleDerivation}
 \includegraphics[width=0.8\textwidth]{PaperFOFIDV.pdf}
 \vspace*{-1em}
 \caption{IDV rendering of the (full version of the) refutation in Figure~\ref{ExampleDerivation}}
-\label{Refutation}
+\label{IDVDerivation}
 \end{figure}
 
 %--------------------------------------------------------------------------------------------------
@@ -702,8 +702,16 @@ Structural verification of a tableau requires checking:
 Semantic verification is essentially the same as for derivations, with the small additional need 
 to extract the specified literals from inference parents.
 
-The extension of IDV to an Interactive Tableau Viewer (ITV) is quite simple, and will be 
-completed as soon as my undergraduate developers have time.
+Figure~\ref{IITVTableau} shows the ITV rendering of the tableau in Figure~\ref{ExampleTableau}.
+The layout is going to be optimized, to produce something more akin to Figure~\ref{TableauPicture}/
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=1.0\textwidth]{PaperFOFITV.pdf}
+\vspace*{-1em}
+\caption{ITV rendering of the tableau in Figure~\ref{ExampleTableau}}
+\label{ITVTableau}
+\end{figure}
 
 %--------------------------------------------------------------------------------------------------
 \section{Conclusion}
