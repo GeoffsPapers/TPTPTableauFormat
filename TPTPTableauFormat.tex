@@ -570,8 +570,8 @@ parents.
 For example, Figure~\ref{ExampleTableau} {\smalltt{t8}} closes the branch of the contradiction 
 between the 2nd literal {\smalltt{{\mytilde}q(b)}} of {\smalltt{t6}} and the 1st literal 
 {\smalltt{q(b)}} of {\smalltt{t1}}.
-In Figure~\ref{TableauPicture} this is denoted by a dotted arrow from {\smalltt{{\mytilde}q(b)}} to 
-{\smalltt{t8}}.
+In Figure~\ref{TableauPicture} this is denoted by the dotted arrow from {\smalltt{{\mytilde}q(b)}}
+to {\smalltt{t8}}.
 The path to this point is recorded as {\smalltt{path([t6:2,t4:2,t2:2,t1:1])}}.
 The logical parents are recorded as {\smalltt{[t6:2,t1:1]}}, meaning the 2nd literal of 
 {\smalltt{t6}} and the 1st literal of {\smalltt{t1}}. 
@@ -583,19 +583,19 @@ For example, Figure~\ref{ExampleTableau} {\smalltt{l1}} is the lemma {\smalltt{p
 when the branch rooted at {\smalltt{t2:2}} is closed.
 The lemma is the negation of the 2nd literal {\smalltt{{\mytilde}p(c)}} of {\smalltt{t2}}.
 The path to this point is recorded as {\smalltt{path([t2:2,t1:1])}}.
-In Figure~\ref{TableauPicture} this is denoted by a solid right arrow from {\smalltt{t2:2}} to 
+In Figure~\ref{TableauPicture} this is denoted by the solid right arrow from {\smalltt{t2:2}} to 
 {\smalltt{l1}}.
 As the node {\smalltt{t1:1}} is used in a reduction in closing the branch, the lemma is
 available only below {\smalltt{t1:1}}, recorded as {\smalltt{below(t1:1)}}.
-The logical parent is recorded as {\smalltt{[t4:1]}}, meaning the 1st literal of
-{\smalltt{t4}} that is the negation of the 2nd literal {\smalltt{{\mytilde}p(c)}} of {\smalltt{t2}}.
-The inference has status {\smalltt{thm}}, i.e., {\smalltt{l1}} is a logical consequence of its 
-parents.
+The logical parent is recorded as {\smalltt{[t2:2]}}, meaning the 2nd literal 
+{\smalltt{{\mytilde}p(c)}} of {\smalltt{t2}}.
+The inference has status {\smalltt{cth}}, i.e., the negation of {\smalltt{l1}} is a logical 
+consequence of its parent.
 
 \paragraph{{\tt lemma\_extension}:} Use of a lemma to close a branch.
 For example, Figure~\ref{ExampleTableau} {\smalltt{t11}} is the result of using the lemma 
 {\smalltt{l1}} to close the branch down to {\smalltt{9:2}}. 
-In Figure~\ref{TableauPicture}, this is denoted by a dashed arrow from {\smalltt{l1}} to 
+In Figure~\ref{TableauPicture} this is denoted by the dashed arrow from {\smalltt{l1}} to 
 {\smalltt{t11}}.
 The lemma {\smalltt{l1}} can be used because {\smalltt{9:2}} is below {\smalltt{t1:1}}.
 The path to this point is recorded as {\smalltt{path([l1:1,t9:2,t2:3,t1:1])}}.
@@ -637,7 +637,7 @@ cnf(t8,plain,               $false,
     inference(reduction,[status(thm),path([t6:2,t4:2,t2:2,t1:1,0:0])],[t6:2,t1:1]) ).
 
 cnf(l1,plain,               p(c),
-    inference(lemma,[status(thm),path([t2:2,t1:1,0:0]),below(t1:1)],[t4:1]) ).
+    inference(lemma,[status(cth),path([t2:2,t1:1,0:0]),below(t1:1)],[t2:2]) ).
 
 cnf(t9,plain,               r | ~p(c),
     inference(extension,[status(thm),path([t2:3,t1:1,0:0])],[c6]) ).
@@ -649,7 +649,7 @@ cnf(t11,plain,              $false,
     inference(lemma_extension,[status(thm),path([l1:1,t9:2,t2:3,t1:1,0:0])],[l1:1,t9:2]) ).
 
 cnf(l2,plain,               ~q(b),
-    inference(lemma,[status(thm),path([t1:1,0:0]),below(0:0)],[t2:1]) ).
+    inference(lemma,[status(cth),path([t1:1,0:0]),below(0:0)],[t1:1]) ).
 
 cnf(t12,plain,              s(sK1) | q(b) | ~p(c),
     inference(extension,[status(thm),path([t1:2,0:0])],[c7]) ).
