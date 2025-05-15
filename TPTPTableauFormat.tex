@@ -506,9 +506,9 @@ Figure~\ref{ExampleTableau} shows the TPTP format for the tableau, following the
 to CNF shown in Figure~\ref{ExampleClausification}.
 The labels in square brackets in Figure~\ref{TableauPicture} identify the literals in the 
 annotated formulae in Figure~\ref{ExampleTableau}.
-The dotted arrows show the reductions that are made in the tableu, while the solid rightward arrows point to the lemmas that are created. 
+The dotted arrow shows the one reduction step, the solid rightward arrows point to the lemmas that 
+are created, and the dashed arrows show where the lemmas are used.
 Note that lemmas can be used only below the parent node of where they are created. 
-In Figure~\ref{ExampleTableau} the cases where the lemmas are used are shown with dashed arrows.
 The tableau in Figure~\ref{TableauPicture} has the variables instantiated as they would be when 
 the tableau is closed.
 
@@ -731,7 +731,7 @@ An ATP system that outputs tableau in this format is described.
 The extension of the existing GDV and IDV tools for verifying and viewing derivations 
 to verifying and viewing tableau proofs has been discussed.
 
-Future work includes completing the extension of GDV, and the implementation of ITV.
+Future work includes completing the extension of GDV and an optimised implementation of ITV.
 
 %--------------------------------------------------------------------------------------------------
 \bibliographystyle{splncs04}
