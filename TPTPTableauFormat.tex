@@ -506,7 +506,7 @@ Figure~\ref{ExampleTableau} shows the TPTP format for the tableau, following the
 to CNF shown in Figure~\ref{ExampleClausification}.
 The labels in square brackets in Figure~\ref{TableauPicture} identify the literals in the 
 annotated formulae in Figure~\ref{ExampleTableau}.
-The solid rightward arrows point to the lemmas that are created. 
+The dotted arrows show the reductions that are made in the tableu, while the solid rightward arrows point to the lemmas that are created. 
 Note that lemmas can be used only below the parent node of where they are created. 
 In Figure~\ref{ExampleTableau} the cases where the lemmas are used are shown with dashed arrows.
 The tableau in Figure~\ref{TableauPicture} has the variables instantiated as they would be when 
@@ -514,7 +514,7 @@ the tableau is closed.
 
 \begin{figure}[htb]
 \centering
-\includegraphics[width=1.0\textwidth]{Tableu_updated.pdf}
+\includegraphics[width=1.0\textwidth]{Tableau.pdf}
 \vspace*{-1em}
 \caption{Tableau for the problem in Figure~\ref{ExampleProblem}}
 \label{TableauPicture}
@@ -570,6 +570,8 @@ parents.
 For example, Figure~\ref{ExampleTableau} {\smalltt{t8}} closes the branch of the contradiction 
 between the 2nd literal {\smalltt{{\mytilde}q(b)}} of {\smalltt{t6}} and the 1st literal 
 {\smalltt{q(b)}} of {\smalltt{t1}}.
+In Figure~\ref{TableauPicture} this is denoted by a dotted arrow from {\smalltt{{\mytilde}q(b)}} to 
+{\smalltt{t8}}.
 The path to this point is recorded as {\smalltt{path([t6:2,t4:2,t2:2,t1:1])}}.
 The logical parents are recorded as {\smalltt{[t6:2,t1:1]}}, meaning the 2nd literal of 
 {\smalltt{t6}} and the 1st literal of {\smalltt{t1}}. 
@@ -581,6 +583,8 @@ For example, Figure~\ref{ExampleTableau} {\smalltt{l1}} is the lemma {\smalltt{p
 when the branch rooted at {\smalltt{t2:2}} is closed.
 The lemma is the negation of the 2nd literal {\smalltt{{\mytilde}p(c)}} of {\smalltt{t2}}.
 The path to this point is recorded as {\smalltt{path([t2:2,t1:1])}}.
+In Figure~\ref{TableauPicture} this is denoted by a solid right arrow from {\smalltt{t2:2}} to 
+{\smalltt{l1}}.
 As the node {\smalltt{t1:1}} is used in a reduction in closing the branch, the lemma is
 available only below {\smalltt{t1:1}}, recorded as {\smalltt{below(t1:1)}}.
 The logical parent is recorded as {\smalltt{[t4:1]}}, meaning the 1st literal of
