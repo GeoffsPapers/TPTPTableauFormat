@@ -612,10 +612,10 @@ parents.
 {\setlength{\baselineskip}{3mm}
 \begin{verbatim}
 %--------------------------------------------------------------------------------------------
-cnf(t1,plain,               q(b) | ~s(X),
+cnf(t1,plain,               q(b) | ~s(sK1),
     inference(start,[status(thm),path([0:0])],[c1]) ).
 
-cnf(t2,plain,               ~q(b) | ~p(X) | ~r,
+cnf(t2,plain,               ~q(b) | ~p(c) | ~r,
     inference(extension,[status(thm),path([t1:1,0:0])],[c2]) ).
 
 cnf(t3,plain,               $false,
@@ -660,7 +660,7 @@ cnf(t13,plain,              $false,
 cnf(t14,plain,              $false,
     inference(lemma_extension,[status(thm),path([l2:1,t12:2,t1:2,0:0])],[l2:1,t12:2]) ).
 
-cnf(t15,plain,              p(c) | q(Y),
+cnf(t15,plain,              p(c) | q(b),
     inference(extension,[status(thm),path([t12:3,t1:2,0:0])],[c4]) ).
 
 cnf(t16,plain,              $false,
