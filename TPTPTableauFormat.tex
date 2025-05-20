@@ -338,7 +338,7 @@ fof(nc1,negated_conjecture, ~ ! [X] : ( ~s(X) & ~q(b) & p(c) ),
 fof(nc2,negated_conjecture, ? [X] : ~ ( ~s(X) & ~q(b) & p(c) ),
     inference(negate,[status(thm)],[nc1]) ).
 fof(nc3,negated_conjecture, ~ ( ~s(sK1) & ~q(b) & p(c) ),
-    inference(skolemize,[status(esq),new_symbols(skolem,[sK1]),
+    inference(skolemize,[status(esa),new_symbols(skolem,[sK1]),
 skolemized(X)],[nc2]) ).
 
 cnf(c1,plain,               ( q(b) | ~s(X) ),
@@ -674,6 +674,10 @@ cnf(t17,plain,              $false,
 \caption{Tableau in TPTP format, for the problem in Figure~\ref{ExampleProblem}}
 \label{ExampleTableau}
 \end{figure}
+
+Additional tableau inference rules, e.g., factorization~\cite{Joh93}, non-unit lemma generation 
+(also known as bottom-up lemma generation)~\cite{AS92,Sch94}, lazy paramodulation~\cite{Pas08}, 
+etc., appear to be easily added to this format.
 
 %--------------------------------------------------------------------------------------------------
 \section{ATP Systems and Tools}
