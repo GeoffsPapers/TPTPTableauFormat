@@ -285,9 +285,9 @@ fof(prove,conjecture, ! [X] : ( ~s(X) & ~q(b) & p(c) ) ).
 \label{Derivations}
 
 A derivation written in the TPTP language is a list of annotated formulae. 
-The leaves of a derivation DAG are typically have a role {\smalltt axiom} or {\smalltt conjecture}, 
-and the role for inferred formulae is typically one of {\smalltt negated\_conjecture} (also used 
-for leaves in CNF) or {\smalltt plain} for inferred formulae. 
+The leaves of a derivation typically have the role {\smalltt axiom} or {\smalltt conjecture}, 
+and the inferred formulae typically have the role{\smalltt plain} or {\smalltt negated\_conjecture}
+(also used for leaves in CNF).
 The source is either a {\smalltt file} record for leaves or an {\smalltt inference} record for 
 inferred formulae.
 A {\smalltt file} record contains the problem file name and the corresponding annotated formulae 
@@ -298,7 +298,7 @@ The inference parents can be annotated formulae names, and nested {\smalltt infe
 Common types of useful inference information are the semantic relationship of the inferred formula 
 to its parents as an SZS ontology value~\cite{Sut08-KEAPPA} in a {\smalltt status} record, 
 special information about recognized types of complex inference rules, e.g., Skolemization and
-explicit splitting, and details of new symbols introduced in the inference.
+splitting, and details of new symbols introduced in the inference.
 The use of SZS values is core to GDV's approach to verification, described below.
 
 Figure~\ref{ExampleClausification} shows the transformation to CNF of the problem in 
@@ -424,19 +424,23 @@ cnf(c_0_33,plain,              $false,
 \label{ExampleDerivation}
 \end{figure}
 
-The GDV derivation verifier~\cite{Sut06} verifies proofs by refutation.
+%--------------------------------------------------------------------------------------------------
+\subsection{TPTP World Tools for Verifying and Viewing Derivations}
+\label{DerivationTools}
+
+The GDV derivation verifier~\cite{Sut06} verifies proofs in the TPTP format.
 % Most recently it has been developed to produce LambdaPi terms that can be independently verified 
 % using the {\smalltt lambdapi} checker.~\cite{SBB25}
-GDV's input is a TPTP format refutation, and optionally (required for complete verification) the 
+GDV's input is a TPTP format proof, and optionally (required for complete verification) the 
 problem for which the proof was produced.
-GDV checks a TPTP proof in four verification phases: structural verification, leaf verification,
+GDV verifies a proof in four phases: structural verification, leaf verification,
 rule-specific verification, and inference verification.
 Many of the checks rely on a ``check-by-ATP'', which calls a trusted ATP system -- either a theorem 
-prover or a model finder.
+prover or a model finder
 % The default trusted theorem provers and model finders used by GDV are Otter~\cite{McC03-Otter}
 % and E~\cite{SCV19} for theorem proving, Paradox~\cite{CS18}, Vampire~\cite{KV13}, and
 % Nitpick~\cite{BN10-ITP} for model finding.
-The systems have become trusted through the process described in \cite{SBB25}.
+(the systems have become trusted through the process described in \cite{SBB25}).
 Structural verification deals with non-logical aspects of a proof, checking whether the the 
 annotated formulae of the proof have the right format and relationships, e.g., the derivation is 
 acyclic. 
@@ -463,10 +467,10 @@ Available at \href{https://tptp.org/cgi-bin/SystemOnTSTP}{\tt tptp.org/cgi-bin/S
 % %EASYCHAIR \end{figure}
 % \end{figure*}   %FLAIRS
 
-The IDV Interactive Derivation Viewer~\cite{TPS07} provides a graphical rendering of a proof
-DAG, with features that allow the user to examine the proof structure in various way, 
-including identification of ``interesting'' steps in the proof~\cite{PGS06}.
-Figure~\ref{IDVDerivation} shows the IDV rendering of the (full version of the) refutation in 
+The IDV Interactive Derivation Viewer~\cite{TPS07} provides a graphical rendering of a proof DAG. 
+It has features that allow the user to examine the proof structure in various way, including 
+identification of ``interesting'' steps in the proof~\cite{PGS06}.
+Figure~\ref{IDVDerivation} shows the IDV rendering of (the full version of) the refutation in 
 Figure~\ref{ExampleDerivation}.
 IDV is available online in SystemOnTSTP.\footnote{%
 Available at \href{https://tptp.org/cgi-bin/SystemOnTSTP}{\tt tptp.org/cgi-bin/SystemOnTSTP}}
@@ -545,8 +549,8 @@ variables have been renamed apart so that it is clear that the {\smalltt X} is i
 
 \paragraph{{\tt start}:} The initial clause below the root node.
 For example, in Figure~\ref{ExampleTableau} {\smalltt{t1}} starts the tableau.
-The path to this point is recorded as {\smalltt{path([0:0])}}, indicating that the node above
-is the root node.
+The path to this point is recorded as {\smalltt{[0:0]}}, indicating that the node above is the 
+root node.
 The logical parent of {\smalltt{t1}} is recorded as {\smalltt{[c1]}}. 
 The inference has status {\smalltt{thm}}, i.e., {\smalltt{t1}} is a logical consequence of its
 parent.
@@ -555,15 +559,15 @@ parent.
 \paragraph{{\tt extension}:} The standard tableau extension rule.
 For example, in Figure~\ref{ExampleTableau} {\smalltt{t2}} extends from the first literal 
 {\smalltt{q(b)}} of {\smalltt{t1}} to the 1st literal {\smalltt{{\mytilde}q(b)}} of {\smalltt{c2}}.
-The path to this point is recorded as {\smalltt{path([t1:1,0:0])}}. 
+The path to this point is recorded as {\smalltt{[t1:1,0:0]}}. 
 The logical parent of {\smalltt{t2} is recorded as {\smalltt{[c2]}}. 
 The inference has status {\smalltt{thm}}, i.e., {\smalltt{t2}} is a logical consequence of its
 parent.
 
 \paragraph{{\tt connection}:} Explicitly close the branch of the contradiction of an extension.
 For example, in Figure~\ref{ExampleTableau} {\smalltt{t3}} closes the branch of the contradiction 
-between {\smalltt{q(b)}} and {\smalltt{{\mytilde}q(b)}} in the extension {\smalltt{t2}}.
-The path to this point is recorded as {\smalltt{path([t2:1,t1:1,0:0])}}.
+between {\smalltt{q(b)}} and {\smalltt{{\mytilde}q(b)}} in the extension to {\smalltt{t2}}.
+The path to this point is recorded as {\smalltt{[t2:1,t1:1,0:0]}}.
 The logical parents of {\smalltt{t3}} are recorded as {\smalltt{[t2:1,t1:1]}}, meaning the 1st 
 literal of {\smalltt{t2}} and the 1st literal of {\smalltt{t1}}. 
 The inference has status {\smalltt{thm}}, i.e., {\smalltt{t3}} is a logical consequence of its
@@ -576,7 +580,7 @@ between the 2nd literal {\smalltt{{\mytilde}q(b)}} of {\smalltt{t6}} and the 1st
 {\smalltt{q(b)}} of {\smalltt{t1}}.
 In Figure~\ref{TableauPicture} this is denoted by the dotted arrow from {\smalltt{q(b)}}
 to {\smalltt{t8}}.
-The path to this point is recorded as {\smalltt{path([t6:2,t4:2,t2:2,t1:1,0:0])}}.
+The path to this point is recorded as {\smalltt{[t6:2,t4:2,t2:2,t1:1,0:0]}}.
 The logical parents of {\smalltt{t8}} are recorded as {\smalltt{[t6:2,t1:1]}}, meaning the 2nd 
 literal of {\smalltt{t6}} and the 1st literal of {\smalltt{t1}}. 
 The inference has status {\smalltt{thm}}, i.e., {\smalltt{t8}} is a logical consequence of its 
@@ -586,7 +590,7 @@ parents.
 For example, in Figure~\ref{ExampleTableau} {\smalltt{l1}} is the lemma {\smalltt{p(c)}} created 
 when the branch rooted at {\smalltt{t2:2}} is closed.
 The lemma is the negation of the 2nd literal {\smalltt{{\mytilde}p(c)}} of {\smalltt{t2}}.
-The path to this point is recorded as {\smalltt{path([t2:2,t1:1,0:0])}}.
+The path to this point is recorded as {\smalltt{[t2:2,t1:1,0:0]}}.
 In Figure~\ref{TableauPicture} this is denoted by the solid right arrow from {\smalltt{t2:2}} to 
 {\smalltt{l1}}.
 As the node {\smalltt{t1:1}} is used in a reduction in closing the branch, the lemma is
@@ -602,7 +606,7 @@ and {\smalltt{t12}} is the {\tt connection} that closes the branch down to {\sma
 In Figure~\ref{TableauPicture} this is denoted by the dashed arrow from {\smalltt{l1}} to 
 {\smalltt{t11:1}}.
 The lemma {\smalltt{l1}} can be used here because {\smalltt{9:2}} is below {\smalltt{t1:1}}.
-The path to this point is recorded as {\smalltt{path([t11:1,t9:2,t2:3,t1:1,0:0])}}.
+The path to this point is recorded as {\smalltt{[t11:1,t9:2,t2:3,t1:1,0:0]}}.
 The logical parent of {\smalltt{t11}} is recorded as {\smalltt{[l1:1]}}, meaning the 1st literal 
 {\smalltt{p(c)}} of {\smalltt{l1}}.
 The inference has status {\smalltt{thm}}, i.e., {\smalltt{t11:1}} is a logical consequence of its
@@ -687,6 +691,7 @@ cnf(t20,plain,              $false,
 \label{ExampleTableau}
 \end{figure}
 
+\vspace*{1em}
 Additional tableau inference rules, e.g., factorization~\cite{Joh93} (another view of lemma
 generation and use), non-unit lemma generation (also known as bottom-up lemma 
 generation)~\cite{AS92,Sch94}, lazy paramodulation~\cite{Pas08} (to deal with equality), 
@@ -711,23 +716,23 @@ Connect++ is implemented in C++, and is open source under the GNU General Public
 Version 3.\footnote{%
 \href{https://www.cl.cam.ac.uk/~sbh11/connect++.html}{\smalltt{www.cl.cam.ac.uk/~sbh11/connect++.html}}}.
 
-The extension of GDV to verify tableau requires extending the structural verification phase,
+The extension of GDV to verify tableau proofs requires extending the structural verification phase,
 and a minor change to inference verification.
 Leaf verification remains unchanged, and the rule-specific steps of derivation verification
 are naturally inapplicable.
-Structural verification of a tableau requires checking:
+Structural verification of a tableau proof requires checking:
 \begin{packed_itemize}
 \item All inference parents exist, in particular that the specified literals exist.
 \item The {\smalltt{path}} records define an acyclic DAG, without contradictions in the paths.
-\item All paths end at the root {\smalltt{0:0}} node.
+\item All paths start at the root {\smalltt{0:0}} node.
 \item The tableau is closed, i.e., every branch ends at a {\smalltt{\$false}} formula.
 \item All {\tt lemma\_extension} steps use lemmas that are below the specified node in the tableau.
 \end{packed_itemize}
 Semantic verification is essentially the same as for derivations, with the small additional need 
 to extract the specified literals from inference parents.
 
-The IDV derivation viewer has been adapted to display a tableau proof, as the Interactive
-Tableau Viewer (ITV) tool.
+The IDV derivation viewer has been adapted to display tableau proofs, as the Interactive
+Tableau Viewer (ITV).
 Figure~\ref{ITVTableau} shows the ITV rendering of the tableau in Figure~\ref{ExampleTableau}.
 The root node is the top {\smalltt{\$true}} box.
 Nodes from {\tt extension} steps are in green-bordered ovals, {\smalltt{\$false}} nodes from
@@ -745,7 +750,7 @@ Available at \href{https://tptp.org/cgi-bin/SystemOnTSTP}{\tt tptp.org/cgi-bin/S
 \centering
 \includegraphics[width=1.0\textwidth]{PaperFOFITV.pdf}
 \vspace*{-1em}
-\caption{ITV rendering of the tableau in Figure~\ref{ExampleTableau}}
+\caption{ITV's rendering of the tableau in Figure~\ref{ExampleTableau}}
 \label{ITVTableau}
 \end{figure}
 
