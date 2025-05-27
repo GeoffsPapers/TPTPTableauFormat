@@ -306,7 +306,7 @@ Figure~\ref{ExampleProblem}, which is used in the refutation discussed here, and
 proof in Section~\ref{Tableau}.
 Points of note:
 all the leaf formulae except {\tt a4} and {\tt a5} are copies of formulas in the problem;
-{\tt a4} and {\tt a5} are easily derived from the corresponding problen formulae;
+{\tt a4} and {\tt a5} are easily derived from the corresponding problem formulae;
 many of the formulae are inferred with SZS status {\smalltt{thm}}, i.e., they are logical 
 consequences of their parents;
 the negated conjecture {\smalltt c\_0\_7} is inferred with SZS status {\smalltt{cth}} --
@@ -701,20 +701,23 @@ etc., appear to be easily added to this format.
 \section{ATP Systems and Tools}
 \label{SystemsTools}
 
-% Sean:
-Connect++ is a prover for first-order logic based on clausal connection calculus.~\cite{Hol23} 
-The advantages of connection provers, with respect to their goal-oriented search and ability to 
-produce readable proofs, are well-known
-Connect++ supports restricted backtracking, restriction of start clauses, reordering, iterative 
-deepening by path length or tree depth.
-Connect++ supports the use of arbitrary search schedules, and can read these from a file in a 
-simple format.
-It deals with equality by detecting its use in the input file and adding the necessary axioms.
-Most relevant to work, Connect accepts input in TPTP format, and {\em outputs closed tableau in
-the new format}.
-Connect++ is implemented in C++, and is open source under the GNU General Public License (GPL) 
-Version 3.\footnote{%
-\href{https://www.cl.cam.ac.uk/~sbh11/connect++.html}{\smalltt{www.cl.cam.ac.uk/~sbh11/connect++.html}}}.
+\newcommand{\cpp}{\textsc{Connect++}}
+
+\cpp\ is an ATP for first-order logic with equality, using the connection calculus 
+to construct proofs.
+It is implemented in C++ and freely available under the GNU General Public License 
+(GPL) Version 3.\footnote{Download from \href{https://www.cl.cam.ac.uk/~sbh11/connect++.html}{$\mathtt{https}$\texttt{://}$\mathtt{www.cl.cam.ac.uk}$\texttt{/}\textasciitilde$\mathtt{sbh11}$\texttt{/}$\mathtt{connect}\texttt{++}\mathtt{.html}$}.}
+\cpp\ implements most of the search methods and other heuristics developed for $\mathtt{leanCoP}$ versions 
+2 and later, including restricted backtracking (and an alternative version of backtracking restriction for 
+extensions), iterative deepening by path length, various approaches to start clause selection, definitional clause conversion, 
+deterministic or random re-ordering, and regularity testing. 
+It also incorporates some further options such as miniscoping and polynomial-time unification
+It accepts input in the TPTP \smalltt{cnf} and \smalltt{fof} formats. 
+\cpp\ incorporates a standard schedule similar to that of $\mathtt{leanCoP}$, but also allows 
+arbitrary schedules to be specified in a simple language. 
+It produces certificates for proofs in a very simple format described in~\cite{Hol23,OH23};
+these can be verified internally, or output to a file and checked independently by a short Prolog program. 
+From version 0.7.0 \cpp\ can also produce closed tableau in the format described here.
 
 The extension of GDV to verify tableau proofs requires extending the structural verification phase,
 and a minor change to inference verification.
@@ -739,7 +742,7 @@ Nodes from {\tt extension} steps are in green-bordered ovals, {\smalltt{\$false}
 {\tt connection} and {\tt reduction} steps are in red-bordered {\smalltt{\$false}} boxes,
 lemmas created in {\tt lemma} steps are in blue-bordered triangles, and lemmas used in
 {\tt lemma\_extension} steps are in green-bordered triangles.
-In the current version of ITV the user has to examine the tableau to find the ancester node
+In the current version of ITV the user has to examine the tableau to find the ancestor node
 used in a {\tt reduction} step, and the lemma used in a {\tt lemma\_extension} step, but soon
 the relevant ancestor/lemma will light up when the cursor is hovered over the 
 reduced/extension node.
@@ -769,8 +772,8 @@ Future work includes completing the extension of GDV, and adding highlighting fe
 explained in Section~\ref{SystemsTools}.
 
 %--------------------------------------------------------------------------------------------------
-\section{Acknowledgements}
-\label{Acknowledgements}
+\section{Acknowledgments}
+\label{Acknowledgments}
 
 For the purpose of open access, the author has applied a Creative Commons Attribution (CC BY) 
 licence to any Author Accepted Manuscript version arising from this submission.
