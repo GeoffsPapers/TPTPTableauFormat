@@ -285,18 +285,18 @@ fof(prove,conjecture, ! [X] : ( ~s(X) & ~q(b) & p(c) ) ).
 \label{Derivations}
 
 A derivation written in the TPTP language is a list of annotated formulae. 
-The leaves of a derivation typically have the role {\smalltt axiom} or {\smalltt conjecture}, 
-and the inferred formulae typically have the role{\smalltt plain} or {\smalltt negated\_conjecture}
+The leaves of a derivation typically have the role \smalltt{axiom} or \smalltt{conjecture}, 
+and the inferred formulae typically have the role \smalltt{plain} or \smalltt{negated\_conjecture}
 (also used for leaves in CNF).
-The source is either a {\smalltt file} record for leaves or an {\smalltt inference} record for 
+The source is either a \smalltt{file} record for leaves or an \smalltt{inference} record for 
 inferred formulae.
-A {\smalltt file} record contains the problem file name and the corresponding annotated formulae 
+A \smalltt{file} record contains the problem file name and the corresponding annotated formulae 
 name in the problem file.
-An {\smalltt inference} record contains the inference rule name, a list of useful inference 
+An \smalltt{inference} record contains the inference rule name, a list of useful inference 
 information, and a list of the inference parents.
-The inference parents can be annotated formulae names, and nested {\smalltt inference} records.
+The inference parents can be annotated formulae names, and nested \smalltt{inference} records.
 Common types of useful inference information are the semantic relationship of the inferred formula 
-to its parents as an SZS ontology value~\cite{Sut08-KEAPPA} in a {\smalltt status} record, 
+to its parents as an SZS ontology value~\cite{Sut08-KEAPPA} in a \smalltt{status} record, 
 special information about recognized types of complex inference rules, e.g., Skolemization and
 splitting, and details of new symbols introduced in the inference.
 The use of SZS values is core to GDV's approach to verification, described below.
@@ -309,9 +309,9 @@ all the leaf formulae except {\tt a4} and {\tt a5} are copies of formulas in the
 {\tt a4} and {\tt a5} are easily derived from the corresponding problem formulae;
 many of the formulae are inferred with SZS status {\smalltt{thm}}, i.e., they are logical 
 consequences of their parents;
-the negated conjecture {\smalltt c\_0\_7} is inferred with SZS status {\smalltt{cth}} --
+the negated conjecture \smalltt{c\_0\_7} is inferred with SZS status {\smalltt{cth}} --
 its negation is a logical consequence of its parent;
-the Skolemized formula {\smalltt c\_0\_11} is inferred with SZS status {\smalltt{esa}} --
+the Skolemized formula \smalltt{c\_0\_11} is inferred with SZS status {\smalltt{esa}} --
 it is equisatisfiable with its parent;
 
 \begin{figure}[htb]
