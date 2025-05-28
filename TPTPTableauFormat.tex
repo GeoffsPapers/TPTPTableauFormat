@@ -117,7 +117,7 @@ incorrect results from ATP might have nasty consequences.
 % reflected in the IEEE~P2817 standard, which aims to ``identify best practices and provide guidance 
 % that supports the definition of valid verification processes for a range of autonomous system 
 % configurations''.\footnote{%
-% \href{https://standards.ieee.org/ieee/2817/11726/}{\smalltt standards.ieee.org/ieee/2817/11726/}}
+% \href{https://standards.ieee.org/ieee/2817/11726/}{\smalltt{standards.ieee.org/ieee/2817/11726/}}}
 Facing the demand for error-free results from ATP systems is the reality that ATP systems
 are complex pieces of software, implementing complex calculi with complex data structures and
 algorithms~\cite{Sch06}. 
@@ -240,16 +240,16 @@ Problems and solutions are built from {\em annotated formulae} of the form
 {\em source}{\tt ,}
 {\em useful\_info}{\tt )}
 \end{center}
-The {\em language}s supported are {\smalltt{cnf}} (clause normal form), {\smalltt{fof}}
-(first-order form), {\smalltt{tff}} (typed first-order form), and {\smalltt{thf}}
+The {\em language}s supported are \smalltt{cnf} (clause normal form), \smalltt{fof}
+(first-order form), \smalltt{tff} (typed first-order form), and \smalltt{thf}
 (typed higher-order form).
-The {\em role}, e.g., {\smalltt{axiom}}, {\smalltt{lemma}}, {\smalltt{conjecture}}, defines the 
+The {\em role}, e.g., \smalltt{axiom}, \smalltt{lemma}, \smalltt{conjecture}, defines the 
 use of the formula.
 In a {\em formula}, terms and atoms follow Prolog conventions -- functions and predicates start 
 with a lowercase letter or are {\tt '}single quoted{\tt '}, and variables start with an uppercase 
 letter.
 The language also supports interpreted symbols that either start with a {\tt \$}, e.g., the 
-truth constants {\smalltt{\$true}} and {\smalltt{\$false}}, or are composed of 
+truth constants \smalltt{\$true} and \smalltt{\$false}, or are composed of 
 non-alphabetic characters, e.g., integer/rational/real numbers such as 27, 43/92, -99.66.
 The logical connectives in the TPTP language are
 {\tt !>}, {\tt ?*}, {\tt @+}, {\tt @-}, {\tt !}, {\tt ?}, {\tt {\mytilde}}, {\tt |}, {\tt \&}, 
@@ -307,11 +307,11 @@ proof in Section~\ref{Tableau}.
 Points of note:
 all the leaf formulae except {\tt a4} and {\tt a5} are copies of formulas in the problem;
 {\tt a4} and {\tt a5} are easily derived from the corresponding problem formulae;
-many of the formulae are inferred with SZS status {\smalltt{thm}}, i.e., they are logical 
+many of the formulae are inferred with SZS status \smalltt{thm}, i.e., they are logical 
 consequences of their parents;
-the negated conjecture \smalltt{c\_0\_7} is inferred with SZS status {\smalltt{cth}} --
+the negated conjecture \smalltt{c\_0\_7} is inferred with SZS status {smalltt{cth} --
 its negation is a logical consequence of its parent;
-the Skolemized formula \smalltt{c\_0\_11} is inferred with SZS status {\smalltt{esa}} --
+the Skolemized formula \smalltt{c\_0\_11} is inferred with SZS status \smalltt{esa} --
 it is equisatisfiable with its parent;
 
 \begin{figure}[htb]
@@ -368,9 +368,9 @@ Figure~\ref{ExampleClausification}.\footnote{%
 The full refutation can be generated in SystemOnTPTP, available at
 \href{https://tptp.org/cgi-bin/SystemOnTPTP}{\tt tptp.org/cgi-bin/SystemOnTPTP}}
 Points of note:
-many of the formulae are inferred with SZS status {\smalltt{thm}}, i.e., they are logical 
+many of the formulae are inferred with SZS status \smalltt{thm}, i.e., they are logical 
 consequences of their parents;
-several of the inferred formulae, e.g., {\smalltt{c\_0\_23}}, have nested {\smalltt{inference}}
+several of the inferred formulae, e.g., \smalltt{c\_0\_23}, have nested \smalltt{inference}
 records -- the intermediate inferred formulae have not been output. 
 
 \begin{figure}[htb]
@@ -430,7 +430,7 @@ cnf(c_0_33,plain,              $false,
 
 The GDV derivation verifier~\cite{Sut06} verifies proofs in the TPTP format.
 % Most recently it has been developed to produce LambdaPi terms that can be independently verified 
-% using the {\smalltt lambdapi} checker.~\cite{SBB25}
+% using the \smalltt{lambdapi} checker.~\cite{SBB25}
 GDV's input is a TPTP format proof, and optionally (required for complete verification) the 
 problem for which the proof was produced.
 GDV verifies a proof in four phases: structural verification, leaf verification,
@@ -451,9 +451,9 @@ Rule specific verification deals with inference rules that require special treat
 Skolemization. 
 Inference verification deals with the various types of inferences that are made by ATP
 systems in a proof.
-Examples of checks are: for inference steps with SZS status {\smalltt{thm}} check-by-ATP that the 
+Examples of checks are: for inference steps with SZS status \smalltt{thm} check-by-ATP that the 
 inferred formula can be proved from the parent formulae, for inference steps with SZS status 
-{\smalltt{cth}} check-by-ATP that the negation of the inferred formula can be proved from the 
+\smalltt{cth} check-by-ATP that the negation of the inferred formula can be proved from the 
 parent formulae.
 GDV is available online in SystemOnTSTP.\footnote{%
 Available at \href{https://tptp.org/cgi-bin/SystemOnTSTP}{\tt tptp.org/cgi-bin/SystemOnTSTP}}
@@ -543,73 +543,72 @@ cnf(t4,plain,              p(c) | ~ q(c),
 \end{verbatim}
 }
 \noindent
-notes that the variable {\smalltt{X}} in {\smalltt{t2} is bound to {\smalltt{c}} (assuming 
-variables have been renamed apart so that it is clear that the {\smalltt X} is in {\smalltt{t2}}).
+notes that the variable \smalltt{X} in \smalltt{t2} is bound to \smalltt{c} (assuming 
+variables have been renamed apart so that it is clear that the \smalltt{X} is in \smalltt{t2}).
 % AAAARGH, WE NEED TO GET THIS VERY CLEAR.
 
 \paragraph{{\tt start}:} The initial clause below the root node.
-For example, in Figure~\ref{ExampleTableau} {\smalltt{t1}} starts the tableau.
-The path to this point is recorded as {\smalltt{[0:0]}}, indicating that the node above is the 
+For example, in Figure~\ref{ExampleTableau} \smalltt{t1} starts the tableau.
+The path to this point is recorded as \smalltt{[0:0]}, indicating that the node above is the 
 root node.
-The logical parent of {\smalltt{t1}} is recorded as {\smalltt{[c1]}}. 
-The inference has status {\smalltt{thm}}, i.e., {\smalltt{t1}} is a logical consequence of its
+The logical parent of \smalltt{t1} is recorded as \smalltt{[c1]}. 
+The inference has status \smalltt{thm}, i.e., \smalltt{t1} is a logical consequence of its
 parent.
 {\tt start} can be viewed as a special form of {\tt extension}, described next.
 
 \paragraph{{\tt extension}:} The standard tableau extension rule.
-For example, in Figure~\ref{ExampleTableau} {\smalltt{t2}} extends from the first literal 
-{\smalltt{q(b)}} of {\smalltt{t1}} to the 1st literal {\smalltt{{\mytilde}q(b)}} of {\smalltt{c2}}.
-The path to this point is recorded as {\smalltt{[t1:1,0:0]}}. 
-The logical parent of {\smalltt{t2} is recorded as {\smalltt{[c2]}}. 
-The inference has status {\smalltt{thm}}, i.e., {\smalltt{t2}} is a logical consequence of its
-parent.
+For example, in Figure~\ref{ExampleTableau} \smalltt{t2} extends from the first literal 
+\smalltt{q(b)} of \smalltt{t1} to the 1st literal \smalltt{{\mytilde}q(b)} of \smalltt{c2}.
+The path to this point is recorded as \smalltt{[t1:1,0:0]}. 
+The logical parent of \smalltt{t2} is recorded as \smalltt{[c2]}. 
+The inference has status \smalltt{thm}, i.e., \smalltt{t2} is a logical consequence of its parent.
 
 \paragraph{{\tt connection}:} Explicitly close the branch of the contradiction of an extension.
-For example, in Figure~\ref{ExampleTableau} {\smalltt{t3}} closes the branch of the contradiction 
-between {\smalltt{q(b)}} and {\smalltt{{\mytilde}q(b)}} in the extension to {\smalltt{t2}}.
-The path to this point is recorded as {\smalltt{[t2:1,t1:1,0:0]}}.
-The logical parents of {\smalltt{t3}} are recorded as {\smalltt{[t2:1,t1:1]}}, meaning the 1st 
-literal of {\smalltt{t2}} and the 1st literal of {\smalltt{t1}}. 
-The inference has status {\smalltt{thm}}, i.e., {\smalltt{t3}} is a logical consequence of its
+For example, in Figure~\ref{ExampleTableau} \smalltt{t3} closes the branch of the contradiction 
+between \smalltt{q(b)} and \smalltt{{\mytilde}q(b)} in the extension to \smalltt{t2}.
+The path to this point is recorded as \smalltt{[t2:1,t1:1,0:0]}.
+The logical parents of \smalltt{t3} are recorded as \smalltt{[t2:1,t1:1]}, meaning the 1st 
+literal of \smalltt{t2} and the 1st literal of \smalltt{t1}. 
+The inference has status \smalltt{thm}, i.e., \smalltt{t3} is a logical consequence of its
 parents. 
 {\tt connection} can be viewed as a degenerate form of {\tt reduction}, described next.
 
 \paragraph{{\tt reduction}:} The standard tableau reduction rule.
-For example, in Figure~\ref{ExampleTableau} {\smalltt{t8}} closes the branch of the contradiction 
-between the 2nd literal {\smalltt{{\mytilde}q(b)}} of {\smalltt{t6}} and the 1st literal 
-{\smalltt{q(b)}} of {\smalltt{t1}}.
-In Figure~\ref{TableauPicture} this is denoted by the dotted arrow from {\smalltt{q(b)}}
-to {\smalltt{t8}}.
-The path to this point is recorded as {\smalltt{[t6:2,t4:2,t2:2,t1:1,0:0]}}.
-The logical parents of {\smalltt{t8}} are recorded as {\smalltt{[t6:2,t1:1]}}, meaning the 2nd 
-literal of {\smalltt{t6}} and the 1st literal of {\smalltt{t1}}. 
-The inference has status {\smalltt{thm}}, i.e., {\smalltt{t8}} is a logical consequence of its 
+For example, in Figure~\ref{ExampleTableau} \smalltt{t8} closes the branch of the contradiction 
+between the 2nd literal \smalltt{{\mytilde}q(b)} of \smalltt{t6} and the 1st literal 
+\smalltt{q(b)} of \smalltt{t1}.
+In Figure~\ref{TableauPicture} this is denoted by the dotted arrow from \smalltt{q(b)}
+to \smalltt{t8}.
+The path to this point is recorded as \smalltt{[t6:2,t4:2,t2:2,t1:1,0:0]}.
+The logical parents of \smalltt{t8} are recorded as \smalltt{[t6:2,t1:1]}, meaning the 2nd 
+literal of \smalltt{t6} and the 1st literal of \smalltt{t1}. 
+The inference has status \smalltt{thm}, i.e., \smalltt{t8} is a logical consequence of its 
 parents.
 
 \paragraph{{\tt lemma}:} The creation of a unit lemma when a branch is closed.
-For example, in Figure~\ref{ExampleTableau} {\smalltt{l1}} is the lemma {\smalltt{p(c)}} created 
-when the branch rooted at {\smalltt{t2:2}} is closed.
-The lemma is the negation of the 2nd literal {\smalltt{{\mytilde}p(c)}} of {\smalltt{t2}}.
-The path to this point is recorded as {\smalltt{[t2:2,t1:1,0:0]}}.
-In Figure~\ref{TableauPicture} this is denoted by the solid right arrow from {\smalltt{t2:2}} to 
-{\smalltt{l1}}.
-As the node {\smalltt{t1:1}} is used in a reduction in closing the branch, the lemma is
-available only below {\smalltt{t1:1}}, recorded as {\smalltt{below(t1:1)}}.
-The logical parent of {\smalltt{l1}} is recorded as {\smalltt{[t2:2]}}, meaning the 2nd literal 
-{\smalltt{{\mytilde}p(c)}} of {\smalltt{t2}}.
-The inference has status {\smalltt{cth}}, i.e., the negation of {\smalltt{l1}} is a logical 
+For example, in Figure~\ref{ExampleTableau} \smalltt{l1} is the lemma \smalltt{p(c)} created 
+when the branch rooted at \smalltt{t2:2} is closed.
+The lemma is the negation of the 2nd literal \smalltt{{\mytilde}p(c)} of \smalltt{t2}.
+The path to this point is recorded as \smalltt{[t2:2,t1:1,0:0]}.
+In Figure~\ref{TableauPicture} this is denoted by the solid right arrow from \smalltt{t2:2} to 
+\smalltt{l1}.
+As the node \smalltt{t1:1} is used in a reduction in closing the branch, the lemma is
+available only below \smalltt{t1:1}, recorded as \smalltt{below(t1:1)}.
+The logical parent of \smalltt{l1} is recorded as \smalltt{[t2:2]}, meaning the 2nd literal 
+\smalltt{{\mytilde}p(c)} of \smalltt{t2}.
+The inference has status \smalltt{cth}, i.e., the negation of \smalltt{l1} is a logical 
 consequence of its parent.
 
 \paragraph{{\tt lemma\_extension}:} Use of a lemma to close a branch.
-For example, in Figure~\ref{ExampleTableau} {\smalltt{t11:1}} is the lemma {\smalltt{l1}},
-and {\smalltt{t12}} is the {\tt connection} that closes the branch down to {\smalltt{t11:1}}. 
-In Figure~\ref{TableauPicture} this is denoted by the dashed arrow from {\smalltt{l1}} to 
-{\smalltt{t11:1}}.
-The lemma {\smalltt{l1}} can be used here because {\smalltt{9:2}} is below {\smalltt{t1:1}}.
-The path to this point is recorded as {\smalltt{[t11:1,t9:2,t2:3,t1:1,0:0]}}.
-The logical parent of {\smalltt{t11}} is recorded as {\smalltt{[l1:1]}}, meaning the 1st literal 
-{\smalltt{p(c)}} of {\smalltt{l1}}.
-The inference has status {\smalltt{thm}}, i.e., {\smalltt{t11:1}} is a logical consequence of its
+For example, in Figure~\ref{ExampleTableau} \smalltt{t11:1} is the lemma \smalltt{l1},
+and \smalltt{t12} is the {\tt connection} that closes the branch down to \smalltt{t11:1}. 
+In Figure~\ref{TableauPicture} this is denoted by the dashed arrow from \smalltt{l1} to 
+\smalltt{t11:1}.
+The lemma \smalltt{l1} can be used here because \smalltt{9:2} is below \smalltt{t1:1}.
+The path to this point is recorded as \smalltt{[t11:1,t9:2,t2:3,t1:1,0:0]}.
+The logical parent of \smalltt{t11} is recorded as \smalltt{[l1:1]}, meaning the 1st literal 
+\smalltt{p(c)} of \smalltt{l1}.
+The inference has status \smalltt{thm}, i.e., \smalltt{t11:1} is a logical consequence of its
 parent.
 {\tt lemma\_extension} can be viewed as a special form of {\tt extension}.
 
@@ -706,17 +705,20 @@ etc., appear to be easily added to this format.
 \cpp\ is an ATP for first-order logic with equality, using the connection calculus 
 to construct proofs.
 It is implemented in C++ and freely available under the GNU General Public License 
-(GPL) Version 3.\footnote{Download from \href{https://www.cl.cam.ac.uk/~sbh11/connect++.html}{$\mathtt{https}$\texttt{://}$\mathtt{www.cl.cam.ac.uk}$\texttt{/}\textasciitilde$\mathtt{sbh11}$\texttt{/}$\mathtt{connect}\texttt{++}\mathtt{.html}$}.}
-\cpp\ implements most of the search methods and other heuristics developed for $\mathtt{leanCoP}$ versions 
-2 and later, including restricted backtracking (and an alternative version of backtracking restriction for 
-extensions), iterative deepening by path length, various approaches to start clause selection, definitional clause conversion, 
-deterministic or random re-ordering, and regularity testing. 
-It also incorporates some further options such as miniscoping and polynomial-time unification
+(GPL) Version 3.\footnote{%
+Download from \href{https://www.cl.cam.ac.uk/~sbh11/connect++.html}{\tt www.cl.cam.ac.uk/\textasciitilde sbh11/connect++.html}}
+\cpp\ implements most of the search methods and other heuristics developed for $\mathtt{leanCoP}$ 
+versions 2 and later, including restricted backtracking (and an alternative version of backtracking 
+restriction for extensions), iterative deepening by path length, various approaches to start clause 
+selection, definitional clause conversion, deterministic or random re-ordering, and regularity 
+testing. 
+It also incorporates some further options such as miniscoping and polynomial-time unification.
 It accepts input in the TPTP \smalltt{cnf} and \smalltt{fof} formats. 
 \cpp\ incorporates a standard schedule similar to that of $\mathtt{leanCoP}$, but also allows 
 arbitrary schedules to be specified in a simple language. 
 It produces certificates for proofs in a very simple format described in~\cite{Hol23,OH23};
-these can be verified internally, or output to a file and checked independently by a short Prolog program. 
+these can be verified internally, or output to a file and checked independently by a short Prolog 
+program. 
 From version 0.7.0 \cpp\ can also produce closed tableau in the format described here.
 
 The extension of GDV to verify tableau proofs requires extending the structural verification phase,
@@ -726,9 +728,9 @@ are naturally inapplicable.
 Structural verification of a tableau proof requires checking:
 \begin{packed_itemize}
 \item All inference parents exist, in particular that the specified literals exist.
-\item The {\smalltt{path}} records define an acyclic DAG, without contradictions in the paths.
-\item All paths start at the root {\smalltt{0:0}} node.
-\item The tableau is closed, i.e., every branch ends at a {\smalltt{\$false}} formula.
+\item The \smalltt{path} records define an acyclic DAG, without contradictions in the paths.
+\item All paths start at the root \smalltt{0:0} node.
+\item The tableau is closed, i.e., every branch ends at a \smalltt{\$false} formula.
 \item All {\tt lemma\_extension} steps use lemmas that are below the specified node in the tableau.
 \end{packed_itemize}
 Semantic verification is essentially the same as for derivations, with the small additional need 
@@ -737,9 +739,9 @@ to extract the specified literals from inference parents.
 The IDV derivation viewer has been adapted to display tableau proofs, as the Interactive
 Tableau Viewer (ITV).
 Figure~\ref{ITVTableau} shows the ITV rendering of the tableau in Figure~\ref{ExampleTableau}.
-The root node is the top {\smalltt{\$true}} box.
-Nodes from {\tt extension} steps are in green-bordered ovals, {\smalltt{\$false}} nodes from
-{\tt connection} and {\tt reduction} steps are in red-bordered {\smalltt{\$false}} boxes,
+The root node is the top \smalltt{\$true} box.
+Nodes from {\tt extension} steps are in green-bordered ovals, \smalltt{\$false} nodes from
+{\tt connection} and {\tt reduction} steps are in red-bordered \smalltt{\$false} boxes,
 lemmas created in {\tt lemma} steps are in blue-bordered triangles, and lemmas used in
 {\tt lemma\_extension} steps are in green-bordered triangles.
 In the current version of ITV the user has to examine the tableau to find the ancestor node
@@ -772,11 +774,13 @@ Future work includes completing the extension of GDV, and adding highlighting fe
 explained in Section~\ref{SystemsTools}.
 
 %--------------------------------------------------------------------------------------------------
-\section{Acknowledgments}
-\label{Acknowledgments}
-
-For the purpose of open access, the author has applied a Creative Commons Attribution (CC BY) 
-licence to any Author Accepted Manuscript version arising from this submission.
+\paragraph{\bf Acknowledgments}
+\begin{packed_itemize}
+\item For the purpose of open access, the author has applied a Creative Commons Attribution 
+      (CC BY) licence to any Author Accepted Manuscript version arising from this submission.
+\item ITV was implemented at the University of Miami by Daniel Li and Esteban Morales, building
+      in the IDV code of Jack McKeown.
+\end{packed_itemize}
 
 %--------------------------------------------------------------------------------------------------
 \bibliographystyle{splncs04}
