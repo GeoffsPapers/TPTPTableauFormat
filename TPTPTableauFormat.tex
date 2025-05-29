@@ -702,11 +702,8 @@ etc., appear to be easily added to this format.
 
 \newcommand{\cpp}{\textsc{Connect++}}
 
-\cpp\ is an ATP for first-order logic with equality, using the connection calculus 
-to construct proofs.
-It is implemented in C++ and freely available under the GNU General Public License 
-(GPL) Version 3.\footnote{%
-Download from \href{https://www.cl.cam.ac.uk/~sbh11/connect++.html}{\tt www.cl.cam.ac.uk/\textasciitilde sbh11/connect++.html}}
+\cpp\ is an ATP for first-order logic with equality, using the connection calculus to construct 
+proofs.~\cite{Hol23}.
 \cpp\ implements most of the search methods and other heuristics developed for $\mathtt{leanCoP}$ 
 versions 2 and later, including restricted backtracking (and an alternative version of backtracking 
 restriction for extensions), iterative deepening by path length, various approaches to start clause 
@@ -719,7 +716,11 @@ arbitrary schedules to be specified in a simple language.
 It produces certificates for proofs in a very simple format described in~\cite{Hol23,OH23};
 these can be verified internally, or output to a file and checked independently by a short Prolog 
 program. 
-From version 0.7.0 \cpp\ can also produce closed tableau in the format described here.
+From version 0.7.0 \cpp\ can also produce closed tableau in the new TPTP format described in this
+paper.
+\cpp\ is implemented in C++ and freely available under the GNU General Public License (GPL) 
+Version~3.\footnote{%
+Download from \href{https://www.cl.cam.ac.uk/~sbh11/connect++.html}{\tt www.cl.cam.ac.uk/\textasciitilde sbh11/connect++.html}}
 
 The extension of GDV to verify tableau proofs requires extending the structural verification phase,
 and a minor change to inference verification.
@@ -766,9 +767,22 @@ Available at \href{https://tptp.org/cgi-bin/SystemOnTSTP}{\tt tptp.org/cgi-bin/S
 This paper has described the new TPTP format for recording tableau proofs. 
 The format builds on the existing infrastructure of the TPTP World, in particular the TPTP 
 format for recording derivations.
-An ATP system that outputs tableau in this format is described.
-The extension of the existing GDV and IDV tools for verifying and viewing derivations 
-to verifying and viewing tableau proofs has been discussed.
+The new format meets the requirements listed in Section~\ref{Tableau}:
+\begin{enumerate}
+\item Easy reconstruction of the tableau - this is can be done directly from the \smalltt{path}s.
+\item Sufficient information for structural verification of the closed tableau - this is provided
+      by the \smalltt{path}s, the \smalltt{below} record in lemmas, and the explicit closing of
+      each path with {\tt connection} steps and after {\tt reduction} steps.
+\item Sufficient information for semantic verification of the inference steps - this is provided
+      with SZS \smalltt{status} information.
+\item Concise and simple enough for a natural representation of proofs - there is no redundant
+      information or unnecessary detail, and the tableau can be directly reconstructed.
+\item Readable by humans as well as ATP tools - the format uses the established TPTP syntax, which
+      is both human and machine readable.
+\end{enumerate}
+The new format has been adopted in the \cpp\ ATP system, and 
+the existing GDV and IDV tools for verifying and viewing derivations have been adapted to 
+verifying and viewing tableau proofs.
 
 Future work includes completing the extension of GDV, and adding highlighting features to ITV as
 explained in Section~\ref{SystemsTools}.
@@ -779,7 +793,7 @@ explained in Section~\ref{SystemsTools}.
 \item For the purpose of open access, the author has applied a Creative Commons Attribution 
       (CC BY) licence to any Author Accepted Manuscript version arising from this submission.
 \item ITV was implemented at the University of Miami by Daniel Li and Esteban Morales, building
-      in the IDV code of Jack McKeown.
+      on the IDV code of Jack McKeown.
 \end{packed_itemize}
 
 %--------------------------------------------------------------------------------------------------
