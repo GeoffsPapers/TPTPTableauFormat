@@ -158,7 +158,7 @@ which serves as a certification (but not a certificate) of the proof.
 
 At one top level, proofs can be divided into two types: Hilbert-style proofs that start at
 axioms and derive theorems~\cite{End72}, and proofs-by-contradiction that negate the
-conjecture to be proved and show that leads to a contradiction with the axioms~\cite{Men87}.
+conjecture to be proved and derive a contradiction with the axioms~\cite{Men87}.
 ATP systems that search for Hilbert-style proofs are often called ``natural deduction systems'',
 e.g., THINKER~\cite{Pel98} and Muscadet~\cite{Pas01-IJCAR}.
 Most contemporary high-performance ATP systems that search for a proof-by-contradiction, called
@@ -190,7 +190,7 @@ Section~\ref{Conclusion} concludes.
 \label{TPTP}
 
 The TPTP World~\cite{Sut24} is a well-established infrastructure that supports research, 
-development, and deployment of Automated Theorem Proving (ATP) systems %(see 
+development, and deployment of Automated Theorem Proving (ATP) systems. %(see 
 %Section~\ref{TPTPWorld} for more details).
 The TPTP World infrastructure includes
 the TPTP language~\cite{SS+06},
@@ -305,11 +305,11 @@ Figure~\ref{ExampleClausification} shows the transformation to CNF of the proble
 Figure~\ref{ExampleProblem}, which is used in the refutation discussed here, and the tableau
 proof in Section~\ref{Tableau}.
 Points of note:
-all the leaf formulae except {\tt a4} and {\tt a5} are copies of formulas in the problem;
+all the leaf formulae except {\tt a4} and {\tt a5} are copies of formulae in the problem;
 {\tt a4} and {\tt a5} are easily derived from the corresponding problem formulae;
 many of the formulae are inferred with SZS status \smalltt{thm}, i.e., they are logical 
 consequences of their parents;
-the negated conjecture \smalltt{c\_0\_7} is inferred with SZS status {smalltt{cth} --
+the negated conjecture \smalltt{c\_0\_7} is inferred with SZS status \smalltt{cth} --
 its negation is a logical consequence of its parent;
 the Skolemized formula \smalltt{c\_0\_11} is inferred with SZS status \smalltt{esa} --
 it is equisatisfiable with its parent;
@@ -441,7 +441,7 @@ prover or a model finder
 % and E~\cite{SCV19} for theorem proving, Paradox~\cite{CS18}, Vampire~\cite{KV13}, and
 % Nitpick~\cite{BN10-ITP} for model finding.
 (the systems have become trusted through the process described in \cite{SBB25}).
-Structural verification deals with non-logical aspects of a proof, checking whether the the 
+Structural verification deals with non-logical aspects of a proof, checking whether the 
 annotated formulae of the proof have the right format and relationships, e.g., the derivation is 
 acyclic. 
 Leaf verification deals with the leaves of the derivation, and their relationship with
@@ -467,8 +467,8 @@ Available at \href{https://tptp.org/cgi-bin/SystemOnTSTP}{\tt tptp.org/cgi-bin/S
 % %EASYCHAIR \end{figure}
 % \end{figure*}   %FLAIRS
 
-The IDV Interactive Derivation Viewer~\cite{TPS07} provides a graphical rendering of a proof DAG. 
-It has features that allow the user to examine the proof structure in various way, including 
+The Interactive Derivation Viewer (IDV)~\cite{TPS07} provides a graphical rendering of a proof DAG. 
+It has features that allow the user to examine the proof structure in various ways, including 
 identification of ``interesting'' steps in the proof~\cite{PGS06}.
 Figure~\ref{IDVDerivation} shows the IDV rendering of (the full version of) the refutation in 
 Figure~\ref{ExampleDerivation}.
@@ -530,7 +530,7 @@ the tableau is closed.
 
 The TPTP format recognizes six inference rules, which are described below.
 The inference record of each annotated formula records the name of the rule used, the SZS status 
-of the inferred formula wrt it parents, the path from the root to the node above, and the 
+of the inferred formula wrt its parents, the path from the root to the node above, and the 
 inference parents.  
 The SZS status and parent information makes it possible to use semantic verification of each 
 inference, and the path information makes it easy to reconstruct the tableau.
