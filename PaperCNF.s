@@ -36,7 +36,7 @@ cnf(t8,plain,
     $false,
     inference(reduction,[status(thm),path([t6:2,t4:2,t2:2,t1:1,0:0])],[t6:2,t1:1]) ).
 
-cnf(l1,plain,
+cnf(l1,lemma,
     p(c),
     inference(lemma,[status(cth),path([t2:2,t1:1,0:0]),below(t1:1)],[t2:2]) ).
 
@@ -57,7 +57,7 @@ cnf(t12,plain,
     $false,
     inference(connection,[status(thm),path([t11:1,t9:2,t2:3,t1:1,0:0])],[t9:2,t11:1]) ).
 
-cnf(l2,plain,
+cnf(l2,lemma,
     ~ q(b),
     inference(lemma,[status(cth),path([t1:1,0:0]),below(0:0)],[t1:1]) ).
 
