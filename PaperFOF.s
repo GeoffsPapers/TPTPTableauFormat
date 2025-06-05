@@ -188,4 +188,4 @@ cnf(t19,plain,
 
 cnf(t20,plain,
     $false,
-    inference(lemma_extension,[status(thm),path([t19:1,t17:2,t13:3,t1:2,0:0])],[l2:1]) ).
+    inference(connection,[status(thm),path([t19:1,t17:2,t13:3,t1:2,0:0])],[l2:1]) ).

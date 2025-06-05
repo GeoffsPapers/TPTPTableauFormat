@@ -53,8 +53,8 @@
 
 \begin{document}
 
-\title{The TPTP Format for Tableaux Proofs}
-\titlerunning{TPTP Tableaux}
+\title{The TPTP Format for Clausal Tableaux Proofs}
+\titlerunning{TPTP Clausal Tableaux}
 
 \author{
 Geoff Sutcliffe\inst{1}\orcidID{0000-0001-9120-3927}\Envelope
@@ -74,12 +74,12 @@ University of Cambridge, United Kingdom,
 \maketitle
 %--------------------------------------------------------------------------------------------------
 \begin{abstract}
-This paper describes the (new) TPTP format for recording tableau proofs.
+This paper describes the (new) TPTP format for recording clausal tableau proofs.
 The format builds on the existing infrastructure of the TPTP World, in particular the TPTP format
 for recording derivations.
-An ATP system that outputs tableau in this format is described.
+An ATP system that outputs tableaux in this format is described.
 Existing TPTP World tools for verifying and viewing derivations can be directly extended to
-verify and view tableau proofs recorded in this new format.
+verify and view tableaux recorded in this new format.
 \keywords{TPTP, tableau, proof}
 \end{abstract}
 %--------------------------------------------------------------------------------------------------
@@ -177,12 +177,12 @@ This paper is structured as follows:
 Section~\ref{TPTP} introduces the TPTP World, providing the necessary background to the TPTP
 language, explains the TPTP format for recording (non-tableau) derivations, and describes the
 GDV and IDV tools for verifying and viewing derivations.
-Section~\ref{Tableau} describes the new TPTP format for recording tableau proofs, and explains how
-the format meets the requirements for easy reconstruction of the tableau, and for semantic 
-verification of the tableau inference steps.
-Section~\ref{SystemsTools} describes an ATP system that can output tableau proofs in the new
+Section~\ref{Tableau} describes the new TPTP format for recording clausal tableau proofs, and 
+explains how the format meets the requirements for easy reconstruction of the tableau, and for 
+semantic verification of the tableau inference steps.
+Section~\ref{SystemsTools} describes an ATP system that can output tableaux in the new
 format, and explains how the GDV and IDV tools can be directly extended to verify and view
-tableau proofs.
+tableaux.
 Section~\ref{Conclusion} concludes.
 
 %--------------------------------------------------------------------------------------------------
@@ -484,10 +484,10 @@ Available at \href{https://tptp.org/cgi-bin/SystemOnTSTP}{\tt tptp.org/cgi-bin/S
 \end{figure}
 
 %--------------------------------------------------------------------------------------------------
-\section{The (new) TPTP Format for Tableau Proofs}
+\section{The (new) TPTP Format for Clausal Tableau Proofs}
 \label{Tableau}
 
-There were three primary requirements for the new format for tableau proofs:
+There were three primary requirements for the new format for a clausal tableau:
 \begin{enumerate}
 \item Easy reconstruction of the tableau.
 \item Sufficient information for structural verification of the closed tableau.
@@ -509,16 +509,16 @@ A more recent proposal~\cite{OH23} in the TPTP style provided some inspiration f
 but left some important information as implicit, which is made explicit in the new format.
 The new format aims to meet all the requirements.
 
-Figure~\ref{TableauPicture} shows the tableau for the problem in Figure~\ref{ExampleProblem}.
-Figure~\ref{ExampleTableau} shows the TPTP format for the tableau, following the transformation
-to CNF shown in Figure~\ref{ExampleClausification}.
+Figure~\ref{TableauPicture} shows the clausal tableau for the clauses in 
+Figure~\ref{ExampleClausification}.
+Figure~\ref{ExampleTableau} shows the TPTP format for recording the tableau.
 The labels in square brackets in Figure~\ref{TableauPicture} identify the literals in the 
 annotated formulae in Figure~\ref{ExampleTableau}.
 The dotted arrow shows the one reduction step, the solid rightward arrows point to the lemmas that 
 are created, and the dashed arrows show where the lemmas are used.
 Note that lemmas can be used only below the parent node of where they are created. 
 The tableau in Figure~\ref{TableauPicture} has the variables instantiated as they would be when 
-the tableau is closed.
+the tableau is closed (but note that in general a tableau need not be ground).
 
 \begin{figure}[htb]
 \centering
@@ -547,6 +547,9 @@ notes that the variable \smalltt{X} in \smalltt{t2} is bound to \smalltt{c} (ass
 variables have been renamed apart so that it is clear that the \smalltt{X} is in \smalltt{t2}).
 % AAAARGH, WE NEED TO GET THIS VERY CLEAR.
 
+\noindent
+\begin{minipage}{\textwidth}
+\textbf{The Inference Rules}
 \paragraph{{\tt start}:} The initial clause below the root node.
 For example, in Figure~\ref{ExampleTableau} \smalltt{t1} starts the tableau.
 The path to this point is recorded as \smalltt{[0:0]}, indicating that the node above is the 
@@ -555,6 +558,7 @@ The logical parent of \smalltt{t1} is recorded as \smalltt{[c1]}.
 The inference has status \smalltt{thm}, i.e., \smalltt{t1} is a logical consequence of its
 parent.
 {\tt start} can be viewed as a special form of {\tt extension}, described next.
+\end{minipage}
 
 \paragraph{{\tt extension}:} The standard tableau extension rule.
 For example, in Figure~\ref{ExampleTableau} \smalltt{t2} extends from the first literal 
@@ -763,7 +767,7 @@ Available at \href{https://tptp.org/cgi-bin/SystemOnTSTP}{\tt tptp.org/cgi-bin/S
 \section{Conclusion}
 \label{Conclusion}
 
-This paper has described the new TPTP format for recording tableau proofs. 
+This paper has described the new TPTP format for recording clausal tableau proofs. 
 The format builds on the existing infrastructure of the TPTP World, in particular the TPTP 
 format for recording derivations.
 The new format meets the requirements listed in Section~\ref{Tableau}:
@@ -779,12 +783,12 @@ The new format meets the requirements listed in Section~\ref{Tableau}:
 \item Readable by humans as well as ATP tools - the format uses the established TPTP syntax, which
       is both human and machine readable.
 \end{enumerate}
-The new format has been adopted in the \cpp\ ATP system, and 
-the existing GDV and IDV tools for verifying and viewing derivations have been adapted to 
-verifying and viewing tableau proofs.
+The new format has been adopted in the \cpp\ ATP system, and the existing GDV and IDV tools for 
+verifying and viewing derivations have been adapted to verifying and viewing tableaux.
 
 Future work includes completing the extension of GDV, and adding highlighting features to ITV as
 explained in Section~\ref{SystemsTools}.
+In the larger picture, the format can be extended to record non-clausal tableaux~\cite{Ott17,Ott18}.
 
 %--------------------------------------------------------------------------------------------------
 \paragraph{\bf Acknowledgments}
