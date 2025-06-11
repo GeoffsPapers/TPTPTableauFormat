@@ -745,7 +745,9 @@ to extract the specified literals from inference parents.
 The IDV derivation viewer has been adapted to display tableau proofs, as the Interactive
 Tableau Viewer (ITV).
 Figure~\ref{ITVTableau} shows the ITV rendering of the tableau in Figure~\ref{ExampleTableau}.
-The root node is the top \smalltt{\$true} box.
+The input formulae and the steps of conversion to CNF are shown above the tableau, in the same
+format used for derivations in IDV (see Section~\ref{DerivationTools}).
+The root node of the tableau is the top \smalltt{\$true} box.
 Nodes from {\tt extension} steps are in green-bordered ovals, \smalltt{\$false} nodes from
 {\tt connection} and {\tt reduction} steps are in red-bordered \smalltt{\$false} boxes,
 lemmas created in {\tt lemma} steps are in blue-bordered triangles, and lemmas used in
@@ -753,6 +755,8 @@ lemmas created in {\tt lemma} steps are in blue-bordered triangles, and lemmas u
 When the cursor hovers over a node in the tableau it's descendants in the tableau are highlighted
 in blue, it's ancestors in the tableau are highlighted in red, and additionally it's source in
 the input formula are also highlighted in red.
+This is shown in Figure~\ref{ITVTableau} with the cursor hovering over \smalltt{{\mytilde}q(c)}
+in the tableau.
 When the cursor is hovered over a {\tt reduction} or {\tt lemma\_extension} node in the tableau, 
 the relevant ancestor/lemma lights up in bright green.
 These browsing features provide useful support for understanding a tableau proof.
@@ -790,18 +794,24 @@ The new format meets the requirements listed in Section~\ref{Tableau}:
 The new format has been adopted in the \cpp\ ATP system, and the existing GDV and IDV tools for 
 verifying and viewing derivations have been adapted to verifying and viewing tableaux.
 
-Future work includes completing the extension of GDV, and adding highlighting features to ITV as
-explained in Section~\ref{SystemsTools}.
-In the larger picture, the format can be extended to record non-clausal tableaux~\cite{Ott17,Ott18}.
+Short-term future work includes completing the extension of GDV. 
+Medium term efforts will focus on convincing developers of tableau-based ATP systems to output 
+their tableau in this format.
+In the larger long-term picture, the format can be extended to record non-clausal 
+tableaux~\cite{Ott17,Ott18}.
 
 %--------------------------------------------------------------------------------------------------
-\paragraph{\bf Acknowledgments}
+\vspace*{1em}
+\noindent
+\begin{minipage}{\textwidth}
+{\bf Acknowledgments}
 \begin{packed_itemize}
-\item For the purpose of open access, the author has applied a Creative Commons Attribution 
+\item For the purpose of open access, the second author has applied a Creative Commons Attribution 
       (CC BY) licence to any Author Accepted Manuscript version arising from this submission.
 \item ITV was implemented at the University of Miami by Daniel Li and Esteban Morales, building
       on the IDV code of Jack McKeown.
 \end{packed_itemize}
+\end{minipage}
 
 %--------------------------------------------------------------------------------------------------
 \bibliographystyle{splncs04}
