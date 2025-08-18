@@ -530,16 +530,15 @@ the tableau is closed (but note that in general a tableau need not be ground).
 
 The TPTP format recognizes six inference rules, which are described below.
 The inference record of each annotated formula records the name of the rule used, the SZS status 
-of the inferred formula wrt its parents, the path from the root to the node above, and the 
-inference parents.  
+of the inferred formula wrt its parents, the parent node, and the inference parents.  
 The SZS status and parent information makes it possible to use semantic verification of each 
-inference, and the path information makes it easy to reconstruct the tableau.
+inference, and the parent information makes it easy to reconstruct the tableau.
 The point at which a variable becomes instantiated can optionally be recorded with a {\tt bind()} 
 record, e.g., 
 {\footnotesize
 \begin{verbatim}
 cnf(t4,plain,              p(c) | ~ q(c),
-    inference(extension,[status(thm),path([t2:2,t1:1]),bind(X,c)],[c3]) ).
+    inference(extension,[status(thm),parent(t2:2),bind(X,$fot(c))],[c3]) ).
 \end{verbatim}
 }
 \noindent
@@ -552,8 +551,7 @@ variables have been renamed apart so that it is clear that the \smalltt{X} is in
 \textbf{The Inference Rules}
 \paragraph{{\tt start}:} The initial clause below the root node.
 For example, in Figure~\ref{ExampleTableau} \smalltt{t1} starts the tableau.
-The path to this point is recorded as \smalltt{[0:0]}, indicating that the node above is the 
-root node.
+The parent is recorded as \smalltt{0:0}, indicating that the node above is the root node.
 The logical parent of \smalltt{t1} is recorded as \smalltt{[c1]}. 
 The inference has status \smalltt{thm}, i.e., \smalltt{t1} is a logical consequence of its
 parent.
@@ -563,14 +561,14 @@ parent.
 \paragraph{{\tt extension}:} The standard tableau extension rule.
 For example, in Figure~\ref{ExampleTableau} \smalltt{t2} extends from the first literal 
 \smalltt{q(b)} of \smalltt{t1} to the 1st literal \smalltt{{\mytilde}q(b)} of \smalltt{c2}.
-The path to this point is recorded as \smalltt{[t1:1,0:0]}. 
+The parent is recorded as \smalltt{t1:1}. 
 The logical parent of \smalltt{t2} is recorded as \smalltt{[c2]}. 
 The inference has status \smalltt{thm}, i.e., \smalltt{t2} is a logical consequence of its parent.
 
 \paragraph{{\tt connection}:} Explicitly close the branch of the contradiction of an extension.
 For example, in Figure~\ref{ExampleTableau} \smalltt{t3} closes the branch of the contradiction 
 between \smalltt{q(b)} and \smalltt{{\mytilde}q(b)} in the extension to \smalltt{t2}.
-The path to this point is recorded as \smalltt{[t2:1,t1:1,0:0]}.
+The parent is recorded as \smalltt{t2:1}.
 The logical parents of \smalltt{t3} are recorded as \smalltt{[t2:1,t1:1]}, meaning the 1st 
 literal of \smalltt{t2} and the 1st literal of \smalltt{t1}. 
 The inference has status \smalltt{thm}, i.e., \smalltt{t3} is a logical consequence of its
@@ -583,7 +581,7 @@ between the 2nd literal \smalltt{{\mytilde}q(b)} of \smalltt{t6} and the 1st lit
 \smalltt{q(b)} of \smalltt{t1}.
 In Figure~\ref{TableauPicture} this is denoted by the dotted arrow from \smalltt{q(b)}
 to \smalltt{t8}.
-The path to this point is recorded as \smalltt{[t6:2,t4:2,t2:2,t1:1,0:0]}.
+The parent is recorded as \smalltt{t6:2}.
 The logical parents of \smalltt{t8} are recorded as \smalltt{[t6:2,t1:1]}, meaning the 2nd 
 literal of \smalltt{t6} and the 1st literal of \smalltt{t1}. 
 The inference has status \smalltt{thm}, i.e., \smalltt{t8} is a logical consequence of its 
@@ -594,7 +592,7 @@ For example, in Figure~\ref{ExampleTableau} \smalltt{l1} is the lemma \smalltt{p
 when the branch rooted at \smalltt{t2:2} is closed.
 The lemma is the negation of the 2nd literal \smalltt{{\mytilde}p(c)} of \smalltt{t2}.
 Note that the role of the annotated formula records it as a {\tt lemma}.
-The path to this point is recorded as \smalltt{[t2:2,t1:1,0:0]}.
+The parent is recorded as \smalltt{t2:2}.
 In Figure~\ref{TableauPicture} this is denoted by the solid right arrow from \smalltt{t2:2} to 
 \smalltt{l1}.
 As the node \smalltt{t1:1} is used in a reduction in closing the branch, the lemma is
@@ -610,7 +608,7 @@ and \smalltt{t12} is the {\tt connection} that closes the branch down to \smallt
 In Figure~\ref{TableauPicture} this is denoted by the dashed arrow from \smalltt{l1} to 
 \smalltt{t11:1}.
 The lemma \smalltt{l1} can be used here because \smalltt{9:2} is below \smalltt{t1:1}.
-The path to this point is recorded as \smalltt{[t11:1,t9:2,t2:3,t1:1,0:0]}.
+The parent is recorded as \smalltt{t11:1}.
 The logical parent of \smalltt{t11} is recorded as \smalltt{[l1:1]}, meaning the 1st literal 
 \smalltt{p(c)} of \smalltt{l1}.
 The inference has status \smalltt{thm}, i.e., \smalltt{t11:1} is a logical consequence of its
@@ -624,70 +622,70 @@ parent.
 \begin{verbatim}
 %--------------------------------------------------------------------------------------------
 cnf(t1,plain,               q(b) | ~s(sK1),
-    inference(start,[status(thm),path([0:0])],[c1]) ).
+    inference(start,[status(thm),parent(0:0)],[c1]) ).
 
 cnf(t2,plain,               ~q(b) | ~p(c) | ~r,
-    inference(extension,[status(thm),path([t1:1,0:0])],[c2]) ).
+    inference(extension,[status(thm),parent(t1:1)],[c2]) ).
 
 cnf(t3,plain,               $false,
-    inference(connection,[status(thm),path([t2:1,t1:1,0:0])],[t2:1,t1:1]) ).
+    inference(connection,[status(thm),parent(t2:1)],[t2:1,t1:1]) ).
 
 cnf(t4,plain,               p(c) | ~q(c),
-    inference(extension,[status(thm),path([t2:2,t1:1,0:0])],[c3]) ).
+    inference(extension,[status(thm),parent(t2:2)],[c3]) ).
 
 cnf(t5,plain,               $false,
-    inference(connection,[status(thm),path([t4:1,t2:2,t1:1,0:0])],[t4:1,t2:2]) ).
+    inference(connection,[status(thm),parent(t4:1)],[t4:1,t2:2]) ).
 
 cnf(t6,plain,               q(c) | ~q(b),
-    inference(extension,[status(thm),path([t4:2,t2:2,t1:1,0:0])],[c5]) ).
+    inference(extension,[status(thm),parent(t4:2)],[c5]) ).
 
 cnf(t7,plain,               $false,
-    inference(connection,[status(thm),path([t6:1,t4:2,t2:2,t1:1,0:0])],[t6:1,t4:2]) ).
+    inference(connection,[status(thm),parent(t6:1)],[t6:1,t4:2]) ).
 
 cnf(t8,plain,               $false,
-    inference(reduction,[status(thm),path([t6:2,t4:2,t2:2,t1:1,0:0])],[t6:2,t1:1]) ).
+    inference(reduction,[status(thm),parent(t6:2)],[t6:2,t1:1]) ).
 
 cnf(l1,lemma,               p(c),
-    inference(lemma,[status(cth),path([t2:2,t1:1,0:0]),below(t1:1)],[t2:2]) ).
+    inference(lemma,[status(cth),parent(t2:2),below(t1:1)],[t2:2]) ).
 
-cnf(t9,plain,               r | ~p(c),
-    inference(extension,[status(thm),path([t2:3,t1:1,0:0])],[c6]) ).
+cnf(t9,plain, i             r | ~p(c),
+    inference(extension,[status(thm),parent(t2:3)],[c6]) ).
 
 cnf(t10,plain,              $false,
-    inference(connection,[status(thm),path([t9:1,t2:3,t1:1,0:0])],[t9:1,t2:3]) ).
+    inference(connection,[status(thm),parent(t9:1)],[t9:1,t2:3]) ).
 
 cnf(t11,plain,              p(c),
-    inference(lemma_extension,[status(thm),path([t9:2,t2:3,t1:1,0:0])],[l1:1]) ).
+    inference(lemma_extension,[status(thm),parent(t9:2)],[l1:1]) ).
 
 cnf(t12,plain,              $false,
-    inference(connection,[status(thm),path([t11:1,t9:2,t2:3,t1:1,0:0])],[t9:2,t11:1]) ).
+    inference(connection,[status(thm),parent(t11:1)],[t9:2,t11:1]) ).
 
 cnf(l2,lemma,               ~q(b),
-    inference(lemma,[status(cth),path([t1:1,0:0]),below(0:0)],[t1:1]) ).
+    inference(lemma,[status(cth),parent(t1:1),below(0:0)],[t1:1]) ).
 
 cnf(t13,plain,              s(sK1) | q(b) | ~p(c),
-    inference(extension,[status(thm),path([t1:2,0:0])],[c7]) ).
+    inference(extension,[status(thm),parent(t1:2)],[c7]) ).
 
 cnf(t14,plain,              $false,
-    inference(connection,[status(thm),path([t13:1,t1:2,0:0])],[t12:1,t1:2]) ).
+    inference(connection,[status(thm),parent(t13:1)],[t13:1,t1:2]) ).
 
 cnf(t15,plain,              ~q(b),
-    inference(lemma_extension,[status(thm),path([t13:2,t1:2,0:0])],[l2:1]) ).
+    inference(lemma_extension,[status(thm),parent(t13:2)],[l2:1]) ).
 
 cnf(t16,plain,              $false,
-    inference(connection,[status(thm),path([t15:1,t13:2,t1:2,0:0])],[t15:1,t13:2]) ).
+    inference(connection,[status(thm),parent(t15:1)],[t15:1,t13:2]) ).
 
 cnf(t17,plain,              p(c) | q(b),
-    inference(extension,[status(thm),path([t13:3,t1:2,0:0])],[c4]) ).
+    inference(extension,[status(thm),parent(t13:3)],[c4]) ).
 
 cnf(t18,plain,              $false,
-    inference(connection,[status(thm),path([t17:1,t13:3,t1:2,0:0])],[t17:1,t13:3]) ).
+    inference(connection,[status(thm),parent(t17:1)],[t17:1,t13:3]) ).
 
 cnf(t19,plain,              ~q(b),
-    inference(lemma_extension,[status(thm),path([t17:2,t13:3,t1:2,0:0])],[l2:1]) ).
+    inference(lemma_extension,[status(thm),parent(t17:2)],[l2:1]) ).
 
 cnf(t20,plain,              $false,
-    inference(connection,[status(thm),path([t19:1,t17:2,t13:3,t1:2,0:0])],[t19:1,t17:2]) ).
+    inference(connection,[status(thm),parent(t19:1)],[t19:1,t17:2]) ).
 %--------------------------------------------------------------------------------------------
 \end{verbatim}
 }}
@@ -734,8 +732,8 @@ are naturally inapplicable.
 Structural verification of a tableau proof requires checking:
 \begin{packed_itemize}
 \item All inference parents exist, in particular that the specified literals exist.
-\item The \smalltt{path} records define an acyclic DAG, without contradictions in the paths.
-\item All paths start at the root \smalltt{0:0} node.
+\item The \smalltt{parent} records define an acyclic DAG, without contradictions in the branches.
+\item All branches start at the root \smalltt{0:0} node.
 \item The tableau is closed, i.e., every branch ends at a \smalltt{\$false} formula.
 \item All {\tt lemma\_extension} steps use lemmas that are below the specified node in the tableau.
 \end{packed_itemize}
@@ -780,10 +778,10 @@ The format builds on the existing infrastructure of the TPTP World, in particula
 format for recording derivations.
 The new format meets the requirements listed in Section~\ref{Tableau}:
 \begin{enumerate}
-\item Easy reconstruction of the tableau - this is can be done directly from the \smalltt{path}s.
+\item Easy reconstruction of the tableau - this is can be done directly from the \smalltt{parent}s.
 \item Sufficient information for structural verification of the closed tableau - this is provided
-      by the \smalltt{path}s, the \smalltt{below} record in lemmas, and the explicit closing of
-      each path with {\tt connection} steps and after {\tt reduction} steps.
+      by the \smalltt{parent}s, the \smalltt{below} record in lemmas, and the explicit closing of
+      each branch with {\tt connection} steps and after {\tt reduction} steps.
 \item Sufficient information for semantic verification of the inference steps - this is provided
       with SZS \smalltt{status} information.
 \item Concise and simple enough for a natural representation of proofs - there is no redundant
