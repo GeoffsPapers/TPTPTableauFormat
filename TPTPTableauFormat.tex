@@ -305,14 +305,18 @@ Figure~\ref{ExampleClausification} shows the transformation to CNF of the proble
 Figure~\ref{ExampleProblem}, which is used in the refutation discussed here, and the tableau
 proof in Section~\ref{Tableau}.
 Points of note:
-all the leaf formulae except {\tt a4} and {\tt a5} are copies of formulae in the problem;
-{\tt a4} and {\tt a5} are easily derived from the corresponding problem formulae;
-many of the formulae are inferred with SZS status \smalltt{thm}, i.e., they are logical 
-consequences of their parents;
-the negated conjecture \smalltt{c\_0\_7} is inferred with SZS status \smalltt{cth} --
-its negation is a logical consequence of its parent;
-the Skolemized formula \smalltt{c\_0\_11} is inferred with SZS status \smalltt{esa} --
-it is equisatisfiable with its parent;
+\begin{packed_itemize}
+\item The leaf formulae are \smalltt{a1}-\smalltt{a5} and \smalltt{prove}.
+      All the leaf formulae except \smalltt{a4} are copies of the corresponding problem formulae.
+      \smalltt{a4} is easily derived from the corresponding problem formula.
+\item Many of the formulae are inferred with SZS status \smalltt{thm}, i.e., they are logical 
+      consequences of their parents, e.g., clause \smalltt{c1} is a logical consequence of 
+      \smalltt{a1}.
+\item The negated conjecture \smalltt{nc1} is inferred with SZS status \smalltt{cth} --
+      its negation is a logical consequence of its parent \smalltt{prove}.
+\item The Skolemized formula \smalltt{nc3} is inferred with SZS status \smalltt{esa} --
+      it is equisatisfiable with its parent \smalltt{nc2}.
+\end{packed_itemize}
 
 \begin{figure}[htb]
 \centering
@@ -326,7 +330,7 @@ fof(a2,axiom,              ( r & q(b) ) => ! [X] : ~p(X),
     file('PaperFOF.p',a2) ).
 fof(a3,axiom,              p(c) | ! [Y] : ( ~q(c) & q(Y) ),
     file('PaperFOF.p',a3) ).
-fof(a4,axiom,              ~q(c) => ~q(b),
+fof(a4,axiom,              q(b) => q(c),
     file('PaperFOF.p',a4) ).
 fof(a5,axiom,              p(c) => r,
     file('PaperFOF.p',a5) ).
@@ -368,10 +372,16 @@ Figure~\ref{ExampleClausification}.\footnote{%
 The full refutation can be generated in SystemOnTPTP, available at
 \href{https://tptp.org/cgi-bin/SystemOnTPTP}{\tt tptp.org/cgi-bin/SystemOnTPTP}}
 Points of note:
-many of the formulae are inferred with SZS status \smalltt{thm}, i.e., they are logical 
-consequences of their parents;
-several of the inferred formulae, e.g., \smalltt{c\_0\_23}, have nested \smalltt{inference}
-records -- the intermediate inferred formulae have not been output. 
+\begin{packed_itemize}
+\item Many of the formulae are inferred with SZS status \smalltt{thm}, i.e., they are logical 
+      consequences of their parents, e.g., \smalltt{c\_0\_26} is a logical consequence of
+      \smalltt{c\_0\_23} and \smalltt{c\_0\_24}.
+\item Several of the inferred formulae have nested \smalltt{inference} records -- the intermediate 
+      inferred formulae have not been output, e.g., in \smalltt{c\_0\_23} the intermediate result
+      of the \smalltt{spm} inference between \smalltt{c\_0\_18} and \smalltt{c\_0\_19} is not
+      shown, and only the subsequent final result of the \smalltt{csr} inference between the
+      intermediate result and \smalltt{c\_0\_20} is given.
+\end{packed_itemize}
 
 \begin{figure}[htb]
 \centering
@@ -533,18 +543,7 @@ The inference record of each annotated formula records the name of the rule used
 of the inferred formula wrt its parents, the parent node, and the inference parents.  
 The SZS status and parent information makes it possible to use semantic verification of each 
 inference, and the parent information makes it easy to reconstruct the tableau.
-The point at which a variable becomes instantiated can optionally be recorded with a {\tt bind()} 
-record, e.g., 
-{\footnotesize
-\begin{verbatim}
-cnf(t4,plain,              p(c) | ~ q(c),
-    inference(extension,[status(thm),parent(t2:2),bind(X,$fot(c))],[c3]) ).
-\end{verbatim}
-}
-\noindent
-notes that the variable \smalltt{X} in \smalltt{t2} is bound to \smalltt{c} (assuming 
-variables have been renamed apart so that it is clear that the \smalltt{X} is in \smalltt{t2}).
-% AAAARGH, WE NEED TO GET THIS VERY CLEAR.
+\vspace*{1em}
 
 \noindent
 \begin{minipage}{\textwidth}
@@ -694,10 +693,24 @@ cnf(t20,plain,              $false,
 \end{figure}
 
 \vspace*{1em}
+The point at which a variable becomes instantiated can optionally be recorded with a {\tt bind()} 
+record, e.g., 
+{\footnotesize
+\begin{verbatim}
+cnf(t4,plain,              p(c) | ~ q(c),
+    inference(extension,[status(thm),parent(t2:2),bind(X,$fot(c))],[c3]) ).
+\end{verbatim}
+}
+\noindent
+notes that the variable \smalltt{X} in \smalltt{t2} is bound to the first-order term
+\smalltt{c} (assuming variables have been renamed apart so that it is clear that the 
+\smalltt{X} is in \smalltt{t2}).
+% AAAARGH, WE NEED TO GET THIS VERY CLEAR.
+
 Additional tableau inference rules, e.g., factorization~\cite{Joh93} (another view of lemma
 generation and use), non-unit lemma generation (also known as bottom-up lemma 
 generation)~\cite{AS92,Sch94}, lazy paramodulation~\cite{Pas08} (to deal with equality), 
-etc., appear to be easily added to this format.
+etc., can easily be added to this format.
 
 %--------------------------------------------------------------------------------------------------
 \section{ATP Systems and Tools}
