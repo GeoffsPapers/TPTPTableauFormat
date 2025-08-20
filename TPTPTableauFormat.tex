@@ -53,8 +53,8 @@
 
 \begin{document}
 
-\title{The TPTP Format for Clausal Tableaux Proofs}
-\titlerunning{TPTP Clausal Tableaux}
+\title{The TPTP Format for \\ Clausal Connection Tableaux}
+\titlerunning{TPTP Clausal Connection Tableaux}
 
 \author{
 Geoff Sutcliffe\inst{1}\orcidID{0000-0001-9120-3927}\Envelope
@@ -74,7 +74,7 @@ University of Cambridge, United Kingdom,
 \maketitle
 %--------------------------------------------------------------------------------------------------
 \begin{abstract}
-This paper describes the (new) TPTP format for recording clausal tableau proofs.
+This paper describes the (new) TPTP format for recording clausal connection tableaux.
 The format builds on the existing infrastructure of the TPTP World, in particular the TPTP format
 for recording derivations.
 An ATP system that outputs tableaux in this format is described.
@@ -177,7 +177,7 @@ This paper is structured as follows:
 Section~\ref{TPTP} introduces the TPTP World, providing the necessary background to the TPTP
 language, explains the TPTP format for recording (non-tableau) derivations, and describes the
 GDV and IDV tools for verifying and viewing derivations.
-Section~\ref{Tableau} describes the new TPTP format for recording clausal tableau proofs, and 
+Section~\ref{Tableau} describes the new TPTP format for recording clausal connection tableaux, and 
 explains how the format meets the requirements for easy reconstruction of the tableau, and for 
 semantic verification of the tableau inference steps.
 Section~\ref{SystemsTools} describes an ATP system that can output tableaux in the new
@@ -494,10 +494,10 @@ Available at \href{https://tptp.org/cgi-bin/SystemOnTSTP}{\tt tptp.org/cgi-bin/S
 \end{figure}
 
 %--------------------------------------------------------------------------------------------------
-\section{The (new) TPTP Format for Clausal Tableau Proofs}
+\section{The (new) TPTP Format for Clausal Connection Tableaux}
 \label{Tableau}
 
-There were three primary requirements for the new format for a clausal tableau:
+There were three primary requirements for the new format for clausal connection tableaux:
 \begin{enumerate}
 \item Easy reconstruction of the tableau.
 \item Sufficient information for structural verification of the closed tableau.
@@ -519,16 +519,23 @@ A more recent proposal~\cite{OH23} in the TPTP style provided some inspiration f
 but left some important information as implicit, which is made explicit in the new format.
 The new format aims to meet all the requirements.
 
-Figure~\ref{TableauPicture} shows the clausal tableau for the clauses in 
+Figure~\ref{TableauPicture} shows the clausal connection tableau for the clauses in 
 Figure~\ref{ExampleClausification}.
-Figure~\ref{ExampleTableau} shows the TPTP format for recording the tableau.
-The labels in square brackets in Figure~\ref{TableauPicture} identify the literals in the 
-annotated formulae in Figure~\ref{ExampleTableau}.
 The dotted arrow shows the one reduction step, the solid rightward arrows point to the lemmas that 
 are created, and the dashed arrows show where the lemmas are used.
 Note that lemmas can be used only below the parent node of where they are created. 
 The tableau in Figure~\ref{TableauPicture} has the variables instantiated as they would be when 
 the tableau is closed (but note that in general a tableau need not be ground).
+Figure~\ref{ExampleTableau} shows the TPTP format for recording the tableau in 
+Figure~\ref{TableauPicture}.
+The TPTP format for clausal connection tableaux recognizes six inference rules, which are 
+described below.
+The inference record of each annotated formula records the name of the rule used, the SZS status 
+of the inferred formula wrt its parents, the parent node, and the inference parents.  
+The SZS status and parent information makes it possible to use semantic verification of each 
+inference, and the parent information makes it easy to reconstruct the tableau.
+The labels in square brackets in Figure~\ref{TableauPicture} identify the literals in the 
+annotated formulae in Figure~\ref{ExampleTableau}.
 
 \begin{figure}[htb]
 \centering
@@ -537,82 +544,6 @@ the tableau is closed (but note that in general a tableau need not be ground).
 \caption{A tableau for the problem in Figure~\ref{ExampleProblem}}
 \label{TableauPicture}
 \end{figure}
-
-The TPTP format recognizes six inference rules, which are described below.
-The inference record of each annotated formula records the name of the rule used, the SZS status 
-of the inferred formula wrt its parents, the parent node, and the inference parents.  
-The SZS status and parent information makes it possible to use semantic verification of each 
-inference, and the parent information makes it easy to reconstruct the tableau.
-\vspace*{1em}
-
-\noindent
-\begin{minipage}{\textwidth}
-\textbf{The Inference Rules}
-\paragraph{{\tt start}:} The initial clause below the root node.
-For example, in Figure~\ref{ExampleTableau} \smalltt{t1} starts the tableau.
-The parent is recorded as \smalltt{0:0}, indicating that the node above is the root node.
-The logical parent of \smalltt{t1} is recorded as \smalltt{[c1]}. 
-The inference has status \smalltt{thm}, i.e., \smalltt{t1} is a logical consequence of its
-parent.
-{\tt start} can be viewed as a special form of {\tt extension}, described next.
-\end{minipage}
-
-\paragraph{{\tt extension}:} The standard tableau extension rule.
-For example, in Figure~\ref{ExampleTableau} \smalltt{t2} extends from the first literal 
-\smalltt{q(b)} of \smalltt{t1} to the 1st literal \smalltt{{\mytilde}q(b)} of \smalltt{c2}.
-The parent is recorded as \smalltt{t1:1}. 
-The logical parent of \smalltt{t2} is recorded as \smalltt{[c2]}. 
-The inference has status \smalltt{thm}, i.e., \smalltt{t2} is a logical consequence of its parent.
-
-\paragraph{{\tt connection}:} Explicitly close the branch of the contradiction of an extension.
-For example, in Figure~\ref{ExampleTableau} \smalltt{t3} closes the branch of the contradiction 
-between \smalltt{q(b)} and \smalltt{{\mytilde}q(b)} in the extension to \smalltt{t2}.
-The parent is recorded as \smalltt{t2:1}.
-The logical parents of \smalltt{t3} are recorded as \smalltt{[t2:1,t1:1]}, meaning the 1st 
-literal of \smalltt{t2} and the 1st literal of \smalltt{t1}. 
-The inference has status \smalltt{thm}, i.e., \smalltt{t3} is a logical consequence of its
-parents. 
-{\tt connection} can be viewed as a degenerate form of {\tt reduction}, described next.
-
-\paragraph{{\tt reduction}:} The standard tableau reduction rule.
-For example, in Figure~\ref{ExampleTableau} \smalltt{t8} closes the branch of the contradiction 
-between the 2nd literal \smalltt{{\mytilde}q(b)} of \smalltt{t6} and the 1st literal 
-\smalltt{q(b)} of \smalltt{t1}.
-In Figure~\ref{TableauPicture} this is denoted by the dotted arrow from \smalltt{q(b)}
-to \smalltt{t8}.
-The parent is recorded as \smalltt{t6:2}.
-The logical parents of \smalltt{t8} are recorded as \smalltt{[t6:2,t1:1]}, meaning the 2nd 
-literal of \smalltt{t6} and the 1st literal of \smalltt{t1}. 
-The inference has status \smalltt{thm}, i.e., \smalltt{t8} is a logical consequence of its 
-parents.
-
-\paragraph{{\tt lemma}:} The creation of a unit lemma when a branch is closed.
-For example, in Figure~\ref{ExampleTableau} \smalltt{l1} is the lemma \smalltt{p(c)} created 
-when the branch rooted at \smalltt{t2:2} is closed.
-The lemma is the negation of the 2nd literal \smalltt{{\mytilde}p(c)} of \smalltt{t2}.
-Note that the role of the annotated formula records it as a {\tt lemma}.
-The parent is recorded as \smalltt{t2:2}.
-In Figure~\ref{TableauPicture} this is denoted by the solid right arrow from \smalltt{t2:2} to 
-\smalltt{l1}.
-As the node \smalltt{t1:1} is used in a reduction in closing the branch, the lemma is
-available only below \smalltt{t1:1}, recorded as \smalltt{below(t1:1)}.
-The logical parent of \smalltt{l1} is recorded as \smalltt{[t2:2]}, meaning the 2nd literal 
-\smalltt{{\mytilde}p(c)} of \smalltt{t2}.
-The inference has status \smalltt{cth}, i.e., the negation of \smalltt{l1} is a logical 
-consequence of its parent.
-
-\paragraph{{\tt lemma\_extension}:} Use of a lemma to close a branch.
-For example, in Figure~\ref{ExampleTableau} \smalltt{t11:1} is the lemma \smalltt{l1},
-and \smalltt{t12} is the {\tt connection} that closes the branch down to \smalltt{t11:1}. 
-In Figure~\ref{TableauPicture} this is denoted by the dashed arrow from \smalltt{l1} to 
-\smalltt{t11:1}.
-The lemma \smalltt{l1} can be used here because \smalltt{9:2} is below \smalltt{t1:1}.
-The parent is recorded as \smalltt{t11:1}.
-The logical parent of \smalltt{t11} is recorded as \smalltt{[l1:1]}, meaning the 1st literal 
-\smalltt{p(c)} of \smalltt{l1}.
-The inference has status \smalltt{thm}, i.e., \smalltt{t11:1} is a logical consequence of its
-parent.
-{\tt lemma\_extension} can be viewed as a special form of {\tt extension}.
 
 \begin{figure}[h!]
 \centering
@@ -693,24 +624,98 @@ cnf(t20,plain,              $false,
 \end{figure}
 
 \vspace*{1em}
-The point at which a variable becomes instantiated can optionally be recorded with a {\tt bind()} 
-record, e.g., 
-{\footnotesize
-\begin{verbatim}
-cnf(t4,plain,              p(c) | ~ q(c),
-    inference(extension,[status(thm),parent(t2:2),bind(X,$fot(c))],[c3]) ).
-\end{verbatim}
-}
-\noindent
-notes that the variable \smalltt{X} in \smalltt{t2} is bound to the first-order term
-\smalltt{c} (assuming variables have been renamed apart so that it is clear that the 
-\smalltt{X} is in \smalltt{t2}).
-% AAAARGH, WE NEED TO GET THIS VERY CLEAR.
 
+\noindent
+\begin{minipage}{\textwidth}
+\textbf{The Inference Rules}
+\paragraph{{\tt start}:} The initial clause below the root node.
+For example, in Figure~\ref{ExampleTableau} \smalltt{t1} starts the tableau.
+The parent is recorded as \smalltt{0:0}, indicating that the node above is the root node.
+The logical parent of \smalltt{t1} is recorded as \smalltt{[c1]}. 
+The inference has status \smalltt{thm}, i.e., \smalltt{t1} is a logical consequence of its
+parent.
+{\tt start} can be viewed as a special form of {\tt extension}, described next.
+\end{minipage}
+
+\paragraph{{\tt extension}:} The standard tableau extension rule.
+For example, in Figure~\ref{ExampleTableau} \smalltt{t2} extends from the first literal 
+\smalltt{q(b)} of \smalltt{t1} to the 1st literal \smalltt{{\mytilde}q(b)} of \smalltt{c2}.
+The parent is recorded as \smalltt{t1:1}. 
+The logical parent of \smalltt{t2} is recorded as \smalltt{[c2]}. 
+The inference has status \smalltt{thm}, i.e., \smalltt{t2} is a logical consequence of its parent.
+
+\paragraph{{\tt connection}:} Explicitly close the branch of the contradiction of an extension.
+For example, in Figure~\ref{ExampleTableau} \smalltt{t3} closes the branch of the contradiction 
+between \smalltt{q(b)} and \smalltt{{\mytilde}q(b)} in the extension to \smalltt{t2}.
+The parent is recorded as \smalltt{t2:1}.
+The logical parents of \smalltt{t3} are recorded as \smalltt{[t2:1,t1:1]}, meaning the 1st 
+literal of \smalltt{t2} and the 1st literal of \smalltt{t1}. 
+The inference has status \smalltt{thm}, i.e., \smalltt{t3} is a logical consequence of its
+parents. 
+{\tt connection} can be viewed as a degenerate form of {\tt reduction}, described next.
+
+\paragraph{{\tt reduction}:} The standard tableau reduction rule.
+For example, in Figure~\ref{ExampleTableau} \smalltt{t8} closes the branch of the contradiction 
+between the 2nd literal \smalltt{{\mytilde}q(b)} of \smalltt{t6} and the 1st literal 
+\smalltt{q(b)} of \smalltt{t1}.
+In Figure~\ref{TableauPicture} this is denoted by the dotted arrow from \smalltt{q(b)}
+to \smalltt{t8}.
+The parent is recorded as \smalltt{t6:2}.
+The logical parents of \smalltt{t8} are recorded as \smalltt{[t6:2,t1:1]}, meaning the 2nd 
+literal of \smalltt{t6} and the 1st literal of \smalltt{t1}. 
+The inference has status \smalltt{thm}, i.e., \smalltt{t8} is a logical consequence of its 
+parents.
+
+\paragraph{{\tt lemma}:} The creation of a unit lemma when a branch is closed.
+For example, in Figure~\ref{ExampleTableau} \smalltt{l1} is the lemma \smalltt{p(c)} created 
+when the branch rooted at \smalltt{t2:2} is closed.
+The lemma is the negation of the 2nd literal \smalltt{{\mytilde}p(c)} of \smalltt{t2}.
+Note that the role of the annotated formula records it as a {\tt lemma}.
+The parent is recorded as \smalltt{t2:2}.
+In Figure~\ref{TableauPicture} this is denoted by the solid right arrow from \smalltt{t2:2} to 
+\smalltt{l1}.
+As the node \smalltt{t1:1} is used in a reduction in closing the branch, the lemma is
+available only below \smalltt{t1:1}, recorded as \smalltt{below(t1:1)}.
+The logical parent of \smalltt{l1} is recorded as \smalltt{[t2:2]}, meaning the 2nd literal 
+\smalltt{{\mytilde}p(c)} of \smalltt{t2}.
+The inference has status \smalltt{cth}, i.e., the negation of \smalltt{l1} is a logical 
+consequence of its parent.
+
+\paragraph{{\tt lemma\_extension}:} Use of a lemma to close a branch.
+For example, in Figure~\ref{ExampleTableau} \smalltt{t11:1} is the lemma \smalltt{l1},
+and \smalltt{t12} is the {\tt connection} that closes the branch down to \smalltt{t11:1}. 
+In Figure~\ref{TableauPicture} this is denoted by the dashed arrow from \smalltt{l1} to 
+\smalltt{t11:1}.
+The lemma \smalltt{l1} can be used here because \smalltt{9:2} is below \smalltt{t1:1}.
+The parent is recorded as \smalltt{t11:1}.
+The logical parent of \smalltt{t11} is recorded as \smalltt{[l1:1]}, meaning the 1st literal 
+\smalltt{p(c)} of \smalltt{l1}.
+The inference has status \smalltt{thm}, i.e., \smalltt{t11:1} is a logical consequence of its
+parent.
+{\tt lemma\_extension} can be viewed as a special form of {\tt extension}.
+
+\vspace*{1em}
+\noindent
 Additional tableau inference rules, e.g., factorization~\cite{Joh93} (another view of lemma
 generation and use), non-unit lemma generation (also known as bottom-up lemma 
 generation)~\cite{AS92,Sch94}, lazy paramodulation~\cite{Pas08} (to deal with equality), 
 etc., can easily be added to this format.
+
+\vspace*{1em}
+The point at which a variable becomes instantiated can optionally be recorded with a {\tt bind()} 
+record, e.g., 
+{\footnotesize
+\begin{verbatim}
+    cnf(t4,plain,              p(c) | ~ q(c),
+        inference(extension,
+                  [status(thm),parent(t2:2),bind(X,$fot(c))],[c3]) ).
+\end{verbatim}
+}
+\noindent
+records that the variable \smalltt{X} in \smalltt{c2} is bound to the first-order term
+\smalltt{c} (assuming variables have been renamed apart so there is no ambiguity about 
+which \smalltt{X} is bound).
+% AAAARGH, WE NEED TO GET THIS VERY CLEAR.
 
 %--------------------------------------------------------------------------------------------------
 \section{ATP Systems and Tools}
@@ -786,19 +791,19 @@ Available at \href{https://tptp.org/cgi-bin/SystemOnTSTP}{\tt tptp.org/cgi-bin/S
 \section{Conclusion}
 \label{Conclusion}
 
-This paper has described the new TPTP format for recording clausal tableau proofs. 
+This paper has described the new TPTP format for recording clausal connection tableaux. 
 The format builds on the existing infrastructure of the TPTP World, in particular the TPTP 
 format for recording derivations.
 The new format meets the requirements listed in Section~\ref{Tableau}:
 \begin{enumerate}
-\item Easy reconstruction of the tableau - this is can be done directly from the \smalltt{parent}s.
+\item Easy reconstruction of the tableau - this can be done directly from the \smalltt{parent}s.
 \item Sufficient information for structural verification of the closed tableau - this is provided
       by the \smalltt{parent}s, the \smalltt{below} record in lemmas, and the explicit closing of
       each branch with {\tt connection} steps and after {\tt reduction} steps.
 \item Sufficient information for semantic verification of the inference steps - this is provided
       with SZS \smalltt{status} information.
 \item Concise and simple enough for a natural representation of proofs - there is no redundant
-      information or unnecessary detail, and the tableau can be directly reconstructed.
+      information or unnecessary detail.
 \item Readable by humans as well as ATP tools - the format uses the established TPTP syntax, which
       is both human and machine readable.
 \end{enumerate}
@@ -808,8 +813,8 @@ verifying and viewing derivations have been adapted to verifying and viewing tab
 Short-term future work includes completing the extension of GDV. 
 Medium term efforts will focus on convincing developers of tableau-based ATP systems to output 
 their tableau in this format.
-In the larger long-term picture, the format can be extended to record non-clausal 
-tableaux~\cite{Ott17,Ott18}.
+The format can be used directly for non-connection tableaux.
+In the long-term the format might be extended to record non-clausal tableaux~\cite{Ott17,Ott18}.
 
 %--------------------------------------------------------------------------------------------------
 \vspace*{1em}
