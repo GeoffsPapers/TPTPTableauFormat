@@ -674,15 +674,14 @@ The logical parent of \smalltt{t11} is recorded as \smalltt{[l1:1]}, meaning the
 \smalltt{p(c)} of \smalltt{l1}.
 The inference has status \smalltt{thm}, i.e., \smalltt{t11:1} is a logical consequence of its
 parent.
-{\tt lemma\_extension} can be viewed as a special form of {\tt extension}.
-
-Lemmas can be used in multiple {\tt lemma\_extension} steps.
+Lemmas can be used in multiple lemma extensions.
 A new copy of the lemma is used each time, which provides fresh variables in the lemma.
 For example, in Figure~\ref{ExampleTableau} \smalltt{l2} is used in the lemma extension
 \smalltt{t15}, after which the variable \smalltt{Y} is instantiated to \smalltt{b} in the
 connection \smalltt{t16}. 
 The lemma is used again in the lemma extension \smalltt{t19}, after which the variable 
 \smalltt{Y} is instantiated to \smalltt{a} in the connection \smalltt{t20}
+{\tt lemma\_extension} can be viewed as a special form of {\tt extension}.
 
 \vspace*{1em}
 \noindent
