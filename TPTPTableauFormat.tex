@@ -307,8 +307,7 @@ proof in Section~\ref{Tableau}.
 Points of note:
 \begin{packed_itemize}
 \item The leaf formulae are \smalltt{a1}-\smalltt{a5} and \smalltt{prove}.
-      All the leaf formulae except \smalltt{a4} are copies of the corresponding problem formulae.
-      \smalltt{a4} is easily derived from the corresponding problem formula.
+      In this example they are copies of the corresponding problem formulae.
 \item Many of the formulae are inferred with SZS status \smalltt{thm}, i.e., they are logical 
       consequences of their parents, e.g., clause \smalltt{c1} is a logical consequence of 
       \smalltt{a1}.
@@ -324,7 +323,7 @@ Points of note:
 {\setlength{\baselineskip}{4mm}
 \begin{verbatim}
 %------------------------------------------------------------------------
-fof(a1,axiom,               ! [Y] : ~( ~q(Y) & ? [X] : s(X) ) ).
+fof(a1,axiom,               ! [Y] : ~( ~q(Y) & ? [X] : s(X) ),
     file(’PaperFOF.p’,a1) ).
 fof(a2,axiom,               ( ( r & ? [Z] : q(Z) ) => ! [X] : ~p(X) ),
     file(’PaperFOF.p’,a2) ).
@@ -420,7 +419,7 @@ cnf(c_0_31,plain,               $false,
 %------------------------------------------------------------------------
 \end{verbatim}
 }}
-\caption{The final steps E 3.2.5's refutation of Figure~\ref{ExampleProblem}}
+\caption{The final steps of E~3.2.5's refutation of Figure~\ref{ExampleProblem}}
 \label{ExampleDerivation}
 \end{figure}
 
@@ -512,7 +511,7 @@ Figure~\ref{TableauPicture}.
 The TPTP format for clausal connection tableaux recognizes six inference rules, which are 
 described below.
 The inference record of each annotated formula records the name of the rule used, the SZS status 
-of the inferred formula wrt its parents, the tableau parent node, and the inference parents.  
+of the inferred formula with respect to its parents, the tableau parent node, and the inference parents.  
 The SZS status and inference parent information makes it possible to use semantic verification 
 of each inference, and the tableau parent information makes it easy to reconstruct the tableau.
 The labels in square brackets in Figure~\ref{TableauPicture} identify the literals in the 
@@ -621,14 +620,14 @@ parent.
 
 \paragraph{{\tt extension}:} The standard tableau extension rule.
 For example, in Figure~\ref{ExampleTableau} \smalltt{t2} extends from the first literal 
-\smalltt{q(b)} of \smalltt{t1} to the 1st literal \smalltt{{\mytilde}q(b)} of \smalltt{c2}.
+\smalltt{q(Y)} of \smalltt{t1} to the 1st literal \smalltt{{\mytilde}q(Y)} of \smalltt{c2}.
 The parent is recorded as \smalltt{t1:1}. 
 The logical parent of \smalltt{t2} is recorded as \smalltt{[c2]}. 
 The inference has status \smalltt{thm}, i.e., \smalltt{t2} is a logical consequence of its parent.
 
 \paragraph{{\tt connection}:} Explicitly close the branch of the contradiction of an extension.
 For example, in Figure~\ref{ExampleTableau} \smalltt{t3} closes the branch of the contradiction 
-between \smalltt{q(b)} and \smalltt{{\mytilde}q(b)} in the extension to \smalltt{t2}.
+between \smalltt{q(Y)} and \smalltt{{\mytilde}q(Y)} in the extension to \smalltt{t2}.
 The parent is recorded as \smalltt{t2:1}.
 The logical parents of \smalltt{t3} are recorded as \smalltt{[t2:1,t1:1]}, meaning the 1st 
 literal of \smalltt{t2} and the 1st literal of \smalltt{t1}. 
@@ -638,9 +637,9 @@ parents.
 
 \paragraph{{\tt reduction}:} The standard tableau reduction rule.
 For example, in Figure~\ref{ExampleTableau} \smalltt{t8} closes the branch of the contradiction 
-between the 2nd literal \smalltt{{\mytilde}q(b)} of \smalltt{t6} and the 1st literal 
-\smalltt{q(b)} of \smalltt{t1}.
-In Figure~\ref{TableauPicture} this is denoted by the dotted arrow from \smalltt{q(b)}
+between the 2nd literal \smalltt{{\mytilde}q(Y)} of \smalltt{t6} and the 1st literal 
+\smalltt{q(Y)} of \smalltt{t1}.
+In Figure~\ref{TableauPicture} this is denoted by the dotted arrow from \smalltt{q(Y)}
 to \smalltt{t8}.
 The parent is recorded as \smalltt{t6:2}.
 The logical parents of \smalltt{t8} are recorded as \smalltt{[t6:2,t1:1]}, meaning the 2nd 
@@ -668,7 +667,7 @@ For example, in Figure~\ref{ExampleTableau} \smalltt{t11:1} is the lemma \smallt
 and \smalltt{t12} is the {\tt connection} that closes the branch down to \smalltt{t11:1}. 
 In Figure~\ref{TableauPicture} this is denoted by the dashed arrow from \smalltt{l1} to 
 \smalltt{t11:1}.
-The lemma \smalltt{l1} can be used here because \smalltt{9:2} is below \smalltt{t1:1}.
+The lemma \smalltt{l1} can be used here because \smalltt{t9:2} is below \smalltt{t1:1}.
 The parent is recorded as \smalltt{t11:1}.
 The logical parent of \smalltt{t11} is recorded as \smalltt{[l1:1]}, meaning the 1st literal 
 \smalltt{p(c)} of \smalltt{l1}.
@@ -680,7 +679,7 @@ For example, in Figure~\ref{ExampleTableau} \smalltt{l2} is used in the lemma ex
 \smalltt{t15}, after which the variable \smalltt{Y} is instantiated to \smalltt{b} in the
 connection \smalltt{t16}. 
 The lemma is used again in the lemma extension \smalltt{t19}, after which the variable 
-\smalltt{Y} is instantiated to \smalltt{a} in the connection \smalltt{t20}
+\smalltt{Y} is instantiated to \smalltt{a} in the connection \smalltt{t20}.
 {\tt lemma\_extension} can be viewed as a special form of {\tt extension}.
 
 \vspace*{1em}
@@ -701,7 +700,7 @@ record, e.g.,
 \end{verbatim}
 }
 \noindent
-records that the variable \smalltt{X} in \smalltt{c2} is bound to the first-order term
+records that the variable \smalltt{X} in \smalltt{c3} is bound to the first-order term
 \smalltt{c} (assuming variables have been renamed apart so there is no ambiguity about 
 which \smalltt{X} is bound).
 % AAAARGH, WE NEED TO GET THIS VERY CLEAR.
@@ -757,9 +756,9 @@ Nodes from {\tt extension} steps are in green-bordered ovals, \smalltt{\$false} 
 {\tt connection} and {\tt reduction} steps are in red-bordered \smalltt{\$false} boxes,
 lemmas created in {\tt lemma} steps are in blue-bordered triangles, and lemmas used in
 {\tt lemma\_extension} steps are in green-bordered triangles.
-When the cursor hovers over a node in the tableau it's descendants in the tableau are highlighted
-in blue, it's ancestors in the tableau are highlighted in red, and additionally it's source in
-the input formula are also highlighted in red.
+When the cursor hovers over a node in the tableau its descendants in the tableau are highlighted
+in blue, its ancestors in the tableau are highlighted in red, and additionally its source in
+the input formula is also highlighted in red.
 This is shown in Figure~\ref{ITVTableau} with the cursor hovering over \smalltt{{\mytilde}q(c)}
 in the tableau.
 When the cursor is hovered over a {\tt reduction} or {\tt lemma\_extension} node in the tableau, 
