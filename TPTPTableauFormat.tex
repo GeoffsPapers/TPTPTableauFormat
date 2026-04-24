@@ -4,7 +4,10 @@
 % 2. Start each sentence on a new line, to make it easy to reorder sentences.
 % 3. Send me your BibTeX entries - I'll add them to the bibliography file in my standard format.
 %----
-\documentclass[runningheads]{llncs}
+\documentclass[hf]{ceuart}
+
+\sloppy
+%\lstset{breaklines=true}
 
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
@@ -53,35 +56,59 @@
 
 \begin{document}
 
-\title{The TPTP Format for \\ Clausal Connection Tableaux}
-\titlerunning{TPTP Clausal Connection Tableaux}
+\copyrightyear{2026}
+\copyrightclause{Copyright for this paper by its authors.
+  Use permitted under Creative Commons License Attribution 4.0
+  International (CC BY 4.0).}
+\conference{PAAR 2026: 10th Workshop on Practical Aspects of Automated Reasoning,
+July 25, 2026, Lisbon, Portugal}
 
-\author{
-Geoff Sutcliffe\inst{1}\orcidID{0000-0001-9120-3927}\Envelope
-\and
-\\ Sean B. Holden\inst{2}\orcidID{0000-0001-7979-1148}
-\and
-\\ Mantas Baksys\inst{2}\orcidID{0000-0001-9532-1007}
-}
-\authorrunning{Geoff Sutcliffe, et al.}
-\institute{University of Miami, USA,
-\email{geoff@cs.miami.edu},
-\and
-University of Cambridge, United Kingdom,
-\email{sbh11@cl.cam.ac.uk,mb2412@cam.ac.uk}
-}
+\title{The TPTP Format for Clausal Connection Tableaux}
+%\titlerunning{TPTP Clausal Connection Tableaux}
+
+\author[1]{Geoff Sutcliffe}[
+    orcid=0000-0001-9120-3927,
+    email=geoff@cs.miami.edu,
+    url=https://www.cs.miami.edu/home/geoff/]
+\cormark[1]
+\address[1]{Department of Computer Science, College of Arts and Sciences, University of Miami, USA}
+
+\author[2]{Sean B. Holden}[
+    orcid=0000-0001-7979-1148,
+    email=sbh11@cl.cam.ac.uk,
+    url=https://www.cl.cam.ac.uk/~sbh11/
+] 
+\address[2]{Department of Computer Science and Technology, University of Cambridge, UK}
+
+\author[2]{Mantas Baksys}[
+    orcid=0000-0001-9532-1007,
+    email=mb2412@cam.ac.uk,
+    url=https://mantasbaksys.github.io/
+]
+
+\cortext[1]{Corresponding author.}
+
+\begin{abstract}
+    This paper describes the (new) TPTP format for recording clausal connection tableaux.
+    The format builds on the existing infrastructure of the TPTP World, in particular the TPTP format
+    for recording derivations.
+    An ATP system that outputs tableaux in this format is described.
+    Existing TPTP World tools for verifying and viewing derivations can be directly extended to
+    verify and view tableaux recorded in this new format.
+\end{abstract}
+
+\begin{keywords}
+        Automated Theorem Proving \sep
+        Proof Certificate \sep
+        Clausal Connection Tableaux \sep
+        Thousands of Problems for Theorem Provers (TPTP) \sep
+        Proof Verification \sep
+        Proof Display
+\end{keywords}
 
 \maketitle
 %--------------------------------------------------------------------------------------------------
-\begin{abstract}
-This paper describes the (new) TPTP format for recording clausal connection tableaux.
-The format builds on the existing infrastructure of the TPTP World, in particular the TPTP format
-for recording derivations.
-An ATP system that outputs tableaux in this format is described.
-Existing TPTP World tools for verifying and viewing derivations can be directly extended to
-verify and view tableaux recorded in this new format.
-\keywords{TPTP, tableau, proof}
-\end{abstract}
+
 %--------------------------------------------------------------------------------------------------
 \section{Introduction}
 \label{Introduction}
