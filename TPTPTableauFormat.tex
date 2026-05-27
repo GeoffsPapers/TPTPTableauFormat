@@ -74,12 +74,12 @@ University of Cambridge, United Kingdom,
 \maketitle
 %--------------------------------------------------------------------------------------------------
 \begin{abstract}
-This paper describes the (new) TPTP format for recording clausal connection tableaux.
+This paper describes the (new) TPTP format for writing clausal connection tableaux.
 The format builds on the existing infrastructure of the TPTP World, in particular the TPTP format
 for recording derivations.
 An ATP system that outputs tableaux in this format is described.
-Existing TPTP World tools for verifying and viewing derivations can be directly extended to
-verify and view tableaux recorded in this new format.
+Existing TPTP World tools for verifying and viewing derivations have been extended to
+verify and view tableaux in this format.
 \keywords{TPTP, tableau, proof}
 \end{abstract}
 %--------------------------------------------------------------------------------------------------
@@ -166,22 +166,25 @@ a refutation in this context, use a saturation based approach~\cite{Sch06}, e.g.
 and Vampire~\cite{KV13}.
 A complementary approach is taken in systems that build tableaux and closed connection 
 matrices~\cite{FB+98}, e.g., leanCoP~\cite{Ott23} and Connect++~\cite{Hol23}.
-The TPTP World (see Section~\ref{TPTP}) has an established format for writing Hilbert-style proofs 
-and refutations~\cite{SS+06}, and has a tool for verifying proofs in that format (see
-Section~\ref{Derivations}), but has not yet settled on a format for tableaux and connection
-proofs.
-One early proposal for a TPTP style format never gained traction~\cite{OS10}.
-A more recent proposal~\cite{OH23} in the TPTP style provided some inspiration for the new format.
+The TPTP World (see Section~\ref{TPTP}) has an established format for writing refutations and
+Hilbert-style proofs~\cite{SS+06}, and has a tool for verifying proofs in that format (see
+Section~\ref{Derivations}).
+One early proposal for a TPTP style format for writing WHAT never gained traction~\cite{OS10}.
+A more recent proposal for a TPTP style format for clausal connection tableaux~\cite{OH23} provided 
+some inspiration for the design of the format described in this paper.
+This paper describes the (new) TPTP format for writing \emph{clausal connection tableaux}.
+(In the long-term the format might be extended to record non-connection~\cite{WHAT} and non-clausal 
+tableaux~\cite{Ott17,Ott18}.)
 
 This paper is structured as follows:
 Section~\ref{TPTP} introduces the TPTP World, providing the necessary background to the TPTP
 language, explains the TPTP format for recording (non-tableau) derivations, and describes the
 GDV and IDV tools for verifying and viewing derivations.
-Section~\ref{Tableau} describes the new TPTP format for recording clausal connection tableaux, and 
+Section~\ref{Tableau} describes the TPTP format for writing clausal connection tableaux, and 
 explains how the format meets the requirements for easy reconstruction of the tableau, and for 
 semantic verification of the tableau inference steps.
-Section~\ref{SystemsTools} describes an ATP system that can output tableaux in the new
-format, and explains how the GDV and IDV tools can be directly extended to verify and view
+Section~\ref{SystemsTools} describes an ATP system that can output clausal connection tableaux in 
+the TPTP format, and explains how the GDV and IDV tools can be used to verify and view such 
 tableaux.
 Section~\ref{Conclusion} concludes.
 
@@ -189,7 +192,7 @@ Section~\ref{Conclusion} concludes.
 \section{The TPTP World}
 \label{TPTP}
 
-The TPTP World~\cite{Sut24} is a well-established infrastructure that supports research, 
+The TPTP World~\cite{Sut24} is the well-established infrastructure that supports research, 
 development, and deployment of Automated Theorem Proving (ATP) systems. %(see 
 %Section~\ref{TPTPWorld} for more details).
 The TPTP World infrastructure includes
@@ -209,8 +212,8 @@ logical status~\cite{Sut08-KEAPPA}.
 The TSTP solution library is the result of running numerous ATP systems on that library and 
 collecting their output. 
 The solutions are categorized according to their logical and output form~\cite{Sut08-KEAPPA}.
-The TPTP and TSTP libraries, with their categorizations, provide the basis for assigning a difficulty 
-rating to each problem, according to the number of ATP systems that are able to solve 
+The TPTP and TSTP libraries, with their categorizations, provide the basis for assigning a 
+difficulty rating to each problem, according to the number of ATP systems that are able to solve 
 it~\cite{SS01}.
 
 The most salient feature of the TPTP World for this work is the TPTP language.
@@ -259,7 +262,7 @@ $\forall$, $\exists$, $\neg$, $\vee$, $\wedge$, $\Rightarrow$, $\Leftarrow$, $\L
 and $\oplus$ respectively.
 Equality and inequality are expressed as the infix operators {\tt =} and {\tt !=}.
 The {\em source} and {\em useful\_info} are optional.
-Figure~\ref{ExampleProblem} shows an example problem.
+Figure~\ref{ExampleProblem} shows an example first-order form problem.
 
 \begin{figure}[htb]
 \centering
@@ -276,7 +279,7 @@ fof(prove,conjecture, ! [X] : ( ~s(X) & ~q(b) & p(c) ) ).
 %------------------------------------------------------------------------
 \end{verbatim}
 }}
-\caption{An example problem in TPTP format}
+\caption{An example first-order form problem in TPTP format}
 \label{ExampleProblem}
 \end{figure}
 
@@ -477,27 +480,29 @@ Available at \href{https://tptp.org/cgi-bin/SystemOnTSTP}{\tt tptp.org/cgi-bin/S
 \section{The (new) TPTP Format for Clausal Connection Tableaux}
 \label{Tableau}
 
-There were three primary requirements for the new format for clausal connection tableaux:
+Three primary requirements were observed for the design of the TPTP format for clausal connection 
+tableaux:
 \begin{enumerate}
 \item Easy reconstruction of the tableau.
 \item Sufficient information for structural verification of the closed tableau.
 \item Sufficient information for semantic verification of the inference steps.
 \end{enumerate}
-Additional requirements adopted from~\cite{OH23} are:
+Additional beneficial features, adopted from~\cite{OH23}, are:
 \begin{enumerate}[resume]
 \item Concise and simple enough for a natural representation of proofs.
 \item Readable by humans as well as ATP tools.
 \end{enumerate}
 One early proposal for a TPTP style format~\cite{OS10} met requirement~1, but fell short
-of requirements~2 and~3 due to the omission of some necessary details. 
-As claimed in~\cite{OH23}, that early proposal might have also failed to meet requirements~4 and~5.
-Another existing TPTP style format is the leanTPTP format output by the leanCoP ATP 
+of requirements~2 and~3 due to the omission of some necessary details. WHAT
+As claimed in~\cite{OH23}, that early proposal might have also failed to have the features~4 and~5.
+Another existing TPTP style format is the leanTPTP format FOR WHAT output by the leanCoP ATP 
 system~\cite{OB03}.
 The leanTPTP format definitely meets requirement~4, but omits the information required for 
 requirements~1,~2, and~3.
-A more recent proposal~\cite{OH23} in the TPTP style provided some inspiration for the new format,
-but left some important information as implicit, which is made explicit in the new format.
-The new format aims to meet all the requirements.
+A more recent proposal a TPTP style format for clausal connection tableaux left some important 
+information WHAT implicit.~\cite{OH23} 
+That information is explicit in the format for clausal connection tableaux proposed here.
+The TPTP format for writing clausal connection tableaux meets all the requirements.
 
 Figure~\ref{TableauPicture} shows the clausal connection tableau for the clauses in 
 Figure~\ref{ExampleClausification}.
@@ -531,10 +536,10 @@ annotated formulae in Figure~\ref{ExampleTableau}.
 {\setlength{\baselineskip}{2.6mm}
 \begin{verbatim}
 %--------------------------------------------------------------------------------------------
-cnf(t1,plain,               q(Y) | ~s(sK1),
+cnf(t1,plain,               q(b) | ~s(sK1),
     inference(start,[status(thm),parent(0:0)],[c1]) ).
 
-cnf(t2,plain,               ~q(Y) | ~p(c) | ~r,
+cnf(t2,plain,               ~q(b) | ~p(c) | ~r,
     inference(extension,[status(thm),parent(t1:1)],[c2]) ).
 
 cnf(t3,plain,               $false,
@@ -546,7 +551,7 @@ cnf(t4,plain,               p(c) | ~q(c),
 cnf(t5,plain,               $false,
     inference(connection,[status(thm),parent(t4:1)],[t4:1,t2:2]) ).
 
-cnf(t6,plain,               q(c) | ~q(Y),
+cnf(t6,plain,               q(c) | ~q(b),
     inference(extension,[status(thm),parent(t4:2)],[c5]) ).
 
 cnf(t7,plain,               $false,
@@ -570,7 +575,7 @@ cnf(t11,plain,              p(c),
 cnf(t12,plain,              $false,
     inference(connection,[status(thm),parent(t11:1)],[t9:2,t11:1]) ).
 
-cnf(l2,lemma,               ~q(Y),
+cnf(l2,lemma,               ~q(b),
     inference(lemma,[status(cth),parent(t1:1),below(0:0)],[t1:1]) ).
 
 cnf(t13,plain,              s(sK1) | q(b) | ~p(c),
@@ -585,13 +590,13 @@ cnf(t15,plain,              ~q(b),
 cnf(t16,plain,              $false,
     inference(connection,[status(thm),parent(t15:1)],[t15:1,t13:2]) ).
 
-cnf(t17,plain,              p(c) | q(a),
+cnf(t17,plain,              p(c) | q(b),
     inference(extension,[status(thm),parent(t13:3)],[c4]) ).
 
 cnf(t18,plain,              $false,
     inference(connection,[status(thm),parent(t17:1)],[t17:1,t13:3]) ).
 
-cnf(t19,plain,              ~q(a),
+cnf(t19,plain,              ~q(b),
     inference(lemma_extension,[status(thm),parent(t17:2)],[l2:1]) ).
 
 cnf(t20,plain,              $false,
@@ -725,14 +730,15 @@ arbitrary schedules to be specified in a simple language.
 It produces certificates for proofs in a very simple format described in~\cite{Hol23,OH23};
 these can be verified internally, or output to a file and checked independently by a short Prolog 
 program. 
-From version 0.7.0 \cpp\ can also produce closed tableau in the new TPTP format described in this
-paper.
+From version 0.7.0 \cpp\ can also produce closed tableau in the TPTP format.
 \cpp\ is implemented in C++ and freely available under the GNU General Public License (GPL) 
 Version~3.\footnote{%
 Download from \href{https://www.cl.cam.ac.uk/~sbh11/connect++.html}{\tt www.cl.cam.ac.uk/\textasciitilde sbh11/connect++.html}}
 
-The extension of GDV to verify tableau proofs required extending the structural verification phase,
-and a minor change to inference verification.
+The extension of GDV to verify tableau proofs requires extending the structural verification 
+phase\footnote{%
+This ongoing work that will be completed in June 2026}, and a minor change to inference 
+verification.
 Leaf verification remains unchanged, and the rule-specific steps of derivation verification
 are naturally inapplicable.
 Structural verification of a tableau proof requires checking:
@@ -779,10 +785,10 @@ Available at \href{https://tptp.org/cgi-bin/SystemOnTSTP}{\tt tptp.org/cgi-bin/S
 \section{Conclusion}
 \label{Conclusion}
 
-This paper has described the new TPTP format for recording clausal connection tableaux. 
+This paper has described the TPTP format for writing clausal connection tableaux. 
 The format builds on the existing infrastructure of the TPTP World, in particular the TPTP 
-format for recording derivations.
-The new format meets the requirements listed in Section~\ref{Tableau}:
+format for writing derivations.
+The format meets the requirements and beneficial features listed in Section~\ref{Tableau}:
 \begin{enumerate}
 \item Easy reconstruction of the tableau - this can be done directly from the \smalltt{parent}s.
 \item Sufficient information for structural verification of the closed tableau - this is provided
@@ -795,26 +801,29 @@ The new format meets the requirements listed in Section~\ref{Tableau}:
 \item Readable by humans as well as ATP tools - the format uses the established TPTP syntax, which
       is both human and machine readable.
 \end{enumerate}
-The new format has been adopted in the \cpp\ ATP system, and the existing GDV and IDV tools for 
+The format has been adopted in the \cpp\ ATP system, and the existing GDV and IDV tools for 
 verifying and viewing derivations have been adapted to verifying and viewing tableaux.
 
-Short-term future work includes completing the extension of GDV. 
-Medium term efforts will focus on convincing developers of tableau-based ATP systems to output 
-their tableau in this format.
-The format can be used directly for non-connection tableaux.
-In the long-term the format might be extended to record non-clausal tableaux~\cite{Ott17,Ott18}.
+Short-term future work includes completing structural verification in GDV. 
+Medium term efforts will focus on convincing developers of ATP systems that produce clausal 
+connection tableau to output their tableaux in the TPTP format.
+In the long-term the format might be extended to record non-connection~\cite{WHAT} and non-clausal 
+tableaux~\cite{Ott17,Ott18}.
 
 %--------------------------------------------------------------------------------------------------
 \vspace*{1em}
 \noindent
 \begin{minipage}{\textwidth}
-{\bf Acknowledgments}
+\paragraph{Acknowledgments:}
 \begin{packed_itemize}
 \item For the purpose of open access, the second author has applied a Creative Commons Attribution 
       (CC BY) licence to any Author Accepted Manuscript version arising from this submission.
 \item ITV was implemented at the University of Miami by Daniel Li and Esteban Morales, building
       on the IDV code of Jack McKeown.
 \end{packed_itemize}
+
+\paragraph{Declaration on Generative AI:}
+We didn't use any.
 \end{minipage}
 
 %--------------------------------------------------------------------------------------------------

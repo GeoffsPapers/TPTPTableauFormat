@@ -1,0 +1,150 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2870
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww16860\viewh16000\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs28 \cf0 * Title: The TPTP Format for Clausal Connection Tableaux\
+\
+Review #8A\
+===========================================================================\
+\
+Overall merit\
+-------------\
+4. Accept\
+\
+Reviewer expertise\
+------------------\
+3. Knowledgeable\
+\
+Paper summary\
+-------------\
+\strike \strikec0 The paper presents a TPTP formal for outputting connection tableaux refutation proofs.\
+This is an incremental improvement on the previous work by Otten; one of the four\
+formats that leanCoP can output. In particular it gives more explicit proof information.\strike0\striked0 \
+\
+Comments for authors\
+--------------------\
+The contribution is clear and it is clear that it needs to be made, but the details as\
+to what it enables is not stated clearly. We see that it enables the IDV/GDV diagrams\
+and proof visualisation, but what else?\
+\
+RELATION TO PREVIOUS WORK:\
+\
+I would definitely like to see an explicit comparison of the current approach versus the three approaches mentioned -- their satisfaction of the requirements is compared but a more mechanical comparison (i.e. "[16] records the results in this way, whereas [15] does this," etc.) would be better to demonstrate the material contribution of the current paper. In the first part of section 3 it states that [16] "...left some important information as implicit, which is made explicit in the new format" but never actually directly states what this information is. From what I can tell, the differences are:\
+\
+explicit connection steps in the proof,\
+below records in lemmas,\
+explicit SZS status,\
+but I needed to compare the format to the format in [16] manually to find this out. \strike \strikec0 I wonder as well whether the inclusion of SZS status overlaps with the TPTP role field.\strike0\striked0 \
+\
+\strike \strikec0 FORMAT REQUIREMENTS:\
+\
+The requirements introduced in part (3) are reasonable, however requirements 4 and 5 are subjective and not measurable. I think that the presentation as "requirements" suggests objectivity. The statement that the first historical proposal "might have also failed to meet requirements 4,5" does not really have any criteria to measure against (hence, probably, "might have"). I can see how (4,5) were taken directly from [16] so really this is an issue with that paper if anything: there's no explicit justification there either for why these requirements exist, for example, citing prior work which criticises existing approaches for being overly complex or unreadable. To be clear I think it is obvious why these requirements are beneficial but it is not completely clear why they are necessary.\strike0\striked0 \
+\
+PRESENTATION:\
+\
+\strike \strikec0 There is ambiguity in the text at various points, as to whether the authors are referring to tableaux generally or connection tableaux, which is difficult to follow. Some examples of this are in section 1 paragraph 2, or section 3 paragraph 2, or the conclusion. It's hard to tell whether the authors mean that the syntax for connection proofs is new, or the syntax for tableau proofs generally. At times the authors refer to "...the TPTP format for..." without qualification which suggests the format is already established, rather than saying "the proposed format" or "the present format" or similar. At the end it is specifically stated that non-clausal tableaux are not handled - depending on how common non-clausal tableaux are, this might be worth an earlier mention.\strike0\striked0 \
+\
+\
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
+\
+\
+Review #8B\
+===========================================================================\
+\
+Overall merit\
+-------------\
+4. Accept\
+\
+Reviewer expertise\
+------------------\
+3. Knowledgeable\
+\
+Paper summary\
+-------------\
+\strike \strikec0 The paper describes a new TPTP/TSTP-based format for recording closed tableaux\
+proofs. A closed tableau is represented as a sequence of TPTP formulas\
+annotated with inference information, similarly to the existing TPTP proof\
+format for saturation-based provers. Each formula F is annotated with\
+information about its parent formula P in the tableau. When the parent is a\
+multi-literal clause (a disjunction), the annotation also specifies the literal\
+(e.g., P:2 for the second literal) under which the formula is placed in the\
+tableau. In this way, the tree-like structure of the tableau is captured in the\
+proof, since disjunction naturally corresponds to tableau branching.\
+Additionally, the format records semantic parents S, which logically entail F\
+(S \uc0\u8658  F). This enables verification that the tableau is valid and that all\
+branches are properly closed.\strike0\striked0 \
+\
+\strike \strikec0 The tableau is recorded in its closed form, with all closing substitutions\
+applied. The format currently supports standard tableau inference rules for\
+branch extension and branch closure, as well as lemma introduction from a\
+closed branch and subsequent lemma application. The format can also optionally\
+record substitution applications, although these are not required for the\
+verification of closed tableaux.\strike0\striked0 \
+\
+\strike \strikec0 In addition to the format itself, the authors implement proof output for the\
+connection calculus prover CONNECT++, proof verification in the tool GDV, and\
+tableau proof visualization in the tool IDV. The paper provides a clear summary\
+of the state of the art in TPTP proof formats, properly motivates the work, and\
+describes and extends previous attempts at tableau proof formats.\
+\
+I believe the format to be generic enough to be useful for other provers as\
+well and becoming a standard. Hence I recommend accepting the paper.\strike0\striked0 \
+\
+Comments for authors\
+--------------------\
+\strike \strikec0 1. You state that the tableau is represented in closed form; however, in Figure\
+5, the left-most branch is closed using ~q(b) and q(Y). In that case, Y should\
+be unified with b, and thus q(Y) should appear as q(b) (including in the lemma\
+alongside ~q(b)). Alternatively, this may simply be a typo, and ~q(b) should\
+instead be q(Y), as also shown in clause t2 in Figure 6. This point should be\
+clarified in the paper.\strike0\striked0 \
+\
+\
+\strike \strikec0 2. You state that semantic verification is essentially the same as for\
+derivations, but is there also a check that the logical parents occur on the\
+same branch leading to the leaf? For example, what would happen if\
+\
+cnf(t12,plain, $false,\
+    inference(connection,[status(thm),parent(t11:1)],[t9:2,t11:1]) ).\
+\
+were instead derived from [t2:2,t11:1]? The resulting set would still be\
+\{~p(c), p(c)\}. Would such a derivation pass the verification check?\strike0\striked0 \
+\
+\
+3. Some tableau provers operate on NNF formulas rather than CNFs. Do you\
+support formulas in NNF form (e.g., using fof formulas in TPTP)?\
+\
+\
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
+\
+\
+Review #8C\
+===========================================================================\
+\
+Overall merit\
+-------------\
+3. Weak accept\
+\
+Reviewer expertise\
+------------------\
+3. Knowledgeable\
+\
+Paper summary\
+-------------\
+\strike \strikec0 This paper presents the new (final/standardized?) format for representing connection tableaux in TPTP. The format builds on earlier rules for representing the clausification step of provers, the new part are the rules and conventions for the tableaux themselves. The rules cover the standard extension step of (strong) connection tableaux; closure of a branch due to complementary literals; and the creation and application of unit lemmas.\strike0\striked0 \
+\
+Comments for authors\
+--------------------\
+\strike \strikec0 A mostly to-the-point presentation of a reasonable new format for tableau proofs. There are some aspects of the format that this reviewer finds a bit problematic: in particular, the tree structure of a tableau is not explicitly represented in the format (e.g., using nested parentheses), instead every expansion step introduces a new top-level "cnf" statement, even though the introduced formulas might live on some branch of the tableau only (it is not a consequence of the problem). But this might be a matter of taste, and the format should be easy to generate and to parse.\strike0\striked0 \
+\
+\strike \strikec0 One aspect that should be explained more clearly in the paper is the handling of substitutions. In Fig 5, it is not obvious why some atoms contain variables and some atoms are instantiated with ground terms, and similarly in Fig 6. E.g., q(Y) in [t1:1] is resolved with ~q(b) in [t2:1], should the Y therefore be replaced by b?\strike0\striked0 \
+\
+It is not clear to me why two rules are needed for closing proof branches ("connection" and "reduction"), wouldn't it be sufficient have only one of them? It would still be easy to check that a given proof satisfies the connection condition.\
+\
+While the paper is a good starting point, it is a bit disappointing that none of the natural next steps are discussed: adding equality, theories like arithmetic, etc.\
+\
+It should also be discussed how the format compares to the more general SC-TPTP, which could be used easily to represent connection tableaux as well.\
+}
