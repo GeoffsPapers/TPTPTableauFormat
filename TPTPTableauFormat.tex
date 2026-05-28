@@ -4,38 +4,32 @@
 % 2. Start each sentence on a new line, to make it easy to reorder sentences.
 % 3. Send me your BibTeX entries - I'll add them to the bibliography file in my standard format.
 %----
-\documentclass[runningheads]{llncs}
+\documentclass{ceurart}
 
+%----My style
 \usepackage[T1]{fontenc}
-\usepackage{graphicx}
-% \renewcommand\UrlFont{\color{blue}\rmfamily}
-\usepackage{hyperref}
-\usepackage{color}
 \usepackage{setspace}
 \usepackage{verbatim}
+\usepackage{upquote}  %----For plain quotes in verbatim
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{setspace}
 \usepackage{multicol}
 \usepackage{array}
-\usepackage{bbding}
 \usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{bbding}
+\renewcommand\UrlFont{\color{blue}\rmfamily}
+
+%----My specials
+\newcommand{\smalltt}[1]{\small \texttt{#1}}
+\newcommand{\tildenot}{\raisebox{0.4ex}{\texttildelow}}
+\newcommand{\proves}{{\footnotesize {\raisebox{0.3ex}{$\;\models$\;}}}}
 
 %----Making things more compact
-%----Suppress extra space in texttt mode
-%\AddToHook{cmd/ttfamily/after}{\frenchspacing}
-\renewcommand{\textfraction}{0.07}
-\renewcommand{\topfraction}{0.9}
-\renewcommand{\bottomfraction}{0.9}
-\renewcommand{\floatpagefraction}{0.66}
-\setlength{\tabcolsep}{3pt}
-\setlength{\floatsep}{2.0pt plus 2.0pt minus 2.0pt}
-\setlength{\textfloatsep}{5.0pt plus 2.0pt minus 0.0pt}
-\renewcommand{\textfloatsep}{2.0ex}
-\renewcommand{\dbltextfloatsep}{2.0ex}
-
-\newcommand{\proves}{{\footnotesize {\raisebox{0.3ex}{$\;\models$\;}}}}
-\newcommand{\smalltt}[1]{\small \texttt{#1}}
-\newcommand{\mytilde}{\raisebox{0.4ex}{\texttildelow}}
 \newenvironment{packed_itemize}{
-\vspace*{-0.2em}
+\vspace*{-0.3em}
 \begin{itemize}
 \setlength{\partopsep}{0pt}
 \setlength{\itemsep}{1pt}
@@ -43,36 +37,54 @@
 \setlength{\parsep}{0pt}
 }{\end{itemize}}
 \newenvironment{packed_enumerate}{
-\vspace*{-0.2em}
+\vspace*{-0.3em}
 \begin{enumerate}
 \setlength{\partopsep}{0pt}
 \setlength{\itemsep}{1pt}
 \setlength{\parskip}{0pt}
 \setlength{\parsep}{0pt}
 }{\end{enumerate}}
+%----Suppress extra space in texttt mode
+\AddToHook{cmd/ttfamily/after}{\frenchspacing}
+% \renewcommand{\arraystretch}{0.8}
+\renewcommand{\floatpagefraction}{0.9}
+\renewcommand{\textfloatsep}{2.0ex}
+% \setlength{\floatsep}{2.0pt plus 2.0pt minus 2.0pt}
+% \setlength{\textfloatsep}{5.0pt plus 2.0pt minus 0.0pt}
+\renewcommand{\dbltextfloatsep}{2.0ex}
+% \renewcommand{\textfraction}{0.07}
+% \renewcommand{\topfraction}{0.9}
+% \renewcommand{\bottomfraction}{0.9}
+\setlength{\tabcolsep}{3pt}
+%% One can fix some overfulls
+\sloppy
 
+\newcommand{\todo}[1]{{\color{red}{{#1}}}}
+
+%----CEUR style
 \begin{document}
+\copyrightyear{2026}
+\copyrightclause{Copyright for this paper by its authors.
+  Use permitted under Creative Commons License Attribution 4.0 International (CC BY 4.0).}
+\conference{The 10th Workshop on Practical Aspects of Automated Reasoning,
+  as part of the Federated Logic Conference (FLoC) 2026, Lisbon, Portugal, July 25, 2026}
+\title{The TPTP Format for Clausal Connection Tableaux}
 
-\title{The TPTP Format for \\ Clausal Connection Tableaux}
-\titlerunning{TPTP Clausal Connection Tableaux}
+\author[1]{Geoff Sutcliffe}[%
+orcid=0000-0001-7116-9338,
+email=geoff@cs.miami.edu
+]
+\address[1]{University of Miami, USA}
+\author[2]{Sean B. Holden}[%
+orcid=0000-0001-7979-1148,
+email=sbh11@cl.cam.ac.uk
+]
+\address[2]{University of Cambridge, United Kingdom}
+\author[2]{Mantas Baksys}[%
+orcid=0000-0001-9532-1007,
+email=mb2412@cam.ac.uk
+]
 
-\author{
-Geoff Sutcliffe\inst{1}\orcidID{0000-0001-9120-3927}\Envelope
-\and
-\\ Sean B. Holden\inst{2}\orcidID{0000-0001-7979-1148}
-\and
-\\ Mantas Baksys\inst{2}\orcidID{0000-0001-9532-1007}
-}
-\authorrunning{Geoff Sutcliffe, et al.}
-\institute{University of Miami, USA,
-\email{geoff@cs.miami.edu},
-\and
-University of Cambridge, United Kingdom,
-\email{sbh11@cl.cam.ac.uk,mb2412@cam.ac.uk}
-}
-
-\maketitle
-%--------------------------------------------------------------------------------------------------
 \begin{abstract}
 This paper describes the (new) TPTP format for writing clausal connection tableaux.
 The format builds on the existing infrastructure of the TPTP World, in particular the TPTP format
@@ -80,8 +92,14 @@ for recording derivations.
 An ATP system that outputs tableaux in this format is described.
 Existing TPTP World tools for verifying and viewing derivations have been extended to
 verify and view tableaux in this format.
-\keywords{TPTP, tableau, proof}
 \end{abstract}
+\begin{keywords}
+  TPTP \sep
+  Tableaux \sep
+  Proof
+\end{keywords}
+
+\maketitle
 %--------------------------------------------------------------------------------------------------
 \section{Introduction}
 \label{Introduction}
@@ -169,12 +187,11 @@ matrices~\cite{FB+98}, e.g., leanCoP~\cite{Ott23} and Connect++~\cite{Hol23}.
 The TPTP World (see Section~\ref{TPTP}) has an established format for writing refutations and
 Hilbert-style proofs~\cite{SS+06}, and has a tool for verifying proofs in that format (see
 Section~\ref{Derivations}).
-One early proposal for a TPTP style format for writing WHAT never gained traction~\cite{OS10}.
+One early proposal for a TPTP style format for writing non-clausal tableaux never gained 
+traction~\cite{OS10}.
 A more recent proposal for a TPTP style format for clausal connection tableaux~\cite{OH23} provided 
 some inspiration for the design of the format described in this paper.
 This paper describes the (new) TPTP format for writing \emph{clausal connection tableaux}.
-(In the long-term the format might be extended to record non-connection~\cite{WHAT} and non-clausal 
-tableaux~\cite{Ott17,Ott18}.)
 
 This paper is structured as follows:
 Section~\ref{TPTP} introduces the TPTP World, providing the necessary background to the TPTP
@@ -235,14 +252,12 @@ A general principle of the TPTP language is: ``We provide the syntax, you provid
 As such, there is no a priori commitment to any semantics for each of the language forms, 
 although in almost all cases the intended logic and semantics are well known.
 
-Problems and solutions are built from {\em annotated formulae} of the form
-\begin{center}
-{\em language}{\tt (}{\em name}{\tt ,}
+Problems and solutions are built from {\em annotated formulae} of the form: \\
+\hspace*{0.5cm}{\em language}{\tt (}{\em name}{\tt ,}
 {\em role}{\tt ,}
 {\em formula}{\tt ,}
 {\em source}{\tt ,}
-{\em useful\_info}{\tt )}
-\end{center}
+{\em useful\_info}{\tt )} \\
 The {\em language}s supported are \smalltt{cnf} (clause normal form), \smalltt{fof}
 (first-order form), \smalltt{tff} (typed first-order form), and \smalltt{thf}
 (typed higher-order form).
@@ -252,11 +267,12 @@ In a {\em formula}, terms and atoms follow Prolog conventions -- functions and p
 with a lowercase letter or are {\tt '}single quoted{\tt '}, and variables start with an uppercase 
 letter.
 The language also supports interpreted symbols that either start with a {\tt \$}, e.g., the 
-truth constants \smalltt{\$true} and \smalltt{\$false}, or are composed of 
+truth constants \smalltt{\$true}, \smalltt{\$false}, the individual and boolean
+types \smalltt{\$i}, \smalltt{\$o}, or are composed of 
 non-alphabetic characters, e.g., integer/rational/real numbers such as 27, 43/92, -99.66.
 The logical connectives in the TPTP language are
-{\tt !>}, {\tt ?*}, {\tt @+}, {\tt @-}, {\tt !}, {\tt ?}, {\tt {\mytilde}}, {\tt |}, {\tt \&}, 
-{\tt =>}, {\tt <=}, {\tt <=>}, and {\tt <{\mytilde}>}, for the mathematical connectives
+{\tt !>}, {\tt ?*}, {\tt @+}, {\tt @-}, {\tt !}, {\tt ?}, {\tt {\tildenot}}, {\tt |}, {\tt \&}, 
+{\tt =>}, {\tt <=}, {\tt <=>}, and {\tt <{\tildenot}>}, for the mathematical connectives
 $\Pi$, $\Sigma$, choice (indefinite description), definite description,
 $\forall$, $\exists$, $\neg$, $\vee$, $\wedge$, $\Rightarrow$, $\Leftarrow$, $\Leftrightarrow$, 
 and $\oplus$ respectively.
@@ -492,17 +508,21 @@ Additional beneficial features, adopted from~\cite{OH23}, are:
 \item Concise and simple enough for a natural representation of proofs.
 \item Readable by humans as well as ATP tools.
 \end{enumerate}
-One early proposal for a TPTP style format~\cite{OS10} met requirement~1, but fell short
-of requirements~2 and~3 due to the omission of some necessary details. WHAT
-As claimed in~\cite{OH23}, that early proposal might have also failed to have the features~4 and~5.
-Another existing TPTP style format is the leanTPTP format FOR WHAT output by the leanCoP ATP 
-system~\cite{OB03}.
+One early proposal for a TPTP style format for non-clausal tableaux~\cite{OS10} met requirements~1
+and~3, but fell short of requirement~2 and features~4 and~5 because it attempted to 
+``squeeze''~\cite{OH23} connection proofs into a derivation style format, with a clumsy encoding 
+of parent formulae details.
+It also did not provide an explicit way of recording lemmas.
+Another existing TPTP style format is the leanTPTP format for clausal connection tableaux that is 
+output by the leanCoP ATP system.~\cite{OB03}
 The leanTPTP format definitely meets requirement~4, but omits the information required for 
-requirements~1,~2, and~3.
-A more recent proposal a TPTP style format for clausal connection tableaux left some important 
-information WHAT implicit.~\cite{OH23} 
-That information is explicit in the format for clausal connection tableaux proposed here.
-The TPTP format for writing clausal connection tableaux meets all the requirements.
+requirements~1,~2, and~3. 
+Most notably, the leanTPTP format does not record the tableau tree structure, does not
+explicitly close the tableau branches, and does not appear to have any way of recording lemmas.
+A more recent proposal for a TPTP style format for clausal connection tableaux~\cite{OH23} has 
+weaknesses akin to the leanTPTP format.
+The (new) TPTP format for writing clausal connection tableaux meets all the requirements and
+provides both the beneficial features.
 
 Figure~\ref{TableauPicture} shows the clausal connection tableau for the clauses in 
 Figure~\ref{ExampleClausification}.
@@ -625,14 +645,14 @@ parent.
 
 \paragraph{{\tt extension}:} The standard tableau extension rule.
 For example, in Figure~\ref{ExampleTableau} \smalltt{t2} extends from the first literal 
-\smalltt{q(Y)} of \smalltt{t1} to the 1st literal \smalltt{{\mytilde}q(Y)} of \smalltt{c2}.
+\smalltt{q(Y)} of \smalltt{t1} to the 1st literal \smalltt{{\tildenot}q(Y)} of \smalltt{c2}.
 The parent is recorded as \smalltt{t1:1}. 
 The logical parent of \smalltt{t2} is recorded as \smalltt{[c2]}. 
 The inference has status \smalltt{thm}, i.e., \smalltt{t2} is a logical consequence of its parent.
 
 \paragraph{{\tt connection}:} Explicitly close the branch of the contradiction of an extension.
 For example, in Figure~\ref{ExampleTableau} \smalltt{t3} closes the branch of the contradiction 
-between \smalltt{q(Y)} and \smalltt{{\mytilde}q(Y)} in the extension to \smalltt{t2}.
+between \smalltt{q(Y)} and \smalltt{{\tildenot}q(Y)} in the extension to \smalltt{t2}.
 The parent is recorded as \smalltt{t2:1}.
 The logical parents of \smalltt{t3} are recorded as \smalltt{[t2:1,t1:1]}, meaning the 1st 
 literal of \smalltt{t2} and the 1st literal of \smalltt{t1}. 
@@ -642,7 +662,7 @@ parents.
 
 \paragraph{{\tt reduction}:} The standard tableau reduction rule.
 For example, in Figure~\ref{ExampleTableau} \smalltt{t8} closes the branch of the contradiction 
-between the 2nd literal \smalltt{{\mytilde}q(Y)} of \smalltt{t6} and the 1st literal 
+between the 2nd literal \smalltt{{\tildenot}q(Y)} of \smalltt{t6} and the 1st literal 
 \smalltt{q(Y)} of \smalltt{t1}.
 In Figure~\ref{TableauPicture} this is denoted by the dotted arrow from \smalltt{q(Y)}
 to \smalltt{t8}.
@@ -655,7 +675,7 @@ parents.
 \paragraph{{\tt lemma}:} The creation of a unit lemma when a branch is closed.
 For example, in Figure~\ref{ExampleTableau} \smalltt{l1} is the lemma \smalltt{p(c)} created 
 when the branch rooted at \smalltt{t2:2} is closed.
-The lemma is the negation of the 2nd literal \smalltt{{\mytilde}p(c)} of \smalltt{t2}.
+The lemma is the negation of the 2nd literal \smalltt{{\tildenot}p(c)} of \smalltt{t2}.
 The role of the annotated formula records it as a {\tt lemma}.
 The parent is recorded as \smalltt{t2:2}.
 In Figure~\ref{TableauPicture} this is denoted by the solid arrow from \smalltt{t2:2} to 
@@ -663,7 +683,7 @@ In Figure~\ref{TableauPicture} this is denoted by the solid arrow from \smalltt{
 As the node \smalltt{t1:1} is used in a reduction in closing the branch, the lemma is
 available only below \smalltt{t1:1}, recorded as \smalltt{below(t1:1)}.
 The logical parent of \smalltt{l1} is recorded as \smalltt{[t2:2]}, meaning the 2nd literal 
-\smalltt{{\mytilde}p(c)} of \smalltt{t2}.
+\smalltt{{\tildenot}p(c)} of \smalltt{t2}.
 The inference has status \smalltt{cth}, i.e., the negation of \smalltt{l1} is a logical 
 consequence of its parent.
 
@@ -765,7 +785,7 @@ lemmas created in {\tt lemma} steps are in blue-bordered triangles, and lemmas u
 When the cursor hovers over a node in the tableau its descendants in the tableau are highlighted
 in blue, its ancestors in the tableau are highlighted in red, and additionally its source in
 the input formula is also highlighted in red.
-This is shown in Figure~\ref{ITVTableau} with the cursor hovering over \smalltt{{\mytilde}q(c)}
+This is shown in Figure~\ref{ITVTableau} with the cursor hovering over \smalltt{{\tildenot}q(c)}
 in the tableau.
 When the cursor is hovered over a {\tt reduction} or {\tt lemma\_extension} node in the tableau, 
 the relevant ancestor/lemma lights up in bright green.
@@ -807,8 +827,8 @@ verifying and viewing derivations have been adapted to verifying and viewing tab
 Short-term future work includes completing structural verification in GDV. 
 Medium term efforts will focus on convincing developers of ATP systems that produce clausal 
 connection tableau to output their tableaux in the TPTP format.
-In the long-term the format might be extended to record non-connection~\cite{WHAT} and non-clausal 
-tableaux~\cite{Ott17,Ott18}.
+In the long-term the format might be extended to record non-connection~\cite{FB+98,Hah01} and 
+non-clausal~\cite{Ott11,Ott17} tableaux.
 
 %--------------------------------------------------------------------------------------------------
 \vspace*{1em}
@@ -827,7 +847,8 @@ We didn't use any.
 \end{minipage}
 
 %--------------------------------------------------------------------------------------------------
-\bibliographystyle{splncs04}
+% Not needed for CEUR 
+% \bibliographystyle{plain}
 \bibliography{Bibliography}
 %--------------------------------------------------------------------------------------------------
 \end{document}
